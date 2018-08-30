@@ -1,11 +1,12 @@
 {
   "name": "lookingformaintainers.com",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
     "dev": "concurrently \"yarn start\" \"cd client && yarn start\"",
-    "heroku-postbuild": "cd client && yarn && yarn run build"
+    "heroku-postbuild": "cd client && yarn && yarn run build",
+    "bump": "yarn version --patch"
   },
   "dependencies": {
     "@octokit/rest": "^15.10.0",
