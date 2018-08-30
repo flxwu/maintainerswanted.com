@@ -30,7 +30,8 @@
   "dependencies": {
     "preact": "^8.2.6",
     "preact-compat": "^3.17.0",
-    "preact-router": "^2.5.7"
+    "preact-router": "^2.5.7",
+    "styled-components": "^3.4.5"
   },
   "jest": {
     "verbose": true,
