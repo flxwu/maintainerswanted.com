@@ -4,19 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-
-// TODO: completely purge unnecessary routes
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
+var firebase = require('firebase');
 
 var projectRouter = require('./routes/project');
 var projectListRouter = require('./routes/projectList');
 var userRouter = require('./routes/user');
 
+// Database connection
+var db = require('db.js');
 
 var app = express();
-
 
 app.use(logger('dev'));
 app.use(express.json());
