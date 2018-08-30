@@ -20,12 +20,13 @@ router.get('/getList', (req, res, next) => {
   var database = firebase.database();
 
   var projectRef = database.ref('projects/');
-  let project;
+  let project = null;
 
   projectRef.on('value', (snapshot) => {
     project = snapshot.val();
   });
 
+  console.log(project);
   // Return project if availible
   if(project)
     res.json({ status: 200, data: project });
@@ -77,11 +78,22 @@ router.post('/add', (req, res, next) => {
     owner: req.body.owner
   };
 
-  // Get a key for a new Post.
-  var newPostKey = database.ref().child('projects').push().key;
+  let dbProjects = database.ref('projects');
+  
+  // firebase callback after push finished 
+  const finished = (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('SUCCESS');
+    }
+  }
 
-  if(newPostKey)
-    res.json({ status: 200, data: newProject });
+  let dbProject = dbProjects.push(newProject, finished);
+  console.log('Firebase generated key: ' + dbProject.key);
+
+  if(dbProject)
+    res.json({ status: 200, data: dbProject.key });
   else
     res.json({ status: 500, err: "Error while adding project" });
 
