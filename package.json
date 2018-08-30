@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@octokit/rest": "^15.10.0",
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
