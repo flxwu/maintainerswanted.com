@@ -16,6 +16,14 @@ export default class App extends Component {
 					stars: 3000,
 					contributors: 5
 				}
+			},{
+				name: '30secondsofcode',
+				description: 'A curated collection of JS snippets',
+				link: 'https://github.com/Chalarangelo/30-seconds-of-code/',
+				githubInfo: {
+					stars: 3000,
+					contributors: 5
+				}
 			}
 			]
 		};
@@ -36,7 +44,7 @@ export default class App extends Component {
 				</List>
 				<FooterWrapper>
 					<Footer>
-						Made with love by @flxwu
+						Made with love by <Link href="https://twitter.com/flxwu">@flxwu</Link>
 					</Footer>
 				</FooterWrapper>
 			</div>
@@ -58,19 +66,23 @@ const List = styled.ul`
 `;
 
 const FooterWrapper = styled.div`
-	position: absolute; 
-	left: 50%;
+	display: flex;
+	justify-content: center;
 	background: #FAFAFA;
-	bottom: 0;
 	height: 20px;
+	margin: 50px 0;
 `;
 
 const Footer = styled.div`
 	position: relative; 
-	left: -50%;
 `;
 
 const ProjectCardWrapper = styled.li`
 	position: relative;
 	flex: 1;
+`;
+
+const Link = styled.a`
+	text-decoration: none;
+	font-weight: bold;
 `;
