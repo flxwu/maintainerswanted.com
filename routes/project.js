@@ -13,8 +13,8 @@ router.post('/add', function(req, res, next) {
   next();
 });
 
-/* UPDATE new local project */
-router.update('/add', function(req, res, next) {
+/* PATCH new local project */
+router.patch('/update', function(req, res, next) {
   res.send("Hello World!");
   next();
 });
