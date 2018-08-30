@@ -31,7 +31,7 @@ router.get('/getList', (req, res, next) => {
     console.error('Something went wrong.');
     console.error(error);
   }
-  
+
   projectRef.on('value', gotAll, errData);
 
   // Return project if availible
@@ -66,6 +66,36 @@ router.get('/getStatistics', async (req, res, next) => {
     res.json({ status: 500, err: "Error while getting Repository Data" });
 });
 
+/**
+ * All Repos of User from Github API
+ * /project/getRepos?user=Qo2770
+ */
+router.get('/getRepos', async (req, res, next) => {
+  const username = req.query.user;
+  const repos = await octokit.repos.getForUser({ username });
+
+  const repos_temp = repos.data;
+  let data = [];
+  for(i = 0; i < repos_temp.length; i++) {
+    data.push(
+      {
+        name: repos_temp[i].name,
+        stars: repos_temp[i].stargazers_count,
+        watchers: repos_temp[i].watchers_count,
+      }
+    );
+  }
+
+  // let data = repos.data;
+  // console.log(data);
+
+  // Return project if available
+  if(data)
+    res.json({ data: await data });
+  else
+    res.json({ status: 500, err: "Error while getting Repository Data" });
+});
+
 
 /**
  * Adds new project to Firebase
@@ -84,8 +114,8 @@ router.post('/add', (req, res, next) => {
   };
 
   let dbProjects = database.ref('projects');
-  
-  // firebase callback after push finished 
+
+  // firebase callback after push finished
   const finished = (err) => {
     if (err) {
       console.error(err);
