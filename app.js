@@ -23,9 +23,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/project', projectRouter);
 
-// catch 404 and forward to error handler
+// catch 404
 app.use(function(req, res, next) {
-  next(createError(404));
+  res.json({ status: 404, error: "Not Found"});
 });
 
 module.exports = app;

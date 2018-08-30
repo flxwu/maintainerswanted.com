@@ -18,18 +18,25 @@ octokit.authenticate({
  */
 router.get('/getList', (req, res, next) => {
   var database = firebase.database();
+  var projectRef = database.ref('projects');
 
-  var projectRef = database.ref('projects/');
-  let project = null;
+  const projectsList = [];
 
-  projectRef.on('value', (snapshot) => {
-    project = snapshot.val();
-  });
+  const gotAll = (data) => {
+    let tmp = data.val();
+    projectsList.push(tmp);
+  }
 
-  console.log(project);
+  const errData = (error) => {
+    console.error('Something went wrong.');
+    console.error(error);
+  }
+  
+  projectRef.on('value', gotAll, errData);
+
   // Return project if availible
-  if(project)
-    res.json({ status: 200, data: project });
+  if(projectsList)
+    res.json({ status: 200, data: projectsList });
   else
     res.json({ status: 500, err: "Error while getting registered Repository List" });
 
@@ -64,7 +71,6 @@ router.get('/getStatistics', async (req, res, next) => {
 /**
  * Adds new project to Firebase
  */
-
 router.post('/add', (req, res, next) => {
 
   var database = firebase.database();
@@ -83,7 +89,7 @@ router.post('/add', (req, res, next) => {
   // firebase callback after push finished 
   const finished = (err) => {
     if (err) {
-      console.log(err);
+      console.error(err);
     } else {
       console.log('SUCCESS');
     }
