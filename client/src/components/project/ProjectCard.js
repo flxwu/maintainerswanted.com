@@ -1,6 +1,10 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
 
+import Icon from '../Icon';
+
+const ImageURI = '../../assets/icons/github.svg';
+
 class ProjectCard extends Component {
 	constructor(props) {
 		super(props);
@@ -14,7 +18,14 @@ class ProjectCard extends Component {
 
 		return (
 			<Card>
-				<Title>{name}</Title>
+				<Title>
+					<Link href={github}>
+						{name}
+					</Link>
+				</Title>
+				<Info>
+					Test test <Icon src={ImageURI} />
+				</Info>
 			</Card>
 		);
 	}
@@ -30,11 +41,21 @@ const Card = styled.div`
 	font-size: 18px;
 	margin-bottom: 20px;
 	height: 10rem;
-	overflow: hidden;`
+	overflow: hidden;
+	flex: 1;
+	flex-direction: row;`
 ;
 
 const Title = styled.h2`
 	text-decoration: underline;
+`;
+
+const Link = styled.a`
+	color: #E27D60
+`;
+
+const Info = styled.div`
+	font-family: Verdana;
 `;
 
 export default ProjectCard;
