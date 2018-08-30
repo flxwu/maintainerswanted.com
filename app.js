@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/project', projectRouter);
+app.use('/api/project', projectRouter);
 
 // catch 404
 app.use(function(req, res, next) {
