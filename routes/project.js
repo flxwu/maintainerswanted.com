@@ -103,7 +103,7 @@ router.get('/getRepos', async (req, res, next) => {
 /**
  * Adds new project to Firebase
  */
-router.post('/add', (req, res, next) => {
+router.post('/add', async (req, res, next) => {
 
   var database = firebase.database();
 
