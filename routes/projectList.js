@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
+/* GET list of local projects */
 router.get('/', function(req, res, next) {
   res.send("Hello World!");
   next();
