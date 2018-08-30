@@ -1,32 +1,72 @@
 import { h, Component } from 'preact';
-import { Router } from 'preact-router';
+import styled from 'styled-components';
 
-import Header from './header';
-
-// Code-splitting is automated for routes
-import Home from '../routes/home';
-import Profile from '../routes/profile';
+import ProjectCard from './project/ProjectCard';
+import Header from './Header';
 
 export default class App extends Component {
-	
-	/** Gets fired when the route changes.
-	 *	@param {Object} event		"change" event from [preact-router](http://git.io/preact-router)
-	 *	@param {string} event.url	The newly routed URL
-	 */
-	handleRoute = e => {
-		this.currentUrl = e.url;
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			projects: [{
+				name: 'project 1',
+				description: 'desc 1',
+				github: 'test-link'
+			}
+			]
+		};
+	}
 
 	render() {
+		const { projects } = this.state;
+
 		return (
-			<div id="app">
+			<div>
 				<Header />
-				<Router onChange={this.handleRoute}>
-					<Home path="/" />
-					<Profile path="/profile/" user="me" />
-					<Profile path="/profile/:user" />
-				</Router>
+				<List>
+					{projects.map(project => (
+						<ProjectCardWrapper>
+							<ProjectCard project={project} />
+						</ProjectCardWrapper>)
+					)}
+				</List>
+				<FooterWrapper>
+					<Footer>
+						Made with love by @flxwu
+					</Footer>
+				</FooterWrapper>
 			</div>
 		);
 	}
 }
+
+const List = styled.ul`
+	display: block;
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	padding-inline-start: 170px;
+	padding-inline-end: 170px;
+	list-style-type: none;
+	background: #FAFAFA;
+	text-align: center;
+`;
+
+const FooterWrapper = styled.div`
+	position: absolute; 
+	left: 50%;
+	background: #FAFAFA;
+	bottom: 0;
+	height: 20px;
+`;
+
+const Footer = styled.div`
+	position: relative; 
+	left: -50%;
+`;
+
+const ProjectCardWrapper = styled.li`
+	position: relative;
+	flex: 1;
+`;
