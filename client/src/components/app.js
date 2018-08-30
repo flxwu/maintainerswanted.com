@@ -11,7 +11,7 @@ export default class App extends Component {
 			projects: [{
 				name: 'project 1',
 				description: 'desc 1',
-				github: 'test-link'
+				github: 'https://flxwu.com'
 			}
 			]
 		};
