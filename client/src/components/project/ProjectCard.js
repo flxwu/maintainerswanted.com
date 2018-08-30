@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import Info from './Info';
 
@@ -8,13 +9,29 @@ class ProjectCard extends Component {
 		super(props);
 		this.state = {
 			project: props.project,
-			githubInfo: props.githubInfo
+			stars: 0,
+			watchers: 0,
+			contributors: 0
 		};
+	}
+
+	async componentDidMount() {
+		const { project } = this.state;
+
+		const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.name}`;
+		// Get stars and contributors for single project
+		const response = await axios.get(url);
+		const data = response.data.data;
+		this.setState({
+			stars: data.stars,
+			watchers: data.watchers,
+			contributors: data.contributors
+		});
 	}
 	
 	render () {
+		const { stars, contributors } = this.state;
 		const { name, description, link } = this.state.project;
-		const { stars, contributors } = this.state.githubInfo;
 
 		return (
 			<Card>
