@@ -40,7 +40,9 @@ export default class App extends Component {
 				</List>
 				<FooterWrapper>
 					<Footer>
-						Made with love by <Link href="https://twitter.com/flxwu">@flxwu</Link>
+						Made with love by
+						<Link href="https://twitter.com/flxwu"> @flxwu</Link> and
+						<Link href="https://twitter.com/QuentinOschatz"> @Qo2770</Link>
 					</Footer>
 				</FooterWrapper>
 			</div>
@@ -55,7 +57,9 @@ const List = styled.ul`
 	margin-inline-start: 0px;
 	margin-inline-end: 0px;
 	padding-inline-start: 170px;
+	-webkit-padding-start: 170px;
 	padding-inline-end: 170px;
+	-webkit-padding-end: 170px;
 	list-style-type: none;
 	background: #FAFAFA;
 	text-align: center;
@@ -70,7 +74,7 @@ const FooterWrapper = styled.div`
 `;
 
 const Footer = styled.div`
-	position: relative; 
+	position: relative;
 `;
 
 const ProjectCardWrapper = styled.li`
@@ -81,4 +85,8 @@ const ProjectCardWrapper = styled.li`
 const Link = styled.a`
 	text-decoration: none;
 	font-weight: bold;
+	color: #E27D60;
+	&:hover { 
+		color: grey; 
+	} 
 `;
