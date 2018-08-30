@@ -1,14 +1,17 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const octokit = require('@octokit/rest')()
+const router = express.Router();
 
-/* GET local project */
-router.get('/get', function(req, res, next) {
-  res.send("Hello World!");
-  next();
+/* GET project stars and contributors */
+router.get('/getStats', async (req, res, next) => {
+  const { owner, repo } = req.params;
+  const result = await octokit.repos.get({owner, repo});
+  console.log(result);
+  res.send(result);
 });
 
 /* POST new local project */
-router.post('/add', function(req, res, next) {
+router.get('/add', function(req, res, next) {
   res.send("Hello World!");
   next();
 });
