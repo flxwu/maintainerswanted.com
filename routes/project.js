@@ -5,11 +5,13 @@ const config = require('./config');
 
 firebase.initializeApp(config);
 
-/* GET local project */
-router.get('/get', (req, res, next) => {
+/**
+ * Gets all registered projects from Firebase
+ */
+router.get('/getAll', (req, res, next) => {
   var database = firebase.database();
   
-  var projectRef = database.ref('projects/' + req.query.name);
+  var projectRef = database.ref('projects/');
   let project;
 
   projectRef.on('value', (snapshot) => {
@@ -19,6 +21,21 @@ router.get('/get', (req, res, next) => {
   // Return project if availible
   if(project)
     res.json({ status: 200, data: project });
+  else
+    res.json({ status: 500, err: "That project does not exist!" });
+
+  next();
+
+});
+
+/**
+ * Fetches Repo Data from Github API
+ */
+router.get('/get', (req, res, next) => {
+
+  // Return project if available
+  if(data)
+    res.json({ status: 200, data: data });
   else
     res.json({ status: 500, err: "That project does not exist!" });
 
