@@ -64,13 +64,14 @@ const Card = styled.div`
 	overflow: hidden;
 	display: flex;
 	align-items: center;
-	justify-content: space-between`
+	justify-content: space-around`
 ;
 
 const Meta = styled.div`
 	display: flex;
 	flex: 1;
 	flex-direction: column;
+	flex-basis: 70%;
 `;
 
 const Title = styled.h2`
@@ -78,6 +79,7 @@ const Title = styled.h2`
 	flex: 1;
 	text-decoration: underline;
 	font-family: Courier New;
+	flex-basis: 0;
 `;
 
 const SubTitle = styled.h4`
@@ -85,6 +87,7 @@ const SubTitle = styled.h4`
 	text-decoration: none !important;
 	flex: 1;
 	font-family: Comic Sans MS;
+	text-align: left;
 `;
 
 const Link = styled.a`
