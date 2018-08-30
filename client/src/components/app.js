@@ -1,46 +1,42 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import ProjectCard from './project/ProjectCard';
 import Header from './Header';
+import Loading from './Loading';
 
 export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			projects: [{
-				name: '30secondsofcode',
-				description: 'A curated collection of JS snippets',
-				link: 'https://github.com/Chalarangelo/30-seconds-of-code/',
-				githubInfo: {
-					stars: 3000,
-					contributors: 5
-				}
-			},{
-				name: '30secondsofcode',
-				description: 'A curated collection of JS snippets',
-				link: 'https://github.com/Chalarangelo/30-seconds-of-code/',
-				githubInfo: {
-					stars: 3000,
-					contributors: 5
-				}
-			}
-			]
+			projects: []
 		};
+	}
+
+	async componentDidMount() {
+		// get projects list
+		const response = await axios.get('/api/project/getList');
+		const dataObject = response.data.data[0];
+		const data = Object.keys(dataObject)
+			.map(dbKey => dataObject[dbKey]);
+		this.setState({ projects: data });
 	}
 
 	render() {
 		const { projects } = this.state;
-
 		return (
 			<div>
 				<Header />
 				<List>
-					{projects.map(project => (
-						<ProjectCardWrapper>
-							<ProjectCard project={project} githubInfo={project.githubInfo} />
-						</ProjectCardWrapper>)
-					)}
+					{projects.length !== 0 ?
+						projects.map(project => (
+							<ProjectCardWrapper>
+								<ProjectCard project={project} />
+							</ProjectCardWrapper>)
+						) :
+						<Loading />
+					}
 				</List>
 				<FooterWrapper>
 					<Footer>
