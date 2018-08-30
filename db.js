@@ -1,7 +1,7 @@
-var firebase = require('require');
-import dbconfig from 'dbconfig.json';
+var firebase = require('firebase');
+var dbconfig = require('./dbconfig.json');
 
 // Initialize Firebase
-var config = JSON.parse(dbconfig);
+var config = dbconfig;
 
 module.exports = firebase.initializeApp(config);
