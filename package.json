@@ -3,10 +3,11 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "dev": "concurrently \"yarn start\" \"cd client && yarn start\""
   },
   "dependencies": {
+    "@octokit/rest": "^15.10.0",
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
@@ -15,7 +16,8 @@
     "firebase-admin": "^6.0.0",
     "http-errors": "~1.6.2",
     "jade": "~1.11.0",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "nodemon": "^1.18.4"
   },
   "devDependencies": {
     "concurrently": "^4.0.1"
