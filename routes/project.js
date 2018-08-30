@@ -15,7 +15,7 @@ var database = firebase.database();
   {
     id: NUMBER,
     name: STRING,
-    owner: STRING
+    owner: STRING,
     collaborators: [STRING, STRING, ...],
     stars: NUMBER,
     commits: NUMBER
@@ -24,38 +24,47 @@ var database = firebase.database();
 */
 
 /* GET local project */
-router.get('/get', function(req, res, next) {
-  var projectRef = firebase.database().ref('projects/' + projectName);
-  projectRef.on('value', function(snapshot) {
+router.get('/get', (req, res, next) => {
+
+  var projectRef = firebase.database().ref('projects/' + req.query.projectname);
+  projectRef.on('value', (snapshot) => {
     var project = snapshot.val();
   });
 
   // Return project if availible
   if(project)
-    res.send(project);
+    return res.json({ status: 200, data: project });
   else
-    res.err(404);
+    return res.json({ status: 500, err: "That project does not exist!" });
 
   next();
+
 });
 
 /* POST new local project */
-router.post('/add', function(req, res, next) {
-  firebase.database().ref('projects/' + projectName).set({
-    id: id,
-    name: name,
-    owner: owner,
-    collaborators: JSON.parse(collaborators),
-    stars: stars,
-    commits: commits
+router.post('/add', (req, res, next) => {
+
+  firebase.database().ref('projects/' + req.query.projectname).set({
+    id: req.query.id,
+    name: req.query.name,
+    owner: req.query.owner,
+    collaborators: JSON.parse(req.query.collaborators),
+    stars: req.query.stars,
+    commits: req.query.commits
   });
+
+  return res.json({ status: 200, data: project });
+
   next();
+
 });
 
 /* PATCH new local project */
-router.patch('/update', function(req, res, next) {
+router.patch('/update', (req, res, next) => {
+
   res.send("Hello World!");
   next();
+
 });
 
 
