@@ -8,7 +8,7 @@ firebase.initializeApp(config);
 /**
  * Gets all registered projects from Firebase
  */
-router.get('/getAll', (req, res, next) => {
+router.get('/getList', (req, res, next) => {
   var database = firebase.database();
   
   var projectRef = database.ref('projects/');
@@ -31,7 +31,8 @@ router.get('/getAll', (req, res, next) => {
 /**
  * Fetches Repo Data from Github API
  */
-router.get('/get', (req, res, next) => {
+router.get('/getStatistics', (req, res, next) => {
+  const result = await octokit.repos.get({owner, repo})
 
   // Return project if available
   if(data)
