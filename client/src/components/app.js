@@ -9,9 +9,13 @@ export default class App extends Component {
 		super(props);
 		this.state = {
 			projects: [{
-				name: 'project 1',
-				description: 'desc 1',
-				github: 'https://flxwu.com'
+				name: '30secondsofcode',
+				description: 'A curated collection of JS snippets',
+				link: 'https://github.com/Chalarangelo/30-seconds-of-code/',
+				githubInfo: {
+					stars: 3000,
+					contributors: 5
+				}
 			}
 			]
 		};
@@ -26,7 +30,7 @@ export default class App extends Component {
 				<List>
 					{projects.map(project => (
 						<ProjectCardWrapper>
-							<ProjectCard project={project} />
+							<ProjectCard project={project} githubInfo={project.githubInfo} />
 						</ProjectCardWrapper>)
 					)}
 				</List>
