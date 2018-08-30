@@ -52,12 +52,11 @@ router.get('/getList', (req, res, next) => {
 router.get('/getStatistics', async (req, res, next) => {
   const { owner, repo } = req.query;
   const repoData = await octokit.repos.get({owner, repo});
-  const contributors = await octokit.repos.getStatsContributors({owner, repo});
-
+  const contributors = await octokit.repos.getContributors({owner, repo});
   const data = {
     stars: repoData.data.stargazers_count,
     watchers: repoData.data.watchers_count,
-    contributors: contributors.data[0].total,
+    contributors: contributors.data.length
   }
 
   // Return project if available
