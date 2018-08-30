@@ -12,6 +12,7 @@ var userRouter = require('./routes/user');
 
 // Database connection
 var db = require('db.js');
+var database = firebase.database();
 
 var app = express();
 
