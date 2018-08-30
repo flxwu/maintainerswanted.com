@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "dev": "concurrently \"yarn start\" \"cd client && yarn start\""
+    "dev": "concurrently \"yarn start\" \"cd client && yarn start\"",
+    "heroku-postbuild": "cd client && yarn && yarn run build"
   },
   "dependencies": {
     "@octokit/rest": "^15.10.0",
