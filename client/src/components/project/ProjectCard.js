@@ -1,31 +1,34 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
 
-import Icon from '../Icon';
-
-const ImageURI = '../../assets/icons/github.svg';
+import Info from './Info';
 
 class ProjectCard extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			project: props.project
+			project: props.project,
+			githubInfo: props.githubInfo
 		};
 	}
 	
 	render () {
-		const { name, description, github } = this.state.project;
+		const { name, description, link } = this.state.project;
+		const { stars, contributors } = this.state.githubInfo;
 
 		return (
 			<Card>
-				<Title>
-					<Link href={github}>
-						{name}
-					</Link>
-				</Title>
-				<Info>
-					Test test <Icon src={ImageURI} />
-				</Info>
+				<Meta>
+					<Title>
+						<Link href={link}>
+							{name}
+						</Link>
+					</Title>
+					<SubTitle>
+						{description}
+					</SubTitle>
+				</Meta>
+				<Info stars={stars} contributors={contributors} />
 			</Card>
 		);
 	}
@@ -34,7 +37,7 @@ class ProjectCard extends Component {
 const Card = styled.div`
 	position: relative;
 	background: #fff;
-	padding: 3% 5%;
+	padding: 4% 8%;
 	border-radius: 12px;
 	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
 	line-height: 1.8;
@@ -42,20 +45,35 @@ const Card = styled.div`
 	margin-bottom: 20px;
 	height: 10rem;
 	overflow: hidden;
-	flex: 1;
-	flex-direction: row;`
+	display: flex;
+	align-items: center;
+	justify-content: space-between`
 ;
 
+const Meta = styled.div`
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+`;
+
 const Title = styled.h2`
+	display: flex;
+	flex: 1;
 	text-decoration: underline;
+	font-family: Courier New;
+`;
+
+const SubTitle = styled.h4`
+	display: flex;
+	text-decoration: none !important;
+	flex: 1;
+	font-family: Comic Sans MS;
 `;
 
 const Link = styled.a`
-	color: #E27D60
-`;
-
-const Info = styled.div`
-	font-family: Verdana;
+	display: flex;
+	color: #E27D60;
+	flex: 1;
 `;
 
 export default ProjectCard;
