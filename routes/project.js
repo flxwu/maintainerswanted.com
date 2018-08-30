@@ -33,9 +33,9 @@ router.get('/get', (req, res, next) => {
 
   // Return project if availible
   if(project)
-    return res.json({ status: 200, data: project });
+    res.json({ status: 200, data: project });
   else
-    return res.json({ status: 500, err: "That project does not exist!" });
+    res.json({ status: 500, err: "That project does not exist!" });
 
   next();
 
@@ -53,7 +53,7 @@ router.post('/add', (req, res, next) => {
     commits: req.query.commits
   });
 
-  return res.json({ status: 200, data: project });
+  res.json({ status: 200, data: project });
 
   next();
 
