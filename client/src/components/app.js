@@ -14,14 +14,16 @@ export default class App extends Component {
 			projects: []
 		};
 
-		function handleFirstTab(e) {
-			if (e.keyCode === 9) {
-				document.body.classList.add('user-is-tabbing');
-				window.removeEventListener('keydown', handleFirstTab);
-			}
+		if (typeof window !== 'undefined') {
+			const handleFirstTab = (e) => {
+				if (e.keyCode === 9) {
+					document.body.classList.add('user-is-tabbing');
+					window.removeEventListener('keydown', handleFirstTab);
+				}
+			};
+    
+			window.addEventListener('keydown', handleFirstTab);
 		}
-	
-		window.addEventListener('keydown', handleFirstTab);
 	}
 
 	async componentDidMount() {
@@ -30,7 +32,7 @@ export default class App extends Component {
 		const dataObject = response.data.data[0];
 		const data = Object.keys(dataObject)
 			.map(dbKey => dataObject[dbKey]);
-		
+    
 		this.setState({ projects: data });
 	}
 
@@ -52,7 +54,7 @@ export default class App extends Component {
 				</List>
 				<FooterWrapper>
 					<Footer>
-						Made with love by
+            Made with love by
 						<Link href="https://twitter.com/flxwu"> @flxwu</Link> and
 						<Link href="https://twitter.com/QuentinOschatz"> @Qo2770</Link>
 					</Footer>
@@ -63,42 +65,42 @@ export default class App extends Component {
 }
 
 const List = styled.ul`
-	display: block;
-	margin-block-start: 3em;
-	margin-block-end: 1em;
-	margin-inline-start: 0px;
-	margin-inline-end: 0px;
-	padding-inline-start: 170px;
-	-webkit-padding-start: 170px;
-	padding-inline-end: 170px;
-	-webkit-padding-end: 170px;
-	list-style-type: none;
-	background: #FAFAFA;
-	text-align: center;
+  display: block;
+  margin-block-start: 3em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 170px;
+  -webkit-padding-start: 170px;
+  padding-inline-end: 170px;
+  -webkit-padding-end: 170px;
+  list-style-type: none;
+  background: #FAFAFA;
+  text-align: center;
 `;
 
 const FooterWrapper = styled.div`
-	display: flex;
-	justify-content: center;
-	background: #FAFAFA;
-	height: 20px;
-	margin: 50px 0;
+  display: flex;
+  justify-content: center;
+  background: #FAFAFA;
+  height: 20px;
+  margin: 50px 0;
 `;
 
 const Footer = styled.div`
-	position: relative;
+  position: relative;
 `;
 
 const ProjectCardWrapper = styled.li`
-	position: relative;
-	flex: 1;
+  position: relative;
+  flex: 1;
 `;
 
 const Link = styled.a`
-	text-decoration: none;
-	font-weight: bold;
-	color: #E27D60;
-	&:hover { 
-		color: grey; 
-	} 
+  text-decoration: none;
+  font-weight: bold;
+  color: #E27D60;
+  &:hover { 
+    color: grey; 
+  } 
 `;
