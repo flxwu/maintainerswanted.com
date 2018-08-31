@@ -41,17 +41,22 @@ class NewProject extends Component {
 						<Text>Add Project</Text>
 					</IconWrapper> :
 					<FormWrapper>
-						<Form>
-							<Row type="text">
-								Github Username: <TextBox placeholder="Enter your Github Username" />
+						<iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe" />
+						<Form action="/api/project/add" method="post" target="dummyframe">
+							<Row>
+								Github Username:
+								<TextBox type="text" name="owner" placeholder="Enter your Github Username" />
 							</Row>
-							<Row type="text">
-								Repository Name: <TextBox placeholder="Enter your Repository Name" />
+							<Row>
+								Repository Name:
+								<TextBox type="text" name="repo" placeholder="Enter your Repository Name" />
+							</Row>
+							<Row>
+								Twitter Contact:
+								<TextBox type="text" name="twitter" placeholder="Enter Twitter Username (for contacting purposes)" />
 							</Row>
 							<Row submit>
-								<Submit>
-									Submit
-								</Submit>
+								<Submit type="submit" value="Submit" />
 							</Row>
 						</Form>
 						<IconWrapperCollapse onClick={this._handleCollapse}>
@@ -129,7 +134,7 @@ const Row = styled.div`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	justify-content: ${props => props.submit ? 'center' : 'flex-end'};
+	justify-content: ${props => props.submit ? 'center' : 'space-between'};
 	white-space: nowrap;
 `;
 
@@ -142,10 +147,10 @@ const TextBox = styled.input`
 	margin: 20px;
 	border: none;
 	display: flex;
-	flex-basis: 80%;
+	flex-basis: 60%;
 `;
 
-const Submit = styled.div`
+const Submit = styled.input`
 	display: flex;
 	background: #FAFAFA;
 	border-radius: 50px;
@@ -158,6 +163,9 @@ const Submit = styled.div`
 	&:hover {
 		font-weight: bold;
 		cursor: pointer;
+	}
+	&:active {
+		
 	}`
 ;
 
