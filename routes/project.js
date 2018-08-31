@@ -9,8 +9,8 @@ firebase.initializeApp(config);
 
 octokit.authenticate({
   type: 'oauth',
-  key: 'dbc407eab78d60478da9',
-  secret: 'a85529728a40158871c4b9a7e19dab6a81eeb24e'
+  key: process.env.GH_KEY,
+  secret: process.env.GH_SECRET
 })
 
 /**
@@ -53,12 +53,13 @@ router.get('/getStatistics', async (req, res, next) => {
   const { owner, repo } = req.query;
   const repoData = await octokit.repos.get({owner, repo});
   const contributors = await octokit.repos.getContributors({owner, repo});
+  
   const data = {
     stars: repoData.data.stargazers_count,
     watchers: repoData.data.watchers_count,
-    contributors: contributors.data[0].total,
+    contributors: contributors.data.length,
     description: repoData.data.description,
-    url: 'https://www.github.com/' + owner + '/' + repo,
+    url: 'https://www.github.com/' + owner + '/' + repo
   }
 
   // Return project if available
