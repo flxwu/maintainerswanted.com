@@ -30,8 +30,8 @@ export default class App extends Component {
 		return (
 			<div>
 				<Header />
-				<NewProject />
 				<List>
+					<NewProject />
 					{projects.length !== 0 ?
 						projects.map(project => (
 							<ProjectCardWrapper>
