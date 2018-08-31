@@ -29,7 +29,8 @@ Quentin Oschatz (Qo2770)
 
 # Credits #   
 
-=======
 Feross Aboukhadijeh    
 =======
 [Feross Aboukhadijeh](twitter.com/feross) for always providing his help as well as sharing his ideas and opinions! ❤️🙏
+=======
+[Feross Aboukhadijeh](https://www.twitter.com/feross) for always providing his help as well as sharing his ideas and opinions! ❤️🙏
