@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-Maintainers Wanted
-=======
 Maintainers Wanted  
 ==================  
->>>>>>> 221d27a... Fixed spacing
 
 ![picture alt](MaintainersWanted.png "")  
 
