@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 import ProjectCard from './project/ProjectCard';
+import NewProject from './form/NewProject';
 import Header from './Header';
 import Loading from './Loading';
 
@@ -29,6 +30,7 @@ export default class App extends Component {
 		return (
 			<div>
 				<Header />
+				<NewProject />
 				<List>
 					{projects.length !== 0 ?
 						projects.map(project => (
