@@ -1,5 +1,5 @@
 node_modules/
 
 dbconfig.json
-routes/config.js
+routes/secrets.js
 yarn-error.log
