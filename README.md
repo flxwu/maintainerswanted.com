@@ -23,8 +23,6 @@ Quentin Oschatz (Qo2770)
 # Credits #  
 
 Feross Aboukhadijeh   
-  
-=======
 Looking for Maintainers  
 =======================
   
@@ -45,3 +43,4 @@ Users who browse the site will be presented with all projects currently up for g
 License: MIT  
 Felix Wu (flxwu)  
 Quentin Oschatz (Qo2770)  
+=======
