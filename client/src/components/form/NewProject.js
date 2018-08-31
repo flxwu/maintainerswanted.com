@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
 
+import Form from './Form';
 import Icon from '../Icon';
 
 class NewProject extends Component {
@@ -41,24 +42,7 @@ class NewProject extends Component {
 						<Text>Add Project</Text>
 					</IconWrapper> :
 					<FormWrapper>
-						<iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe" />
-						<Form action="/api/project/add" method="post" target="dummyframe">
-							<Row>
-								Github Username:
-								<TextBox type="text" name="owner" placeholder="Enter your Github Username" />
-							</Row>
-							<Row>
-								Repository Name:
-								<TextBox type="text" name="repo" placeholder="Enter your Repository Name" />
-							</Row>
-							<Row>
-								Twitter Contact:
-								<TextBox type="text" name="twitter" placeholder="Enter Twitter Username (for contacting purposes)" />
-							</Row>
-							<Row submit>
-								<Submit type="submit" value="Submit" />
-							</Row>
-						</Form>
+						<Form />
 						<IconWrapperCollapse onClick={this._handleCollapse}>
 							<Icon type={'arrow-up'} />
 						</IconWrapperCollapse>
@@ -81,8 +65,7 @@ const Card = styled.div`
 	justify-content: space-around;
 	font-size: 16px;
 	color: #E27D60;
-	padding-left: 8%;
-	padding-right: 5%;
+	padding: 0 5%;
 	align-self: stretch;
 	cursor: ${props => props.collapsed ? 'pointer' : 'default' };`
 ;
@@ -122,51 +105,5 @@ const FormWrapper = styled.div`
 	flex-basis: 100%;
 	justify-content: flex-end;
 `;
-
-const Form = styled.form`
-	display: flex;
-	flex-direction: column;
-	flex-basis: 100%;
-	align-items: stretch;
-`;
-
-const Row = styled.div`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	justify-content: ${props => props.submit ? 'center' : 'space-between'};
-	white-space: nowrap;
-`;
-
-const TextBox = styled.input`
-	display: inline-flex;
-	border-radius: 12px;
-	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
-	height: 20px;
-	padding: 10px;
-	margin: 20px;
-	border: none;
-	display: flex;
-	flex-basis: 60%;
-`;
-
-const Submit = styled.input`
-	display: flex;
-	background: #FAFAFA;
-	border-radius: 50px;
-	line-height: 1.8;
-	overflow: hidden;
-	font-size: 20px;
-	color: #E27D60;
-	align-self: center;
-	margin-bottom: 15px;
-	&:hover {
-		font-weight: bold;
-		cursor: pointer;
-	}
-	&:active {
-		
-	}`
-;
 
 export default NewProject;
