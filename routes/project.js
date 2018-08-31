@@ -56,7 +56,8 @@ router.get('/getStatistics', async (req, res, next) => {
   const data = {
     stars: repoData.data.stargazers_count,
     watchers: repoData.data.watchers_count,
-    contributors: contributors.data.length
+    contributors: contributors.data[0].total,
+    description: repoData.data.description,
   }
 
   // Return project if available
@@ -75,6 +76,7 @@ router.get('/getRepos', async (req, res, next) => {
   const repos = await octokit.repos.getForUser({ username });
 
   const repos_temp = repos.data;
+  console.log(repos_temp);
   let data = [];
   for(i = 0; i < repos_temp.length; i++) {
     data.push(
@@ -82,6 +84,7 @@ router.get('/getRepos', async (req, res, next) => {
         name: repos_temp[i].name,
         stars: repos_temp[i].stargazers_count,
         watchers: repos_temp[i].watchers_count,
+        description: repos_temp[i].description,
       }
     );
   }
@@ -110,7 +113,8 @@ router.post('/add', (req, res, next) => {
   var newProject = {
     id: req.body.id,
     name: req.body.name,
-    owner: req.body.owner
+    owner: req.body.owner,
+    description: req.body.description,
   };
 
   let dbProjects = database.ref('projects');
