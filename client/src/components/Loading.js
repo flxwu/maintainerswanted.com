@@ -15,7 +15,9 @@ class Loading extends Component {
 
 const DotWrapper = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5rem;
 `;
 
 const Dot = styled.div`
