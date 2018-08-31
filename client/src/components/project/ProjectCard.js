@@ -94,6 +94,9 @@ const Link = styled.a`
 	display: flex;
 	color: #E27D60;
 	flex: 1;
+	&:hover { 
+		color: grey; 
+	}
 `;
 
 export default ProjectCard;
