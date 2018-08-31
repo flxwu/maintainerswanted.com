@@ -7,7 +7,7 @@ const Header = props =>	(
 		<Text>
 			Find projects that are searching for Maintainers
 			or <br />
-			find maintainers to overtake your project!
+			Find maintainers to overtake your project!
 		</Text>
 	</Container>
 );
@@ -25,6 +25,7 @@ const Title = styled.h1`
 	text-align: center;
 	font-family: Courier New;
 	flex: 1;
+	margin: 10px;
 `;
 
 const Text = styled.p`
@@ -32,6 +33,7 @@ const Text = styled.p`
 	line-height: 1.8;
 	flex: 1;
 	text-align: center;
+	margin: 10px;
 `;
 
 export default Header;

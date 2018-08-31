@@ -47,7 +47,7 @@ export default class App extends Component {
 		return (
 			<div>
 				<Header />
-				<List>
+				<List mobile>
 					<NewProject />
 					{projects.length !== 0 ?
 						projects.map(project => (
@@ -76,10 +76,10 @@ const List = styled.ul`
   margin-block-end: 1em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
-  padding-inline-start: 170px;
-  -webkit-padding-start: 170px;
-  padding-inline-end: 170px;
-  -webkit-padding-end: 170px;
+  padding-inline-start: 20%;
+  -webkit-padding-start: 20%;
+  padding-inline-end: 20%;
+  -webkit-padding-end: 20%;
   list-style-type: none;
   background: #FAFAFA;
   text-align: center;
