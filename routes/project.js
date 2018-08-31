@@ -110,9 +110,11 @@ router.post('/add', async (req, res, next) => {
   var database = firebase.database();
   const owner = req.body.owner;
   const repo = req.body.repo;
+  const twitterHandle = req.body.twitter;
   const repoData = await octokit.repos.get({owner, repo});
   const id = Math.random().toString(36).substr(2, 9);
   
+
   // New entry
   var newProject = {
     id: id,
@@ -120,6 +122,7 @@ router.post('/add', async (req, res, next) => {
     owner: owner,
     description: repoData.data.description,
     url: 'https://www.github.com/' + owner + '/' + repo,
+    twitter: twitterHandle,
   };
 
   let dbProjects = database.ref('projects');

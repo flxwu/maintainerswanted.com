@@ -7,6 +7,7 @@ import MediaQuery from 'react-responsive';
 import Emoji from 'react-emoji-render';
 >>>>>>> bcfd722... Added emoji support
 
+import Icon from '../Icon';
 import Info from './Info';
 
 class ProjectCard extends Component {
@@ -36,18 +37,27 @@ class ProjectCard extends Component {
 
 	render () {
 		const { stars, contributors } = this.state;
-		const { name, description, url } = this.state.project;
+		const { name, description, url, twitter } = this.state.project;
+
+		const twitterURL = (handle) => `https://twitter.com/${handle}`;
 
 		return (
 			<div>
 				<MediaQuery minDeviceWidth={1224}>
 					<Card>
 						<Meta>
-							<Title>
-								<Link href={url}>
-									{name}
-								</Link>
-							</Title>
+							<TitleWrapper>
+								<Title>
+									<Link href={url}>
+										{name}
+									</Link>
+								</Title>
+								<div style={styles.iconContainer}>
+									<a href={twitterURL(twitter)} target="_blank" rel="noopener noreferrer">
+										<Icon type={'twitter'} width={30} height={30} style={styles.twitter} />
+									</a>
+								</div>
+							</TitleWrapper>
 							<Emoji text={description} />
 						</Meta>
 						<Info stars={stars} contributors={contributors} />
@@ -71,6 +81,19 @@ class ProjectCard extends Component {
 	}
 }
 
+const styles = {
+	iconContainer: {
+		display: 'flex',
+		alignItems: 'center',
+		flexBasis: '100%',
+		alignSelf: 'center',
+		marginLeft: '15px'
+	},
+	twitter: {
+		cursor: 'pointer'
+	}
+};
+
 const Card = styled.div`
 	position: relative;
 	background: #fff;
@@ -89,7 +112,6 @@ const Card = styled.div`
 	`
 ;
 
-
 const Meta = styled.div`
 	display: flex;
 	flex: 1;
@@ -97,6 +119,10 @@ const Meta = styled.div`
 	flex-basis: 70%;
 	${props => props.mobile && 'align-self: flex-start'}; 
 	text-align: left;
+`;
+
+const TitleWrapper = styled.div`
+	display: flex;
 `;
 
 const Title = styled.h2`
