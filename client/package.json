@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "if-env NODE_ENV=production && yarn run serve --silent || yarn run dev --silent",
+    "start": "if-env NODE_ENV=production && yarn --silent serve || yarn --silent dev",
     "build": "preact build --template src/public.html",
     "serve": "preact build && preact serve",
     "dev": "preact watch --template src/public.html",
