@@ -1,34 +1,19 @@
 var express = require('express');
 var router = express.Router();
 var firebase = require('firebase');
+const config = require('./config');
 
-// Database connection
-var db = require('../db.js');
-var database = firebase.database();
-
-// TODO: Add params
-
-/*
-
-  Data Format:
-
-  {
-    id: NUMBER,
-    name: STRING,
-    owner: STRING,
-    collaborators: [STRING, STRING, ...],
-    stars: NUMBER,
-    commits: NUMBER
-  }
-
-*/
+firebase.initializeApp(config);
 
 /* GET local project */
 router.get('/get', (req, res, next) => {
+  var database = firebase.database();
+  
+  var projectRef = database.ref('projects/' + req.query.name);
+  let project;
 
-  var projectRef = database.ref('projects/' + req.query.projectname);
   projectRef.on('value', (snapshot) => {
-    var project = snapshot.val();
+    project = snapshot.val();
   });
 
   // Return project if availible
@@ -40,32 +25,5 @@ router.get('/get', (req, res, next) => {
   next();
 
 });
-
-/* POST new local project */
-router.post('/add', (req, res, next) => {
-
-  database.ref('projects/' + req.query.projectname).set({
-    id: req.query.id,
-    name: req.query.name,
-    owner: req.query.owner,
-    collaborators: JSON.parse(req.query.collaborators),
-    stars: req.query.stars,
-    commits: req.query.commits
-  });
-
-  res.json({ status: 200, data: project });
-
-  next();
-
-});
-
-/* PATCH new local project */
-router.patch('/update', (req, res, next) => {
-
-  res.send("Hello World!");
-  next();
-
-});
-
 
 module.exports = router;
