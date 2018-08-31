@@ -1,3 +1,4 @@
 node_modules/
 
 dbconfig.json
+routes/config.js
