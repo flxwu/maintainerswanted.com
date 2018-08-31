@@ -87,7 +87,8 @@ const styles = {
 		marginLeft: '15px'
 	},
 	twitter: {
-		cursor: 'pointer'
+		cursor: 'pointer',
+		display: 'flex'
 	}
 };
 
