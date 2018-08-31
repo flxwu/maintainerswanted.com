@@ -30,11 +30,35 @@ router.get('/getList', (req, res, next) => {
   if(project)
     res.json({ status: 200, data: project });
   else
-    res.json({ status: 500, err: "That project does not exist!" });
+    res.json({ status: 500, err: "Error while getting registered Repository List" });
 
   next();
 
 });
+
+
+/**
+ * Fetches Repo Data from Github API
+ * /project/getStatistics?owner=flxwu&repo=test
+ */
+router.get('/getStatistics', async (req, res, next) => {
+  const { owner, repo } = req.query;
+  const repoData = await octokit.repos.get({owner, repo});
+  const contributors = await octokit.repos.getStatsContributors({owner, repo});
+
+  const data = {
+    stars: repoData.data.stargazers_count,
+    watchers: repoData.data.watchers_count,
+    contributors: contributors.data[0].total,
+  }
+
+  // Return project if available
+  if(data)
+    res.json({ data: await data });
+  else
+    res.json({ status: 500, err: "Error while getting Repository Data" });
+});
+
 
 /**
  * Adds new project to Firebase
@@ -56,12 +80,10 @@ router.post('/add', (req, res, next) => {
   // Get a key for a new Post.
   var newPostKey = database.ref().child('projects').push().key;
 
-  console.log(newPostKey);
-
   if(newPostKey)
     res.json({ status: 200, data: newProject });
   else
-    res.json({ status: 500, err: "Project could not be added!" });
+    res.json({ status: 500, err: "Error while adding project" });
 
   next();
 
