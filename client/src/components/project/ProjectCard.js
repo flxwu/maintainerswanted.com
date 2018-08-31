@@ -1,7 +1,11 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
 import axios from 'axios';
+<<<<<<< HEAD
 import MediaQuery from 'react-responsive';
+=======
+import Emoji from 'react-emoji-render';
+>>>>>>> bcfd722... Added emoji support
 
 import Info from './Info';
 
@@ -29,44 +33,25 @@ class ProjectCard extends Component {
 			contributors: data.contributors
 		});
 	}
-	
+
 	render () {
 		const { stars, contributors } = this.state;
 		const { name, description, url } = this.state.project;
 
 		return (
-			<div>
-				<MediaQuery minDeviceWidth={1224}>
-					<Card>
-						<Meta>
-							<Title>
-								<Link href={url}>
-									{name}
-								</Link>
-							</Title>
-							<SubTitle>
-								{description}
-							</SubTitle>
-						</Meta>
-						<Info stars={stars} contributors={contributors} />
-					</Card>
-				</MediaQuery>
-				<MediaQuery maxDeviceWidth={1224}>
-					<Card mobile>
-						<Meta>
-							<Title>
-								<Link href={url}>
-									{name}
-								</Link>
-							</Title>
-							<SubTitle>
-								{description}
-							</SubTitle>
-						</Meta>
-						<Info stars={stars} contributors={contributors} />
-					</Card>
-				</MediaQuery>
-			</div>
+			<Card>
+				<Meta>
+					<Title>
+						<Link href={url}>
+							{name}
+						</Link>
+					</Title>
+					<SubTitle>
+						<Emoji text={description} />
+					</SubTitle>
+				</Meta>
+				<Info stars={stars} contributors={contributors} />
+			</Card>
 		);
 	}
 }
@@ -114,8 +99,8 @@ const Link = styled.a`
 	display: flex;
 	color: #E27D60;
 	flex: 1;
-	&:hover { 
-		color: grey; 
+	&:hover {
+		color: grey;
 	}
 `;
 
