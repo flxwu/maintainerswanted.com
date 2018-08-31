@@ -20,6 +20,7 @@ export default class App extends Component {
 		const dataObject = response.data.data[0];
 		const data = Object.keys(dataObject)
 			.map(dbKey => dataObject[dbKey]);
+		
 		this.setState({ projects: data });
 	}
 
