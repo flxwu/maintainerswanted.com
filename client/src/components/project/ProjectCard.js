@@ -31,13 +31,13 @@ class ProjectCard extends Component {
 	
 	render () {
 		const { stars, contributors } = this.state;
-		const { name, description, link } = this.state.project;
+		const { name, description, url } = this.state.project;
 
 		return (
 			<Card>
 				<Meta>
 					<Title>
-						<Link href={link}>
+						<Link href={url}>
 							{name}
 						</Link>
 					</Title>
