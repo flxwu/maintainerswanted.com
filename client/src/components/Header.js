@@ -3,9 +3,11 @@ import styled from 'styled-components';
 
 const Header = props =>	(
 	<Container>
-		<Title>Looking for Maintainers</Title>
+		<Title>Maintainers Wanted</Title>
 		<Text>
-			Find projects that are searching for maintainers
+			Find projects that are searching for Maintainers
+			or <br />
+			find maintainers to overtake your project!
 		</Text>
 	</Container>
 );
