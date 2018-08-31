@@ -1,11 +1,8 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
 import axios from 'axios';
-<<<<<<< HEAD
 import MediaQuery from 'react-responsive';
-=======
 import Emoji from 'react-emoji-render';
->>>>>>> bcfd722... Added emoji support
 
 import Icon from '../Icon';
 import Info from './Info';
