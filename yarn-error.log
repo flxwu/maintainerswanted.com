@@ -1,26 +1,50 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add -g preact
+  /Users/flxwu/.nvm/versions/node/v8.11.3/bin/node /usr/local/Cellar/yarn/1.9.4/libexec/bin/yarn.js add preact-combat
 
 PATH: 
-  /Users/quentin/mongodb/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/share/dotnet:/Library/Frameworks/Mono.framework/Versions/Current/Commands
+  /Users/flxwu/code/go/bin:/Users/flxwu/code/go/bin:/Users/flxwu/.nvm/versions/node/v8.11.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/go/bin:/usr/local/MacGPG2/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin/:/usr/local/mysql/bin/:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin/:/usr/local/mysql/bin/
 
 Yarn version: 
-  1.5.1
+  1.9.4
 
 Node version: 
-  9.6.1
+  8.11.3
 
 Platform: 
   darwin x64
 
+Trace: 
+  Error: https://registry.yarnpkg.com/preact-combat: Not found
+      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.9.4/libexec/lib/cli.js:64202:18)
+      at Request.self.callback (/usr/local/Cellar/yarn/1.9.4/libexec/lib/cli.js:137468:22)
+      at emitTwo (events.js:126:13)
+      at Request.emit (events.js:214:7)
+      at Request.<anonymous> (/usr/local/Cellar/yarn/1.9.4/libexec/lib/cli.js:138440:10)
+      at emitOne (events.js:116:13)
+      at Request.emit (events.js:211:7)
+      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.9.4/libexec/lib/cli.js:138362:12)
+      at Object.onceWrapper (events.js:313:30)
+      at emitNone (events.js:111:20)
+
 npm manifest: 
   {
     "name": "lookingformaintainers.com",
-    "version": "0.0.1",
+    "version": "1.1.3",
     "private": true,
     "scripts": {
       "start": "nodemon ./bin/www",
-      "dev": "concurrently \"yarn start\" \"cd client && yarn start\""
+      "dev": "concurrently \"yarn start\" \"cd client && yarn start\"",
+      "heroku-postbuild": "cd client && yarn && yarn run build",
+      "bump": "yarn version --patch"
+    },
+    "homepage": "https://maintainerswanted.com",
+    "repository": {
+      "type": "git",
+      "url": "git://github.com/flxwu/maintainerswanted.com.git"
+    },
+    "engines": {
+      "node": "8.11.3",
+      "yarn": "1.9.4"
     },
     "dependencies": {
       "@octokit/rest": "^15.10.0",
@@ -31,6 +55,7 @@ npm manifest:
       "express": "~4.16.0",
       "firebase": "^5.4.1",
       "firebase-admin": "^6.0.0",
+      "gh-emoji": "^0.2.5",
       "http-errors": "~1.6.2",
       "jade": "~1.11.0",
       "morgan": "~1.9.0",
@@ -67,9 +92,9 @@ Lockfile:
     version "0.3.4"
     resolved "https://registry.yarnpkg.com/@firebase/auth-types/-/auth-types-0.3.4.tgz#253b1b2d9b520a0b945d4617c8418f0f19a4159f"
   
-  "@firebase/auth@0.7.3":
-    version "0.7.3"
-    resolved "https://registry.yarnpkg.com/@firebase/auth/-/auth-0.7.3.tgz#b596bdc43d79b7121758c78b0dd6d1d70cd7387d"
+  "@firebase/auth@0.7.4":
+    version "0.7.4"
+    resolved "https://registry.yarnpkg.com/@firebase/auth/-/auth-0.7.4.tgz#007db9801bc2eaaafe65d3e27613a69238f67b63"
     dependencies:
       "@firebase/auth-types" "0.3.4"
   
@@ -91,9 +116,9 @@ Lockfile:
     version "0.6.0"
     resolved "https://registry.yarnpkg.com/@firebase/firestore-types/-/firestore-types-0.6.0.tgz#560befea439a4a9d830866fa5f5859e4bb30d770"
   
-  "@firebase/firestore@0.7.1":
-    version "0.7.1"
-    resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-0.7.1.tgz#41a820934b45409b40aedccfc3ba61228b70b51b"
+  "@firebase/firestore@0.7.2":
+    version "0.7.2"
+    resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-0.7.2.tgz#077bc793445faa4c68b5a3960ef95b43d135ddc7"
     dependencies:
       "@firebase/firestore-types" "0.6.0"
       "@firebase/logger" "0.1.1"
@@ -892,7 +917,7 @@ Lockfile:
       readable-stream "^2.2.2"
       typedarray "^0.0.6"
   
-  concurrently:
+  concurrently@^4.0.1:
     version "4.0.1"
     resolved "https://registry.yarnpkg.com/concurrently/-/concurrently-4.0.1.tgz#f6310fbadf2f476dd95df952edb5c0ab789f672c"
     dependencies:
@@ -1399,13 +1424,13 @@ Lockfile:
       "@types/google-cloud__storage" "^1.1.7"
   
   firebase@^5.4.1:
-    version "5.4.1"
-    resolved "https://registry.yarnpkg.com/firebase/-/firebase-5.4.1.tgz#1e2c12f682771f4b6a1d78255af86dd8dc28f0e7"
+    version "5.4.2"
+    resolved "https://registry.yarnpkg.com/firebase/-/firebase-5.4.2.tgz#48d6da1be44539efcb2aa4875ef9155dd0700ae4"
     dependencies:
       "@firebase/app" "0.3.3"
-      "@firebase/auth" "0.7.3"
+      "@firebase/auth" "0.7.4"
       "@firebase/database" "0.3.4"
-      "@firebase/firestore" "0.7.1"
+      "@firebase/firestore" "0.7.2"
       "@firebase/functions" "0.3.0"
       "@firebase/messaging" "0.3.5"
       "@firebase/polyfill" "0.3.3"
@@ -1520,6 +1545,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/getpass/-/getpass-0.1.7.tgz#5eff8e3e684d569ae4cb2b1282604e8ba62149fa"
     dependencies:
       assert-plus "^1.0.0"
+  
+  gh-emoji@^0.2.5:
+    version "0.2.5"
+    resolved "https://registry.yarnpkg.com/gh-emoji/-/gh-emoji-0.2.5.tgz#a6755eba4f9c2af24a473c27a4963433286bbeff"
   
   glob-parent@^3.1.0:
     version "3.1.0"
@@ -3243,8 +3272,8 @@ Lockfile:
       amdefine ">=0.0.4"
   
   spawn-command@^0.0.2-1:
-    version "0.0.2"
-    resolved "https://registry.yarnpkg.com/spawn-command/-/spawn-command-0.0.2.tgz#9544e1a43ca045f8531aac1a48cb29bdae62338e"
+    version "0.0.2-1"
+    resolved "https://registry.yarnpkg.com/spawn-command/-/spawn-command-0.0.2-1.tgz#62f5e9466981c1b796dc5929937e11c9c6921bd0"
   
   spdx-correct@^3.0.0:
     version "3.0.0"
@@ -3813,16 +3842,3 @@ Lockfile:
       cliui "^2.1.0"
       decamelize "^1.0.0"
       window-size "0.1.0"
-
-Trace: 
-  Error: Missing list of packages to add to your project.
-      at new MessageError (/usr/local/lib/node_modules/yarn/lib/cli.js:186:110)
-      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:40587:13)
-      at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:98:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:116:14
-      at new Promise (<anonymous>)
-      at new F (/usr/local/lib/node_modules/yarn/lib/cli.js:23451:28)
-      at Object.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:95:12)
-      at Object.run (/usr/local/lib/node_modules/yarn/lib/cli.js:40599:19)
-      at run (/usr/local/lib/node_modules/yarn/lib/cli.js:89113:20)
