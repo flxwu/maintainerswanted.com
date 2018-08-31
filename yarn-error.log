@@ -1,8 +1,8 @@
 Arguments: 
-  /Users/flxwu/.nvm/versions/node/v8.11.3/bin/node /usr/local/Cellar/yarn/1.9.4/libexec/bin/yarn.js add preact-combat
+  /usr/local/bin/node /usr/local/bin/yarn add passport passport-github
 
 PATH: 
-  /Users/flxwu/code/go/bin:/Users/flxwu/code/go/bin:/Users/flxwu/.nvm/versions/node/v8.11.3/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/go/bin:/usr/local/MacGPG2/bin:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin/:/usr/local/mysql/bin/:/Library/Java/JavaVirtualMachines/jdk1.8.0_181.jdk/Contents/Home/bin/:/usr/local/mysql/bin/
+  /Users/quentin/mongodb/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/TeX/texbin:/usr/local/share/dotnet:/Library/Frameworks/Mono.framework/Versions/Current/Commands
 
 Yarn version: 
   1.9.4
@@ -14,17 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/preact-combat: Not found
-      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.9.4/libexec/lib/cli.js:64202:18)
-      at Request.self.callback (/usr/local/Cellar/yarn/1.9.4/libexec/lib/cli.js:137468:22)
-      at emitTwo (events.js:126:13)
-      at Request.emit (events.js:214:7)
-      at Request.<anonymous> (/usr/local/Cellar/yarn/1.9.4/libexec/lib/cli.js:138440:10)
-      at emitOne (events.js:116:13)
-      at Request.emit (events.js:211:7)
-      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.9.4/libexec/lib/cli.js:138362:12)
-      at Object.onceWrapper (events.js:313:30)
-      at emitNone (events.js:111:20)
+  Error: ENFILE: file table overflow, copyfile '/Users/quentin/Library/Caches/Yarn/v2/npm-grpc-1.14.1-42d5900fd13a0daca1a58155cd4ab4d0c2f9c716/deps/grpc/third_party/boringssl/crypto/digest_extra/digest_test.cc' -> '/Users/quentin/Desktop/Programming/Web/looking-for-maintainers/node_modules/google-gax/node_modules/grpc/deps/grpc/third_party/boringssl/crypto/digest_extra/digest_test.cc'
 
 npm manifest: 
   {
@@ -55,7 +45,6 @@ npm manifest:
       "express": "~4.16.0",
       "firebase": "^5.4.1",
       "firebase-admin": "^6.0.0",
-      "gh-emoji": "^0.2.5",
       "http-errors": "~1.6.2",
       "jade": "~1.11.0",
       "morgan": "~1.9.0",
