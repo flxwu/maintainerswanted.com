@@ -132,7 +132,7 @@ const Submit = styled.input`
 		cursor: pointer;
 	}
 	&:active {
-		
+		outline: 0;
 	}`
 ;
 

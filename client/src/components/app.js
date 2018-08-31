@@ -79,6 +79,25 @@ export default class App extends Component {
             Made with love by
 						<Link href="https://twitter.com/flxwu"> @flxwu</Link> and
 						<Link href="https://twitter.com/QuentinOschatz"> @Qo2770</Link>
+						<br />
+						<Footer break>
+							<Link break href="https://github.com/flxwu/maintainerswanted.com">
+              Find us on Github!
+							</Link>
+						</Footer>
+						<br />
+						<Footer small>
+            Built using
+							<Link small href="https://github.com/flxwu/maintainerswanted.com">
+								{' Preact'}
+							</Link> +
+							<Link small href="https://github.com/flxwu/maintainerswanted.com">
+								{' Express'}
+							</Link> +
+							<Link small href="https://github.com/flxwu/maintainerswanted.com">
+								{' Firebase'}
+							</Link>
+						</Footer>
 					</Footer>
 				</FooterWrapper>
 			</div>
@@ -111,6 +130,9 @@ const FooterWrapper = styled.div`
 
 const Footer = styled.div`
   position: relative;
+  text-align: center;
+  ${props => props.small && 'font-size: 12px'};
+  ${props => props.break && 'margin-top: 7px'};
 `;
 
 const ProjectCardWrapper = styled.li`
@@ -121,8 +143,10 @@ const ProjectCardWrapper = styled.li`
 const Link = styled.a`
   text-decoration: none;
   font-weight: bold;
+  text-align: center;
   color: #E27D60;
   &:hover { 
     color: grey; 
-  } 
+  };
+  ${props => props.break && 'margin-top: 10px'};
 `;
