@@ -107,14 +107,16 @@ router.post('/add', (req, res, next) => {
 
   var database = firebase.database();
 
-  console.log(req.body);
+  const owner = req.body.owner;
+  const repo = req.body.name;
+  const repoData = await octokit.repos.get({owner, repo});
 
   // New entry
   var newProject = {
     id: req.body.id,
     name: req.body.name,
     owner: req.body.owner,
-    description: req.body.description,
+    description: repoData.data.description,
   };
 
   let dbProjects = database.ref('projects');
