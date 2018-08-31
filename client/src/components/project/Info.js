@@ -22,13 +22,13 @@ class Info extends Component {
 							<Text>
 								{props.stars}
 							</Text>
-							<Icon type={'star'} />
+							<Icon type={'star'} alt="Stars" title="Stars" />
 						</SubContainer>
 						<SubContainer>
 							<Text>
 								{props.contributors}
 							</Text>
-							<Icon type={'users'} />
+							<Icon type={'users'} alt="Contributors" title="Contributors" />
 						</SubContainer>
 					</Container>
 				</MediaQuery>
@@ -38,13 +38,13 @@ class Info extends Component {
 							<Text mobile>
 								{props.stars}
 							</Text>
-							<Icon type={'star'} width={30} />
+							<Icon type={'star'} width={30} alt="Stars" title="Stars" />
 						</SubContainer>
 						<SubContainer mobile>
 							<Text mobile>
 								{props.contributors}
 							</Text>
-							<Icon type={'users'} width={30} />
+							<Icon type={'users'} width={30} alt="Contributors" title="Contributors" />
 						</SubContainer>
 					</Container>
 				</MediaQuery>
