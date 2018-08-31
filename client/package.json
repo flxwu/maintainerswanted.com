@@ -23,11 +23,11 @@
     "identity-obj-proxy": "^3.0.0",
     "if-env": "^1.0.0",
     "jest": "^21.2.1",
-    "preact-cli": "^2.1.0",
     "preact-render-spy": "^1.2.1"
   },
   "dependencies": {
     "preact": "^8.2.6",
+    "preact-cli": "^2.1.0",
     "preact-cli-plugin-async": "^2.0.0",
     "preact-compat": "^3.17.0",
     "preact-router": "^2.5.7",
