@@ -18,8 +18,12 @@ class NewProject extends Component {
 			<Card collapsed={collapsed}>
 				{collapsed ?
 					<Form>
-						Github Username: <TextBox />{"\n"}
+						<Row>
+						Github Username: <TextBox />
+						</Row>
+						<Row>
 						Repository Name: <TextBox />
+						</Row>
 					</Form>
 					: <Icon type={'plus'} />
 				}
@@ -28,7 +32,7 @@ class NewProject extends Component {
 	}
 }
 
-const Card = styled.div`
+const Card = styled.button`
 	position: relative;
 	background: #E27D60;
 	padding: 0.5% 8%;
@@ -36,15 +40,28 @@ const Card = styled.div`
 	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
 	line-height: 1.8;
 	font-size: 18px;
+	margin: auto;
 	margin-bottom: 20px;
 	overflow: hidden;
 	display: flex;
+	width: 100%;
 	align-items: center;
 	justify-content: space-around`
 ;
 
 const Form = styled.form`
+	display: flex;
+	flex-direction: column;
+	flex-basis: 100%;
+	align-items: stretch;
+`;
 
+const Row = styled.div`
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-end;
+	white-space: nowrap;
 `;
 
 const TextBox = styled.input`
@@ -54,8 +71,9 @@ const TextBox = styled.input`
 	height: 20px;
 	padding: 10px;
 	margin: 20px;
-	min-width: 70%;
 	border: none;
+	display: flex;
+	flex-basis: 100%;
 `;
 
 export default NewProject;
