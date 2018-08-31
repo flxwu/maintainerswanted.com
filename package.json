@@ -8,6 +8,15 @@
     "heroku-postbuild": "cd client && yarn && yarn run build",
     "bump": "yarn version --patch"
   },
+  "homepage": "https://maintainerswanted.com",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/flxwu/maintainerswanted.com.git"
+  },
+  "engines": {
+    "node": "8.11.3",
+    "yarn": "1.9.4"
+  },
   "dependencies": {
     "@octokit/rest": "^15.10.0",
     "axios": "^0.18.0",

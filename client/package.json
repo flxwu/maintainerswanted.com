@@ -14,7 +14,6 @@
   "eslintConfig": {
     "extends": "eslint-config-synacor"
   },
-  "proxy": "http://localhost:5000",
   "eslintIgnore": [
     "build/*"
   ],
@@ -29,6 +28,7 @@
   },
   "dependencies": {
     "preact": "^8.2.6",
+    "preact-cli-plugin-async": "^2.0.0",
     "preact-compat": "^3.17.0",
     "preact-router": "^2.5.7",
     "rest.js": "^0.2.1",
