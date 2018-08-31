@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
 import axios from 'axios';
+import MediaQuery from 'react-responsive';
 
 import Info from './Info';
 
@@ -34,19 +35,38 @@ class ProjectCard extends Component {
 		const { name, description, url } = this.state.project;
 
 		return (
-			<Card>
-				<Meta>
-					<Title>
-						<Link href={url}>
-							{name}
-						</Link>
-					</Title>
-					<SubTitle>
-						{description}
-					</SubTitle>
-				</Meta>
-				<Info stars={stars} contributors={contributors} />
-			</Card>
+			<div>
+				<MediaQuery minDeviceWidth={1224}>
+					<Card>
+						<Meta>
+							<Title>
+								<Link href={url}>
+									{name}
+								</Link>
+							</Title>
+							<SubTitle>
+								{description}
+							</SubTitle>
+						</Meta>
+						<Info stars={stars} contributors={contributors} />
+					</Card>
+				</MediaQuery>
+				<MediaQuery maxDeviceWidth={1224}>
+					<Card mobile>
+						<Meta>
+							<Title>
+								<Link href={url}>
+									{name}
+								</Link>
+							</Title>
+							<SubTitle>
+								{description}
+							</SubTitle>
+						</Meta>
+						<Info stars={stars} contributors={contributors} />
+					</Card>
+				</MediaQuery>
+			</div>
 		);
 	}
 }
