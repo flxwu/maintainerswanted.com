@@ -39,19 +39,34 @@ class ProjectCard extends Component {
 		const { name, description, url } = this.state.project;
 
 		return (
-			<Card>
-				<Meta>
-					<Title>
-						<Link href={url}>
-							{name}
-						</Link>
-					</Title>
-					<SubTitle>
-						<Emoji text={description} />
-					</SubTitle>
-				</Meta>
-				<Info stars={stars} contributors={contributors} />
-			</Card>
+			<div>
+				<MediaQuery minDeviceWidth={1224}>
+					<Card>
+						<Meta>
+							<Title>
+								<Link href={url}>
+									{name}
+								</Link>
+							</Title>
+							<Emoji text={description} />
+						</Meta>
+						<Info stars={stars} contributors={contributors} />
+					</Card>
+				</MediaQuery>
+				<MediaQuery maxDeviceWidth={1224}>
+					<Card mobile>
+						<Meta mobile>
+							<Title mobile>
+								<Link href={url}>
+									{name}
+								</Link>
+							</Title>
+							<Description text={description} />
+						</Meta>
+						<Info stars={stars} contributors={contributors} />
+					</Card>
+				</MediaQuery>
+			</div>
 		);
 	}
 }
@@ -63,20 +78,25 @@ const Card = styled.div`
 	border-radius: 12px;
 	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
 	line-height: 1.8;
-	font-size: 18px;
 	margin-bottom: 20px;
 	height: 10rem;
 	overflow: hidden;
 	display: flex;
 	align-items: center;
-	justify-content: space-around`
+	justify-content: space-around
+	font-size: ${props => props.mobile ? '12px' : '18px'};
+	flex-direction: ${props => props.mobile ? 'column' : 'row'};
+	`
 ;
+
 
 const Meta = styled.div`
 	display: flex;
 	flex: 1;
 	flex-direction: column;
 	flex-basis: 70%;
+	${props => props.mobile && 'align-self: flex-start'}; 
+	text-align: left;
 `;
 
 const Title = styled.h2`
@@ -84,7 +104,12 @@ const Title = styled.h2`
 	flex: 1;
 	text-decoration: underline;
 	font-family: Courier New;
-	flex-basis: 0;
+	${props => props.mobile && 'max-height: fit-content'};
+	${props => props.mobile && 'flex-basis: 0'};
+`;
+
+const Description = styled(Emoji)`
+	display: flex;
 `;
 
 const SubTitle = styled.h4`
