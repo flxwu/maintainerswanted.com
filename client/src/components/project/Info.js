@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
+import MediaQuery from 'react-responsive';
 
 import Icon from '../Icon';
 
@@ -13,22 +14,41 @@ class Info extends Component {
 	}
 
 	render (props) {
-		
 		return (
-			<Container>
-				<SubContainer>
-					<Text>
-						{props.stars}
-					</Text>
-					<Icon type={'star'} />
-				</SubContainer>
-				<SubContainer>
-					<Text>
-						{props.contributors}
-					</Text>
-					<Icon type={'users'} />
-				</SubContainer>
-			</Container>
+			<div>
+				<MediaQuery minDeviceWidth={1224}>
+					<Container>
+						<SubContainer>
+							<Text>
+								{props.stars}
+							</Text>
+							<Icon type={'star'} />
+						</SubContainer>
+						<SubContainer>
+							<Text>
+								{props.contributors}
+							</Text>
+							<Icon type={'users'} />
+						</SubContainer>
+					</Container>
+				</MediaQuery>
+				<MediaQuery maxDeviceWidth={1224}>
+					<Container mobile>
+						<SubContainer mobile>
+							<Text mobile>
+								{props.stars}
+							</Text>
+							<Icon type={'star'} width={30} />
+						</SubContainer>
+						<SubContainer mobile>
+							<Text mobile>
+								{props.contributors}
+							</Text>
+							<Icon type={'users'} width={30} />
+						</SubContainer>
+					</Container>
+				</MediaQuery>
+			</div>
 		);
 	}
 }
@@ -41,6 +61,7 @@ const Container = styled.div`
 	justify-content: flex-end;
 	align-items: flex-end;
 	padding: 0 4%;
+	flex-direction: ${props => props.mobile ? 'row' : 'column'}
 `;
 
 const SubContainer = styled.div`
@@ -49,7 +70,7 @@ const SubContainer = styled.div`
 	justify-self: flex-end;
 	justify-content: flex-end;
 	align-items: center;
-	margin: -10px 0;
+	margin: ${props => props.mobile ? '0 10px' : '-10px 0'};
 `;
 
 const Text = styled.p`
@@ -60,7 +81,7 @@ const Text = styled.p`
 	padding-top: 5px;
 	font-style: italic;
 	font-weight: 500;
-	font-size: 25px;
+	font-size: ${props => props.mobile ? '13px' : '25px'}
 `;
 
 export default Info;
