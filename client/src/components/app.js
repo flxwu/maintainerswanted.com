@@ -14,6 +14,7 @@ export default class App extends Component {
 			projects: []
 		};
 
+		// accessibility: add outline if tab is used
 		if (typeof window !== 'undefined') {
 			const handleFirstTab = (e) => {
 				if (e.keyCode === 9) {
@@ -24,6 +25,11 @@ export default class App extends Component {
     
 			window.addEventListener('keydown', handleFirstTab);
 		}
+    
+		if (typeof document !== 'undefined') {
+			document.title = 'Maintainers Wanted';
+		}
+    
 	}
 
 	async componentDidMount() {
