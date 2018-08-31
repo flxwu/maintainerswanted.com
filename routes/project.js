@@ -26,7 +26,7 @@ var database = firebase.database();
 /* GET local project */
 router.get('/get', (req, res, next) => {
 
-  var projectRef = firebase.database().ref('projects/' + req.query.projectname);
+  var projectRef = database.ref('projects/' + req.query.projectname);
   projectRef.on('value', (snapshot) => {
     var project = snapshot.val();
   });
@@ -44,7 +44,7 @@ router.get('/get', (req, res, next) => {
 /* POST new local project */
 router.post('/add', (req, res, next) => {
 
-  firebase.database().ref('projects/' + req.query.projectname).set({
+  database.ref('projects/' + req.query.projectname).set({
     id: req.query.id,
     name: req.query.name,
     owner: req.query.owner,
