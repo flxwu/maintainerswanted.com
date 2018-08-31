@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
 import axios from 'axios';
+import MediaQuery from 'react-responsive';
 
 import ProjectCard from './project/ProjectCard';
 import NewProject from './form/NewProject';
@@ -47,17 +48,32 @@ export default class App extends Component {
 		return (
 			<div>
 				<Header />
-				<List mobile>
-					<NewProject />
-					{projects.length !== 0 ?
-						projects.map(project => (
-							<ProjectCardWrapper>
-								<ProjectCard project={project} />
-							</ProjectCardWrapper>)
-						) :
-						<Loading />
-					}
-				</List>
+				<MediaQuery minDeviceWidth={1224}>
+					<List>
+						<NewProject />
+						{projects.length !== 0 ?
+							projects.map(project => (
+								<ProjectCardWrapper>
+									<ProjectCard project={project} />
+								</ProjectCardWrapper>)
+							) :
+							<Loading />
+						}
+					</List>
+				</MediaQuery>
+				<MediaQuery maxDeviceWidth={1224}>
+					<List mobile>
+						<NewProject />
+						{projects.length !== 0 ?
+							projects.map(project => (
+								<ProjectCardWrapper>
+									<ProjectCard project={project} />
+								</ProjectCardWrapper>)
+							) :
+							<Loading />
+						}
+					</List>
+				</MediaQuery>
 				<FooterWrapper>
 					<Footer>
             Made with love by
@@ -76,10 +92,10 @@ const List = styled.ul`
   margin-block-end: 1em;
   margin-inline-start: 0px;
   margin-inline-end: 0px;
-  padding-inline-start: 20%;
-  -webkit-padding-start: 20%;
-  padding-inline-end: 20%;
-  -webkit-padding-end: 20%;
+  padding-inline-start: ${props => props.mobile ? '10%' : '20%'};
+  -webkit-padding-start: ${props => props.mobile ? '10%' : '20%'};
+  padding-inline-end: ${props => props.mobile ? '10%' : '20%'};
+  -webkit-padding-end: ${props => props.mobile ? '10%' : '20%'};
   list-style-type: none;
   background: #FAFAFA;
   text-align: center;
