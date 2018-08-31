@@ -12,7 +12,17 @@
     "test": "jest ./tests"
   },
   "eslintConfig": {
-    "extends": "eslint-config-synacor"
+    "extends": "eslint-config-synacor",
+    "rules": {
+      "react/sort-comp": [1, {
+        "order": [
+          "constructor",
+          "lifecycle",
+          "everything-else",
+          "render"
+        ]
+      }]
+    }
   },
   "eslintIgnore": [
     "build/*"
