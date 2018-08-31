@@ -13,6 +13,7 @@ class NewProject extends Component {
 
 		this._handleExpand = this._handleExpand.bind(this);
 		this._handleCollapse = this._handleCollapse.bind(this);
+		this._onSubmit = this._onSubmit.bind(this);
 	}
 
 	_handleExpand(event) {
@@ -26,6 +27,10 @@ class NewProject extends Component {
 		this.setState({ collapsed: true, collapseClick: true });
 	}
 
+	_onSubmit (event) {
+
+	}
+
 	render () {
 		const { collapsed } = this.state;
 		return (
@@ -37,15 +42,15 @@ class NewProject extends Component {
 					</IconWrapper> :
 					<FormWrapper>
 						<Form>
-							<Row>
-								Github Username: <TextBox />
+							<Row type="text">
+								Github Username: <TextBox placeholder="Enter your Github Username" />
 							</Row>
-							<Row>
-								Repository Name: <TextBox />
+							<Row type="text">
+								Repository Name: <TextBox placeholder="Enter your Repository Name" />
 							</Row>
 							<Row submit>
 								<Submit>
-								Submit
+									Submit
 								</Submit>
 							</Row>
 						</Form>
@@ -73,7 +78,8 @@ const Card = styled.div`
 	color: #E27D60;
 	padding-left: 8%;
 	padding-right: 5%;
-	align-self: stretch;`
+	align-self: stretch;
+	cursor: ${props => props.collapsed ? 'pointer' : 'default' };`
 ;
 
 const IconWrapper = styled.div`
