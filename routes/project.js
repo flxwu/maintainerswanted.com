@@ -18,7 +18,7 @@ octokit.authenticate({
  */
 router.get('/getList', (req, res, next) => {
   var database = firebase.database();
-  
+
   var projectRef = database.ref('projects/');
   let project;
 
@@ -37,25 +37,31 @@ router.get('/getList', (req, res, next) => {
 });
 
 /**
- * Fetches Repo Data from Github API
- * /project/getStatistics?owner=flxwu&repo=test
+ * Adds new project to Firebase
  */
-router.get('/getStatistics', async (req, res, next) => {
-  const { owner, repo } = req.query;
-  const repoData = await octokit.repos.get({owner, repo});
-  const contributors = await octokit.repos.getStatsContributors({owner, repo});
 
-  const data = {
-    stars: repoData.data.stargazers_count,
-    watchers: repoData.data.watchers_count,
-    contributors: contributors.data[0].total,
-  }
+router.post('/add', (req, res, next) => {
 
-  // Return project if available
-  if(data)
-    res.json({ data: await data });
+  var database = firebase.database();
+
+  console.log(req.body);
+
+  // New entry
+  var newProject = {
+    id: req.body.id,
+    name: req.body.name,
+    owner: req.body.owner
+  };
+
+  // Get a key for a new Post.
+  var newPostKey = database.ref().child('projects').push().key;
+
+  console.log(newPostKey);
+
+  if(newPostKey)
+    res.json({ status: 200, data: newProject });
   else
-    res.json({ status: 500, err: "That project does not exist!" });
+    res.json({ status: 500, err: "Project could not be added!" });
 
   next();
 
