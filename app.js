@@ -14,6 +14,9 @@ var githubcallback = require('./routes/auth/githubcallback');
 
 var app = express();
 
+// Init passport
+app.use(passport.initialize());
+
 // Routes
 app.use('/api/project', projectRouter);
 app.get('/api/auth/github', passport.authenticate('github'));
@@ -26,9 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/build')));
-
-// Init passport
-app.use(passport.initialize());
 
 // Passport user (de)-serialisation to avoid transmitting user info after login
 passport.serializeUser(function(user, callback) {
@@ -46,7 +46,7 @@ passport.use(new GitHubStrategy({
 	callbackURL: 'http://localhost:5000/api/auth/github/callback' //TODO: Change localhost to production host
 },
 (accessToken, refreshToken, profile, callback) => {
-  callback(null, profile);
+	return callback(null, profile);
 }
 ));
 
