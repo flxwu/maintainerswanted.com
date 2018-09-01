@@ -1,16 +1,44 @@
 import { h } from 'preact';
 import styled from 'styled-components';
 
-const Header = props =>	(
+const Header = props => (
 	<Container>
+		{props.loggedIn && (
+			<LoggedIn>
+				Logged in as:
+				<Link href={`https://github.com/${props.user}`} target="_blank">{props.user}</Link>
+			</LoggedIn>
+		)}
 		<Title>Maintainers Wanted</Title>
 		<Text>
-			Find projects that are searching for Maintainers
-			or <br />
+			Find projects that are searching for Maintainers or <br />
 			Find maintainers to overtake your project!
 		</Text>
 	</Container>
 );
+
+const LoggedIn = styled.div`
+	display: flex;
+	flex: 1;
+	align-self: flex-end;
+	font-family: Verdana;
+	text-align: right;
+	align-self: right;
+	font-weight: 500;
+	font-size: 12px;
+	margin: -1% 10%;
+`;
+
+const Link = styled.a`
+  font-style: italic;
+  margin-left: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  color: #e27d60;
+  &:hover {
+		color: grey;
+	}
+`;
 
 const Container = styled.header`
 	background-size: 100% 100%;
@@ -18,6 +46,8 @@ const Container = styled.header`
 	flex: 1;
 	align-items: center;
 	justify-content: center;
+	display: flex;
+	flex-direction: column;
 `;
 
 const Title = styled.h1`
@@ -26,6 +56,7 @@ const Title = styled.h1`
 	font-family: Courier New;
 	flex: 1;
 	margin: 10px;
+	display: flex;
 `;
 
 const Text = styled.p`
@@ -34,6 +65,7 @@ const Text = styled.p`
 	flex: 1;
 	text-align: center;
 	margin: 10px;
+	display: flex;
 `;
 
 export default Header;
