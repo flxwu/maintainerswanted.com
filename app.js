@@ -1,16 +1,14 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var passport = require('passport');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const passport = require('passport');
+const logger = require('morgan');
 
 const GitHubStrategy = require('passport-github').Strategy;
 
-var projectRouter = require('./routes/project');
-var github = require('./routes/auth/github');
-var githubcallback = require('./routes/auth/githubcallback');
+const projectRouter = require('./routes/project');
+// var github = require('./routes/auth/github');
+// var githubcallback = require('./routes/auth/githubcallback');
 
 var app = express();
 
@@ -57,9 +55,13 @@ passport.use(
 	)
 );
 
+// redirect all wildcard matches to landing page
+app.get('*', function(req, res) {
+  res.redirect('/');
+});
 // catch 404
-app.use(function(req, res, next) {
-	res.json({ status: 404, error: 'Not Found' });
+app.use(function(req, res) {
+	res.redirect('/');
 });
 
 module.exports = app;
