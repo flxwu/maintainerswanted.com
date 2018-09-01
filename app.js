@@ -14,19 +14,21 @@ var githubcallback = require('./routes/auth/githubcallback');
 
 var app = express();
 
+// Init passport
+app.use(passport.initialize());
+
 // Routes
 app.use('/api/project', projectRouter);
-app.use('/api/auth/github', github);
-app.use('/api/auth/guthub/callback', githubcallback);
+app.get('/api/auth/github', passport.authenticate('github'));
+app.get('/api/auth/github/callback',
+  passport.authenticate('github', { successRedirect: '/',
+                                     failureRedirect: '/login' }));
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/build')));
-
-// Init passport
-app.use(passport.initialize());
 
 // Passport user (de)-serialisation to avoid transmitting user info after login
 passport.serializeUser(function(user, callback) {
@@ -41,12 +43,10 @@ passport.deserializeUser(function(obj, callback) {
 passport.use(new GitHubStrategy({
 	clientID: process.env.GH_KEY,
 	clientSecret: process.env.GH_SECRET,
-	callbackURL: 'localhost:5000/auth/github/callback' //TODO: Change localhost to production host
+	callbackURL: 'http://localhost:5000/api/auth/github/callback' //TODO: Change localhost to production host
 },
 (accessToken, refreshToken, profile, callback) => {
-	User.findOrCreate({ githubId: profile.id }, function (err, user) {
-		return callback(err, user);
-	});
+	return callback(null, profile);
 }
 ));
 
