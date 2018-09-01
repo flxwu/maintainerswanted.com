@@ -1,18 +1,16 @@
-var express = require('express');
-var router = express.Router();
-var firebase = require('firebase');
-const octokit = require('@octokit/rest')();
+const express = require('express');
+const router = express.Router();
 
-const config = require('../util/config');
 const { paginate, finished } = require('../util/apiHelper');
 
-// run Setup for Firebase and Octokit
-firebase.initializeApp(config);
-octokit.authenticate({
-	type: 'oauth',
-	key: process.env.GH_KEY,
-	secret: process.env.GH_SECRET
-});
+let octokit = null;
+let firebase = null;
+
+function getRouter(octokitRef, firebaseRef) {
+	octokit = octokitRef;
+	firebase = firebaseRef;
+	return router;
+}
 
 /**
  * GET - /api/project/getList
@@ -141,4 +139,5 @@ router.post('/add', async (req, res, next) => {
 	next();
 });
 
-module.exports = router;
+
+module.exports = getRouter;

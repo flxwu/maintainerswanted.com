@@ -3,57 +3,54 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const logger = require('morgan');
-
-const GitHubStrategy = require('passport-github').Strategy;
+const firebase = require('firebase');
+const octokit = require('@octokit/rest')();
+const session = require('express-session');
+const FirebaseStore = require('connect-session-firebase')(session);
 
 const projectRouter = require('./routes/project');
-// var github = require('./routes/auth/github');
-// var githubcallback = require('./routes/auth/githubcallback');
+const authRouter = require('./routes/auth');
+const config = require('./util/config');
+const { passportSetup } = require('./util/apiHelper');
 
-var app = express();
-
+// Initialize Express App
+const app = express();
 // Init passport
 app.use(passport.initialize());
 
-// Routes
-app.use('/api/project', projectRouter);
-app.get('/api/auth/github', passport.authenticate('github'));
-app.get(
-	'/api/auth/github/callback',
-	passport.authenticate('github', {
-		successRedirect: '/',
-		failureRedirect: '/login'
-	})
-);
+// run Setup for Firebase, Octokit and Passport
+const ref = firebase.initializeApp(config);
+octokit.authenticate({
+	type: 'oauth',
+	key: process.env.GH_KEY,
+	secret: process.env.GH_SECRET
+});
+passportSetup(passport);
 
+
+// Routes
+app.use('/api/project', projectRouter(octokit, firebase));
+app.get('/api/auth', authRouter(passport));
+
+
+// Session Storage
+app.use(session({
+	store: new FirebaseStore({
+		database: ref.database()
+	}),
+	secret: 'keyboard cat',
+	resave: true,
+	saveUninitialized: true
+}));
+
+// Middleware
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// Serve FrontEnd build
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// Passport user (de)-serialisation to avoid transmitting user info after login
-passport.serializeUser(function(user, callback) {
-	callback(null, user);
-});
-
-passport.deserializeUser(function(obj, callback) {
-	callback(null, obj);
-});
-
-// Configure Github OAuth
-passport.use(
-	new GitHubStrategy(
-		{
-			clientID: process.env.GH_KEY,
-			clientSecret: process.env.GH_SECRET,
-			callbackURL: 'http://localhost:5000/api/auth/github/callback' //TODO: Change localhost to production host
-		},
-		(accessToken, refreshToken, profile, callback) => {
-			return callback(null, profile);
-		}
-	)
-);
 
 // redirect all wildcard matches to landing page
 app.get('*', function(req, res) {
