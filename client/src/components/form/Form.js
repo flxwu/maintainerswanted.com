@@ -2,8 +2,6 @@ import { h, Component } from 'preact';
 import styled from 'styled-components';
 import axios from 'axios';
 
-import Icon from '../Icon';
-
 class Form extends Component {
 	constructor (props) {
 		super(props);
@@ -42,37 +40,40 @@ class Form extends Component {
 			});
 	};
 
-	render({ }, { owner, repo, twitter, fetching, success }) {
+	render({ mobile }, { owner, repo, twitter, fetching, success }) {
 		return (
-			<FormContainer onSubmit={this._submitForm} action="javascript:">
-				<Row>
+			<FormContainer onSubmit={this._submitForm} action="javascript:" mobile>
+				<Row mobile>
 				Github Username:
 					<TextBox
 						value={owner}
 						onInput={this.setFormValue}
 						name="owner"
 						placeholder="e.g. feross"
+						mobile
 					/>
 				</Row>
-				<Row>
+				<Row mobile>
 				Repository Name:
 					<TextBox
 						value={repo}
 						onInput={this.setFormValue}
 						name="repo"
 						placeholder="e.g. standard"
+						mobile
 					/>
 				</Row>
-				<Row>
+				<Row mobile>
 				Twitter Handle:
 					<TextBox
 						value={twitter}
 						onInput={this.setFormValue}
 						name="twitter"
 						placeholder="e.g. feross"
+						mobile
 					/>
 				</Row>
-				<Row submit>
+				<Row submit mobile>
 					<Submit type="submit"> Submit </Submit>
 				</Row>
 				{ success &&
@@ -90,14 +91,16 @@ const FormContainer = styled.form`
 	flex-direction: column;
 	flex-basis: 100%;
 	align-items: stretch;
+	${props => props.mobile && 'padding: 10px 0'};
 `;
 
 const Row = styled.div`
 	display: flex;
-	flex-direction: row;
-	align-items: center;
+	align-items: ${props => props.mobile ? 'stretch' : 'center'};
 	justify-content: ${props => props.submit ? 'center' : 'space-between'};
 	${props => props.submit && 'flex-basis: 15%' };
+	${props => props.submit && 'margin-top: 15px' };
+	flex-direction: ${props => props.mobile ? 'column' : 'row'};
 	white-space: nowrap;
 `;
 
@@ -111,10 +114,10 @@ const TextBox = styled.input`
 	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
 	height: 20px;
 	padding: 10px;
-	margin: 20px;
+	margin: 10px 20px;
 	border: none;
 	display: flex;
-	flex-basis: 60%;
+	flex-basis: ${props => props.mobile ? '100%' : '60%'};
 `;
 
 const Submit = styled.input`
@@ -126,7 +129,7 @@ const Submit = styled.input`
 	font-size: 20px;
 	color: #E27D60;
 	align-self: center;
-	margin-bottom: 15px;
+	margin-bottom: 12.5px;
 	&:hover {
 		font-weight: bold;
 		cursor: pointer;
