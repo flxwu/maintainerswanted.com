@@ -14,6 +14,7 @@ export default class App extends Component {
 		this.state = {
       projects: [],
       loggedIn: false,
+      user: null,
 		};
 
 		// accessibility: add outline if tab is used
@@ -45,10 +46,10 @@ export default class App extends Component {
 		this.setState({ projects: data, loggedIn: loggedIn ? true : false });
 	}
 
-	render({}, { projects, loggedIn }) {
+	render({}, { projects, loggedIn, user }) {
 		return (
 			<div>
-				<Header />
+				<Header loggedIn={loggedIn} user={user} />
 				<MediaQuery minDeviceWidth={1224}>
 					<List>
 						<NewProject loggedIn={loggedIn}/>
