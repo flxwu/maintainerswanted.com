@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var firebase = require('firebase');
-const config = require('./config');
 const octokit = require('@octokit/rest')();
 
-import { paginate, setup, finished } from '../util/apiHelper';
+const { paginate, setup, finished } = require('../util/apiHelper');
 
 // run Setup for Firebase and Octokit
 setup();
@@ -49,13 +48,17 @@ router.get('/getList', (req, res, next) => {
  */
 router.get('/getStatistics', async (req, res, next) => {
   const { owner, repo } = req.query;
+
   const repoData = await octokit.repos.get({owner, repo});
-  const contributors = await octokit.repos.getContributors({owner, repo, anon, per_page, page});
-  
+  const contributors = await paginate(octokit.repos.getContributors, {owner, repo, anon: true})
+    .then(data => {
+      return data.length;
+    })
+
   const data = {
     stars: repoData.data.stargazers_count,
     watchers: repoData.data.watchers_count,
-    contributors: contributors.data.length,
+    contributors: contributors,
     description: repoData.data.description,
     url: 'https://www.github.com/' + owner + '/' + repo
   }
