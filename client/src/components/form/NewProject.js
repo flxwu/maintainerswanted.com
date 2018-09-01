@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
+import MediaQuery from 'react-responsive';
 
 import Form from './Form';
 import Icon from '../Icon';
@@ -14,7 +15,6 @@ class NewProject extends Component {
 
 		this._handleExpand = this._handleExpand.bind(this);
 		this._handleCollapse = this._handleCollapse.bind(this);
-		this._onSubmit = this._onSubmit.bind(this);
 	}
 
 	_handleExpand(event) {
@@ -28,27 +28,44 @@ class NewProject extends Component {
 		this.setState({ collapsed: true, collapseClick: true });
 	}
 
-	_onSubmit (event) {
-
-	}
+	_iconWrapper = () => (
+		<IconWrapper>
+			<Icon type={'plus'} />
+			<Text>Add Project</Text>
+		</IconWrapper>
+	)
 
 	render () {
 		const { collapsed } = this.state;
 		return (
-			<Card collapsed={collapsed} onClick={this._handleExpand}>
-				{collapsed ?
-					<IconWrapper>
-						<Icon type={'plus'} />
-						<Text>Add Project</Text>
-					</IconWrapper> :
-					<FormWrapper>
-						<Form />
-						<IconWrapperCollapse onClick={this._handleCollapse}>
-							<Icon type={'arrow-up'} />
-						</IconWrapperCollapse>
-					</FormWrapper>
-				}
-			</Card>
+			<div>
+				<MediaQuery minDeviceWidth={1224}>
+					<Card collapsed={collapsed} onClick={this._handleExpand}>
+						{collapsed ?
+							this._iconWrapper() :
+							<FormWrapper>
+								<Form />
+								<IconWrapperCollapse onClick={this._handleCollapse}>
+									<Icon type={'arrow-up'} />
+								</IconWrapperCollapse>
+							</FormWrapper>
+						}
+					</Card>
+				</MediaQuery>
+				<MediaQuery maxDeviceWidth={1224}>
+					<Card collapsed={collapsed} onClick={this._handleExpand}>
+						{collapsed ?
+							this._iconWrapper() :
+							<FormWrapper mobile>
+								<Form mobile />
+								<IconWrapperCollapse onClick={this._handleCollapse}>
+									<Icon type={'x'} />
+								</IconWrapperCollapse>
+							</FormWrapper>
+						}
+					</Card>
+				</MediaQuery>
+			</div>
 		);
 	}
 }
@@ -101,7 +118,7 @@ const Text = styled.p`
 
 const FormWrapper = styled.div`
 	display: flex;
-	flex-direction: row;
+	flex-direction: ${props => props.mobile ? 'column' : 'row'};
 	flex-basis: 100%;
 	justify-content: flex-end;
 `;
