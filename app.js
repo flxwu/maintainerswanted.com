@@ -20,9 +20,13 @@ app.use(passport.initialize());
 // Routes
 app.use('/api/project', projectRouter);
 app.get('/api/auth/github', passport.authenticate('github'));
-app.get('/api/auth/github/callback',
-  passport.authenticate('github', { successRedirect: '/',
-                                     failureRedirect: '/login' }));
+app.get(
+	'/api/auth/github/callback',
+	passport.authenticate('github', {
+		successRedirect: '/',
+		failureRedirect: '/login'
+	})
+);
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -40,19 +44,22 @@ passport.deserializeUser(function(obj, callback) {
 });
 
 // Configure Github OAuth
-passport.use(new GitHubStrategy({
-	clientID: process.env.GH_KEY,
-	clientSecret: process.env.GH_SECRET,
-	callbackURL: 'http://localhost:5000/api/auth/github/callback' //TODO: Change localhost to production host
-},
-(accessToken, refreshToken, profile, callback) => {
-	return callback(null, profile);
-}
-));
+passport.use(
+	new GitHubStrategy(
+		{
+			clientID: process.env.GH_KEY,
+			clientSecret: process.env.GH_SECRET,
+			callbackURL: 'http://localhost:5000/api/auth/github/callback' //TODO: Change localhost to production host
+		},
+		(accessToken, refreshToken, profile, callback) => {
+			return callback(null, profile);
+		}
+	)
+);
 
 // catch 404
 app.use(function(req, res, next) {
-  res.json({ status: 404, error: "Not Found"});
+	res.json({ status: 404, error: 'Not Found' });
 });
 
 module.exports = app;
