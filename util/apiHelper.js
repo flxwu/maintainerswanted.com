@@ -1,9 +1,13 @@
 const octokit = require('@octokit/rest')();
+var firebase = require('firebase');
 
-const paginate = async (method) => {
-	let response = await method({ per_page: 100 });
+const config = require('./config');
+
+const paginate = async (method, params) => {
+	let response = await method({ per_page: 100, ...params });
 	let { data } = response;
 	while (octokit.hasNextPage(response)) {
+		console.error('new page');
 		response = await octokit.getNextPage(response);
 		data = data.concat(response.data);
 	}
@@ -28,4 +32,4 @@ const finished = (err) => {
 	}
 }
 
-export { paginate, setup, finished };
+module.exports = { paginate, setup, finished };
