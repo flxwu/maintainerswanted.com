@@ -5,7 +5,7 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "dev": "concurrently \"yarn start\" \"cd client && yarn start\"",
-    "heroku-postbuild": "cd client && yarn && yarn run build",
+    "heroku-postbuild": "cd client && yarn install --network-timeout 1000000 && yarn run build",
     "heroku-prebuild": "yarn install --network-timeout 1000000",
     "bump": "yarn version --patch"
   },
