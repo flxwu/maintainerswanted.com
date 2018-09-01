@@ -77,7 +77,7 @@ const Text = styled.p`
 	display: flex;
 	flex-basis: 0;
 	font-family: Verdana;
-	margin-right: 5px;
+	margin-right: 10px;
 	padding-top: 5px;
 	font-style: italic;
 	font-weight: 500;
