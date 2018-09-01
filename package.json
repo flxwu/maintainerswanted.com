@@ -14,7 +14,7 @@
     "url": "git://github.com/flxwu/maintainerswanted.com.git"
   },
   "engines": {
-    "node": "8.11.3",
+    "node": "8.11.4",
     "yarn": "1.9.4"
   },
   "dependencies": {
