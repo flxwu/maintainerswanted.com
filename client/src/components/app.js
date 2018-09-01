@@ -86,7 +86,7 @@ export default class App extends Component {
 							</Link>
 						</Footer>
 						<br />
-						<Footer small>
+						<Footer small break>
             Built using
 							<Link small href="https://github.com/flxwu/maintainerswanted.com">
 								{' Preact'}
@@ -132,7 +132,7 @@ const Footer = styled.div`
   position: relative;
   text-align: center;
   ${props => props.small && 'font-size: 12px'};
-  ${props => props.break && 'margin-top: 7px'};
+  ${props => props.break && 'margin: 10px 0'};
 `;
 
 const ProjectCardWrapper = styled.li`
