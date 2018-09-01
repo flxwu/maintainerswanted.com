@@ -46,9 +46,7 @@ passport.use(new GitHubStrategy({
 	callbackURL: 'http://localhost:5000/api/auth/github/callback' //TODO: Change localhost to production host
 },
 (accessToken, refreshToken, profile, callback) => {
-	User.findOrCreate({ githubId: profile.id }, function (err, user) {
-		return callback(err, user);
-	});
+  callback(null, profile);
 }
 ));
 
