@@ -16,8 +16,10 @@ var app = express();
 
 // Routes
 app.use('/api/project', projectRouter);
-app.use('/api/auth/github', github);
-app.use('/api/auth/guthub/callback', githubcallback);
+app.get('/api/auth/github', passport.authenticate('github'));
+app.get('/api/auth/github/callback',
+  passport.authenticate('github', { successRedirect: '/',
+                                     failureRedirect: '/login' }));
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -41,7 +43,7 @@ passport.deserializeUser(function(obj, callback) {
 passport.use(new GitHubStrategy({
 	clientID: process.env.GH_KEY,
 	clientSecret: process.env.GH_SECRET,
-	callbackURL: 'localhost:5000/api/auth/github/callback' //TODO: Change localhost to production host
+	callbackURL: 'http://localhost:5000/api/auth/github/callback' //TODO: Change localhost to production host
 },
 (accessToken, refreshToken, profile, callback) => {
 	User.findOrCreate({ githubId: profile.id }, function (err, user) {
