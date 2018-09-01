@@ -7,7 +7,6 @@ const paginate = async (method, params) => {
 	let response = await method({ per_page: 100, ...params });
 	let { data } = response;
 	while (octokit.hasNextPage(response)) {
-		console.error('new page');
 		response = await octokit.getNextPage(response);
 		data = data.concat(response.data);
 	}
