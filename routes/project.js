@@ -4,16 +4,14 @@ var firebase = require('firebase');
 const config = require('./config');
 const octokit = require('@octokit/rest')();
 
-// initialize Firebase
-firebase.initializeApp(config);
+import { paginate, setup, finished } from '../util/apiHelper';
 
-octokit.authenticate({
-  type: 'oauth',
-  key: process.env.GH_KEY,
-  secret: process.env.GH_SECRET
-})
+// run Setup for Firebase and Octokit
+setup();
+
 
 /**
+ * GET - /api/project/getList
  * Gets all registered projects from Firebase
  */
 router.get('/getList', (req, res, next) => {
@@ -46,13 +44,13 @@ router.get('/getList', (req, res, next) => {
 
 
 /**
+ * GET - /api/project/getStatistics?owner&repo
  * Fetches Repo Data from Github API
- * /project/getStatistics?owner=flxwu&repo=test
  */
 router.get('/getStatistics', async (req, res, next) => {
   const { owner, repo } = req.query;
   const repoData = await octokit.repos.get({owner, repo});
-  const contributors = await octokit.repos.getContributors({owner, repo});
+  const contributors = await octokit.repos.getContributors({owner, repo, anon, per_page, page});
   
   const data = {
     stars: repoData.data.stargazers_count,
@@ -70,8 +68,9 @@ router.get('/getStatistics', async (req, res, next) => {
 });
 
 /**
+ * GET - /api/project/getRepos?user
  * All Repos of User from Github API
- * /project/getRepos?user=Qo2770
+ * TODO: Change to all Repos he collaborates on
  */
 router.get('/getRepos', async (req, res, next) => {
   const username = req.query.user;
@@ -104,7 +103,8 @@ router.get('/getRepos', async (req, res, next) => {
 
 
 /**
- * Adds new project to Firebase
+ * POST - /api/project/add
+ * Adds new project to Database
  */
 router.post('/add', async (req, res, next) => {
 
@@ -127,15 +127,6 @@ router.post('/add', async (req, res, next) => {
   };
 
   let dbProjects = database.ref('projects');
-
-  // firebase callback after push finished
-  const finished = (err) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log('SUCCESS');
-    }
-  }
 
   let dbProject = dbProjects.push(newProject, finished);
   console.log('Firebase generated key: ' + dbProject.key);
