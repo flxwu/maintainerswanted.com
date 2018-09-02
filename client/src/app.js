@@ -36,14 +36,18 @@ export default class App extends Component {
 
 	async componentDidMount() {
 		// get if logged in
-		const loggedIn = await axios.get('/api/auth/status');
+		const authStatus = await axios.get('/api/auth/status');
 
 		// get projects list
 		const response = await axios.get('/api/project/getList');
 		const dataObject = response.data.data[0];
 		const data = Object.keys(dataObject).map(dbKey => dataObject[dbKey]);
-
-		this.setState({ projects: data, loggedIn: !!loggedIn });
+		
+		this.setState({
+			projects: data,
+			loggedIn: !!authStatus.loggedIn,
+			user: authStatus.user
+		});
 	}
 
 	render({}, { projects, loggedIn, user }) {
