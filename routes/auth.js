@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const axios = require('axios');
 
-let passport = null;
+let key = null;
+let secret = null;
 
-const getRouter = passportRef => {
-	passport = passportRef;
+const getRouter = (keyRef, secretRef) => {
+  key = keyRef;
+  secret = secretRef;
 	return router;
 };
 
@@ -12,10 +15,11 @@ const getRouter = passportRef => {
  * GET Auth Status
  */
 router.get('/status', (req, res, next) => {
-  console.log('balblablablablabl');
 	res.json({
-    loggedIn: req.session.loggedIn,
-    user: req.session.user
+    // loggedIn: req.session.loggedIn,
+    // user: req.session.user
+    loggedIn: true,
+    user: 'test'
   });
 });
 
@@ -23,34 +27,43 @@ router.get('/status', (req, res, next) => {
  * GET Github Auth
  */
 router.get('/github', (req, res, next) => {
-	passport.authenticate('github', (err, user, info) => {
-		if (err) {
-			return next(err);
-		}
-		if (!user) {
-			return res.redirect('/');
-		}
-		req.session.loggedIn = true;
-		req.session.user = user;
-	})(req, res, next);
+	res.redirect(
+    'https://github.com/login/oauth/authorize?' +
+    `client_id=${key}&scope=user,repo` +
+    `&redirect_uri=http://localhost:5000/api/auth/github/callback`)
 });
 
 /**
  * GET Github Auth Callback
  */
-router.get('/github/callback', (req, res, next) => {
-	passport.authenticate('github', {
-		successRedirect: '/',
-		failureRedirect: '/'
-	});
+router.get('/github/callback', async (req, res, next) => {
+  const code = req.query.code;
+
+  let access_token = null;
+
+  await axios.post('https://github.com/login/oauth/access_token', {
+    client_id: key,
+    client_secret: secret,
+    code: code,
+  }).then((response) => {
+    access_token = (response.data.split('&')[0]).split('token=')[1];
+  })
+  
+  await axios.get(`https://api.github.com/user?access_token=${access_token}`)
+  .then(response => {
+    req.session.user = response.data.login;
+    req.session.loggedIn = true;
+    res.redirect('/');
+  })
 });
 
 /**
  * GET Github Logout
  */
 router.get('/github/logout', (req, res, next) => {
-	req.logout();
-	res.redirect('/');
+  req.session.loggedIn = false;
+  req.session.user = null;
+  res.redirect('/');
 });
 
 module.exports = getRouter;
