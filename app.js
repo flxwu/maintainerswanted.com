@@ -44,6 +44,7 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+
 // Middleware
 app.use(logger('dev'));
 app.use(express.json());
