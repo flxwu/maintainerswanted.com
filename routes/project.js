@@ -6,7 +6,7 @@ const { paginate, finished } = require('../util/apiHelper');
 let octokit = null;
 let firebase = null;
 
-function getRouter(octokitRef, firebaseRef) {
+const getRouter = (octokitRef, firebaseRef) => {
 	octokit = octokitRef;
 	firebase = firebaseRef;
 	return router;
