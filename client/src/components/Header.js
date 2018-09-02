@@ -1,8 +1,9 @@
 import { h } from 'preact';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const logOut = () => {
-	window.location = '/api/auth/github/logout';
+	axios.get('/api/auth/github/logout');
 };
 
 const Header = props => (
