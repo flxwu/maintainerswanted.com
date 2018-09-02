@@ -25,10 +25,12 @@ router.get('/status', (req, res, next) => {
  * GET Github Auth
  */
 router.get('/github', (req, res, next) => {
-	res.redirect(
+  const callbackUrl = 'https://maintainerswanted.com/api/auth/github/callback';
+  
+  res.redirect(
     'https://github.com/login/oauth/authorize?' +
     `client_id=${key}&scope=user,repo` +
-    `&redirect_uri=http://localhost:5000/api/auth/github/callback`)
+    `&redirect_uri=${callbackUrl}`)
 });
 
 /**
@@ -45,14 +47,14 @@ router.get('/github/callback', async (req, res, next) => {
     code: code,
   }).then((response) => {
     access_token = (response.data.split('&')[0]).split('token=')[1];
-  })
+  });
   
   await axios.get(`https://api.github.com/user?access_token=${access_token}`)
     .then(response => {
-    req.session.user = response.data.login;
-    req.session.loggedIn = true;
-    res.redirect('/');
-  })
+      req.session.user = response.data.login;
+      req.session.loggedIn = true;
+      res.redirect('/');
+  });
 });
 
 /**
