@@ -31,7 +31,7 @@ passportSetup(passport);
 
 // Routes
 app.use('/api/project', projectRouter(octokit, firebase));
-app.get('/api/auth', authRouter(passport));
+app.use('/api/auth', authRouter(passport));
 
 
 // Session Storage
