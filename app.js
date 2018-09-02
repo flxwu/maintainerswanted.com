@@ -13,6 +13,7 @@ const authRouter = require('./routes/auth');
 const config = require('./util/config');
 const { passportSetup } = require('./util/apiHelper');
 
+
 // Initialize Express App
 const app = express();
 // Init passport
@@ -53,11 +54,11 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 
 // redirect all wildcard matches to landing page
-app.get('*', function(req, res) {
+app.get('*', (req, res) => {
   res.redirect('/');
 });
 // catch 404
-app.use(function(req, res) {
+app.use((req, res) => {
 	res.redirect('/');
 });
 

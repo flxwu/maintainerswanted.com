@@ -12,9 +12,9 @@ export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-      projects: [],
-      loggedIn: false,
-      user: null,
+			projects: [],
+			loggedIn: false,
+			user: null
 		};
 
 		// accessibility: add outline if tab is used
@@ -35,15 +35,15 @@ export default class App extends Component {
 	}
 
 	async componentDidMount() {
-    // get if logged in
-    const loggedIn = await axios.get('/api/auth/status');
+		// get if logged in
+		const loggedIn = await axios.get('/api/auth/status');
 
 		// get projects list
 		const response = await axios.get('/api/project/getList');
 		const dataObject = response.data.data[0];
 		const data = Object.keys(dataObject).map(dbKey => dataObject[dbKey]);
 
-		this.setState({ projects: data, loggedIn: loggedIn ? true : false });
+		this.setState({ projects: data, loggedIn: !!loggedIn });
 	}
 
 	render({}, { projects, loggedIn, user }) {
@@ -52,7 +52,7 @@ export default class App extends Component {
 				<Header loggedIn={loggedIn} user={user} />
 				<MediaQuery minDeviceWidth={1224}>
 					<List>
-						<NewProject loggedIn={loggedIn}/>
+						<NewProject loggedIn={loggedIn} />
 						{projects.length !== 0 ? (
 							projects.map(project => (
 								<ProjectCardWrapper>

@@ -12,11 +12,11 @@ const paginate = async (octokit, method, params) => {
 
 const passportSetup = passportRef => {
 	// Passport user (de)-serialisation to avoid transmitting user info after login
-	passportRef.serializeUser(function(user, callback) {
+	passportRef.serializeUser((user, callback) => {
 		callback(null, user);
 	});
 
-	passportRef.deserializeUser(function(obj, callback) {
+	passportRef.deserializeUser((obj, callback) => {
 		callback(null, obj);
 	});
 
