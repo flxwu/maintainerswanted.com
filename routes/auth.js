@@ -25,4 +25,11 @@ router.get('/github/callback', (req, res, next) => {
 	})
 });
 
+/**
+ * GET Github Logout
+ */
+router.get('/github/logout', (req, res, next) => {
+	req.logout();
+});
+
 module.exports = getRouter;
