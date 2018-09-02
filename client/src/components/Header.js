@@ -1,9 +1,8 @@
 import { h } from 'preact';
 import styled from 'styled-components';
-import axios from 'axios';
 
-const logOut = async () => {
-	await axios.get('/api/auth/github/logout');
+const logOut = () => {
+	window.location = '/api/auth/github/logout';
 };
 
 const Header = props => (
@@ -14,9 +13,9 @@ const Header = props => (
 				Logged in as:
 					<Link href={`https://github.com/${props.user}`} target="_blank">{props.user}</Link>
 				</Login>
-				<Logout onClick={logOut}>
+				<div style={styles.logout} onClick={logOut}>
 					Log out
-				</Logout>
+				</div>
 			</LoggedIn>
 		)}
 		<Title>Maintainers Wanted</Title>
@@ -26,6 +25,17 @@ const Header = props => (
 		</Text>
 	</Container>
 );
+
+const styles = {
+	// FIXME: turn into styled-component
+	// ugly fix for now
+	// preact renders the styled-component as <undefined></undefined>
+	logout: {
+		alignSelf: 'flex-end',
+		cursor: 'pointer',
+		display: 'flex'
+	}
+};
 
 const LoggedIn = styled.div`
 	display: flex;
@@ -73,12 +83,6 @@ const Title = styled.h1`
 const Login = styled.div`
 	display: flex;
 	font-weight: 700;
-`;
-
-const Logout = styled.div`
-	display: flex;
-	align-self: flex-end;
-	cursor: pointer;
 `;
 
 const Text = styled.p`
