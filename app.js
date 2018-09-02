@@ -28,12 +28,6 @@ octokit.authenticate({
 });
 passportSetup(passport);
 
-
-// Routes
-app.use('/api/project', projectRouter(octokit, firebase));
-app.use('/api/auth', authRouter(passport));
-
-
 // Session Storage
 app.use(session({
 	store: new FirebaseStore({
@@ -43,6 +37,10 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+
+// Routes
+app.use('/api/project', projectRouter(octokit, firebase));
+app.use('/api/auth', authRouter(passport));
 
 
 // Middleware
