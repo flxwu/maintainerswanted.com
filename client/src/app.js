@@ -42,11 +42,11 @@ export default class App extends Component {
 		const response = await axios.get('/api/project/getList');
 		const dataObject = response.data.data[0];
 		const data = Object.keys(dataObject).map(dbKey => dataObject[dbKey]);
-		
+
 		this.setState({
 			projects: data,
-			loggedIn: !!authStatus.loggedIn,
-			user: authStatus.user
+			loggedIn: authStatus.data.loggedIn,
+			user: authStatus.data.user
 		});
 	}
 
