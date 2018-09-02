@@ -37,7 +37,7 @@ yarn dev
 # Authors and License #   
 
 License: MIT  
-Felix Wu [@flxwu](twitter.com/flxwu)
+Felix Wu [@flxwu](twitter.com/flxwu)    
 Quentin Oschatz [@QuentinOschatz](twitter.com/QuentinOschatz)     
 
 # Credits #   
