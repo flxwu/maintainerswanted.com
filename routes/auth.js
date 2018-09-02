@@ -16,10 +16,8 @@ const getRouter = (keyRef, secretRef) => {
  */
 router.get('/status', (req, res, next) => {
 	res.json({
-    // loggedIn: req.session.loggedIn,
-    // user: req.session.user
-    loggedIn: true,
-    user: 'test'
+    loggedIn: req.session.loggedIn,
+    user: req.session.user
   });
 });
 
