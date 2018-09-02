@@ -50,6 +50,7 @@ router.get('/github/callback', (req, res, next) => {
  */
 router.get('/github/logout', (req, res, next) => {
 	req.logout();
+	res.redirect('/');
 });
 
 module.exports = getRouter;
