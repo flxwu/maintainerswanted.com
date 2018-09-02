@@ -48,7 +48,7 @@ router.get('/github/callback', async (req, res, next) => {
   })
   
   await axios.get(`https://api.github.com/user?access_token=${access_token}`)
-  .then(response => {
+    .then(response => {
     req.session.user = response.data.login;
     req.session.loggedIn = true;
     res.redirect('/');
@@ -61,6 +61,8 @@ router.get('/github/callback', async (req, res, next) => {
 router.get('/github/logout', (req, res, next) => {
   req.session.loggedIn = false;
   req.session.user = null;
+
+  res.clearCookie('connect.sid');
   res.redirect('/');
 });
 
