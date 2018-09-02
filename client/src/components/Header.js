@@ -1,12 +1,22 @@
 import { h } from 'preact';
 import styled from 'styled-components';
+import axios from 'axios';
+
+const logOut = async () => {
+	await axios.get('/api/auth/github/logout');
+};
 
 const Header = props => (
 	<Container>
 		{props.loggedIn && (
 			<LoggedIn>
+				<Login>
 				Logged in as:
-				<Link href={`https://github.com/${props.user}`} target="_blank">{props.user}</Link>
+					<Link href={`https://github.com/${props.user}`} target="_blank">{props.user}</Link>
+				</Login>
+				<Logout onClick={logOut}>
+					Log out
+				</Logout>
 			</LoggedIn>
 		)}
 		<Title>Maintainers Wanted</Title>
@@ -20,6 +30,7 @@ const Header = props => (
 const LoggedIn = styled.div`
 	display: flex;
 	flex: 1;
+	flex-direction: column;
 	align-self: flex-end;
 	font-family: Verdana;
 	text-align: right;
@@ -57,6 +68,17 @@ const Title = styled.h1`
 	flex: 1;
 	margin: 10px;
 	display: flex;
+`;
+
+const Login = styled.div`
+	display: flex;
+	font-weight: 700;
+`;
+
+const Logout = styled.div`
+	display: flex;
+	align-self: flex-end;
+	cursor: pointer;
 `;
 
 const Text = styled.p`
