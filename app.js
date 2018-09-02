@@ -19,12 +19,15 @@ const app = express();
 // Init passport
 app.use(passport.initialize());
 
+const GH_KEY = process.env.GH_KEY;
+const GH_SECRET = process.env.GH_SECRET;
+
 // run Setup for Firebase, Octokit and Passport
 const ref = firebase.initializeApp(config);
 octokit.authenticate({
 	type: 'oauth',
-	key: process.env.GH_KEY,
-	secret: process.env.GH_SECRET
+	key: GH_KEY,
+	secret: GH_SECRET
 });
 passportSetup(passport);
 
@@ -40,7 +43,7 @@ app.use(session({
 
 // Routes
 app.use('/api/project', projectRouter(octokit, firebase));
-app.use('/api/auth', authRouter(passport));
+app.use('/api/auth', authRouter(GH_KEY, GH_SECRET));
 
 
 // Middleware
