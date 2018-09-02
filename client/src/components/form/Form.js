@@ -14,7 +14,7 @@ class Form extends Component {
 		};
 	}
 
-	setFormValue = e => {
+	_setFormValue = e => {
 		this.setState({
 			[e.target.name]: e.target.value
 		});
@@ -47,7 +47,7 @@ class Form extends Component {
 				Github Username:
 					<TextBox
 						value={owner}
-						onInput={this.setFormValue}
+						onInput={this._setFormValue}
 						name="owner"
 						placeholder="e.g. feross"
 						mobile
@@ -57,7 +57,7 @@ class Form extends Component {
 				Repository Name:
 					<TextBox
 						value={repo}
-						onInput={this.setFormValue}
+						onInput={this._setFormValue}
 						name="repo"
 						placeholder="e.g. standard"
 						mobile
@@ -67,7 +67,7 @@ class Form extends Component {
 				Twitter Handle:
 					<TextBox
 						value={twitter}
-						onInput={this.setFormValue}
+						onInput={this._setFormValue}
 						name="twitter"
 						placeholder="e.g. feross"
 						mobile

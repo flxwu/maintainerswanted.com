@@ -18,24 +18,24 @@ class NewProject extends Component {
 		this._handleCollapse = this._handleCollapse.bind(this);
 	}
 
-	componentWillReceiveProps(nextProps) {
+	componentWillReceiveProps = (nextProps) => {
 		if (nextProps.loggedIn !== this.state.loggedIn) {
 			this.setState({ loggedIn: nextProps.loggedIn });
 		}
 	}
 
-	_handleExpand() {
+	_handleExpand = () => {
 		if (!this.state.collapseClick) {
 			this.setState({ collapsed: false });
 		}
 		this.setState({ collapseClick: false });
 	}
 
-	_handleCollapse() {
+	_handleCollapse = () => {
 		this.setState({ collapsed: true, collapseClick: true });
 	}
 
-	_handleLogin() {
+	_handleLogin = () => {
 		window.location = '/api/auth/github';
 	}
 
