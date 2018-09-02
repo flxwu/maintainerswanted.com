@@ -3,7 +3,7 @@ const router = express.Router();
 
 let passport = null;
 
-function getRouter(passportRef) {
+const getRouter = (passportRef) => {
 	passport = passportRef;
 	return router;
 }

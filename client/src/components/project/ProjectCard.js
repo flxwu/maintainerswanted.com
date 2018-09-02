@@ -18,7 +18,7 @@ class ProjectCard extends Component {
 		};
 	}
 
-	async componentDidMount() {
+	componentDidMount = async () => {
 		const { project } = this.state;
 
 		const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.name}`;
