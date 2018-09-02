@@ -42,7 +42,6 @@ router.get('/getList', (req, res, next) => {
 			err: 'Error while getting registered Repository List'
 		});
 
-	next();
 });
 
 /**

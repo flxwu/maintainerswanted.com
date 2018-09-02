@@ -29,7 +29,6 @@ octokit.authenticate({
 	key: GH_KEY,
 	secret: GH_SECRET
 });
-passportSetup(passport);
 
 // Session Storage
 app.use(session({
