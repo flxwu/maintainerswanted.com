@@ -2,8 +2,15 @@ import { h } from 'preact';
 import styled from 'styled-components';
 import axios from 'axios';
 
+const rootURL =
+	process.env.NODE_ENV === 'development' ?
+		'http://localhost:5000' :
+		'https://maintainerswanted.com';
+
 const logOut = () => {
-	axios.get('/api/auth/github/logout');
+	axios.get('/api/auth/github/logout')
+		.then(response => window.location = rootURL)
+		.catch(err => console.error(err));
 };
 
 const Header = props => (
