@@ -1,6 +1,7 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
 import MediaQuery from 'react-responsive';
+import axios from 'axios';
 
 import Form from './Form';
 import Icon from '../Icon';
@@ -35,8 +36,9 @@ class NewProject extends Component {
 		this.setState({ collapsed: true, collapseClick: true });
 	}
 
-	_handleLogin = () => {
-		window.location = '/api/auth/github';
+	_handleLogin = async () => {
+		const oauthUrl = await axios.get('/api/auth/github');
+		window.location = oauthUrl.data;
 	}
 
 	_iconWrapper = login => (
