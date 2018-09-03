@@ -3,10 +3,11 @@ const router = express.Router();
 const axios = require('axios');
 
 const env = process.env.NODE_ENV || 'dev';
-const callbackUrl =
-	env === 'dev'
-		? 'http://localhost:5000/api/auth/github/callback'
-		: 'https://maintainerswanted.com/api/auth/github/callback';
+const rootURL =
+  env === 'dev' ?
+		'http://localhost:5000' :
+		'https://maintainerswanted.com';
+const callbackUrl = rootURL + '/api/auth/github/callback';
 
 let key = null;
 let secret = null;
@@ -31,11 +32,11 @@ router.get('/status', (req, res, next) => {
  * GET Github Auth
  */
 router.get('/github', (req, res, next) => {
-	res.redirect(
+	res.send(
 		'https://github.com/login/oauth/authorize?' +
 			`client_id=${key}&scope=user,repo` +
 			`&redirect_uri=${callbackUrl}`
-	);
+  );
 });
 
 /**
@@ -61,7 +62,7 @@ router.get('/github/callback', async (req, res, next) => {
 		.then(response => {
 			req.session.user = response.data.login;
 			req.session.loggedIn = true;
-			res.redirect('/');
+			res.redirect(rootURL);
 		});
 });
 
