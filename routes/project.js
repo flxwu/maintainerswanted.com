@@ -3,6 +3,12 @@ const router = express.Router();
 
 const { paginate, finished } = require('../util/apiHelper');
 
+const env = process.env.NODE_ENV || 'dev';
+const rootURL =
+  env === 'dev' ?
+		'http://localhost:5000' :
+		'https://maintainerswanted.com';
+
 let octokit = null;
 let firebase = null;
 
@@ -114,9 +120,14 @@ router.post('/add', async (req, res, next) => {
     .substr(2, 9);
 
   const result = await octokit.repos.createHook({
-    owner, repo, name: 'web', config: {
-
-    }
+    owner,
+    repo,
+    name: 'web',
+    config: {
+      url: `${rootURL}/api/project/webhook`,
+      content_type: 'json'
+    },
+    events: ["issues"] 
   });
 
   // New entry
