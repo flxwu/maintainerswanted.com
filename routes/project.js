@@ -109,7 +109,7 @@ router.get('/getRepos', async (req, res, next) => {
  */
 router.post('/add', async (req, res, next) => {
 	var database = firebase.database();
-	const owner = req.body.owner;
+	const owner = req.session.user;
 	const repo = req.body.repo;
 	const twitterHandle = req.body.twitter;
 	const repoData = await octokit.repos.get({ owner, repo });
