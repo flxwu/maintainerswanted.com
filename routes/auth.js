@@ -55,12 +55,13 @@ router.get('/github/callback', async (req, res, next) => {
 		})
 		.then(response => {
 			access_token = response.data.split('&')[0].split('token=')[1];
+      req.session.access_token = access_token;
 		});
 
 	await axios
 		.get(`https://api.github.com/user?access_token=${access_token}`)
 		.then(response => {
-			req.session.user = response.data.login;
+      req.session.user = response.data.login;
 			req.session.loggedIn = true;
 			res.redirect(rootURL);
 		});
