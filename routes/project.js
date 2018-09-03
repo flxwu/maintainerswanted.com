@@ -80,7 +80,7 @@ router.get('/getStatistics', async (req, res, next) => {
     watchers: repoData.data.watchers_count,
     contributors: contributors,
     description: repoData.data.description,
-    url: 'https://www.github.com/' + owner + '/' + repo
+    url: 'https://github.com/' + owner + '/' + repo
   };
 
   // Return project if available
@@ -105,7 +105,7 @@ router.get('/getRepos', async (req, res, next) => {
       stars: repos_temp[i].stargazers_count,
       watchers: repos_temp[i].watchers_count,
       description: repos_temp[i].description,
-      url: 'https://www.github.com/' + username + '/' + repos_temp[i].name
+      url: 'https://github.com/' + username + '/' + repos_temp[i].name
     });
   }
 
@@ -148,7 +148,7 @@ router.post('/add', async (req, res, next) => {
     name: repo,
     owner: owner,
     description: repoData.data.description,
-    url: 'https://www.github.com/' + owner + '/' + repo,
+    url: 'https://github.com/' + owner + '/' + repo,
     twitter: twitterHandle
   };
 
