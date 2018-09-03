@@ -6,7 +6,6 @@ class Form extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-			owner: '',
 			repo: '',
 			twitter: '',
 			fetching: false,
@@ -21,11 +20,10 @@ class Form extends Component {
 	}
 	
 	_submitForm = async () => {
-		const { owner, repo, twitter } = this.state;
+		const { repo, twitter } = this.state;
 		this.setState({ fetching: true });
 
 		await axios.post('/api/project/add', {
-			owner,
 			repo,
 			twitter
 		})
@@ -43,16 +41,6 @@ class Form extends Component {
 	render({ mobile }, { owner, repo, twitter, fetching, success }) {
 		return (
 			<FormContainer onSubmit={this._submitForm} action="javascript:" mobile>
-				<Row mobile>
-				Github Username:
-					<TextBox
-						value={owner}
-						onInput={this._setFormValue}
-						name="owner"
-						placeholder="e.g. feross"
-						mobile
-					/>
-				</Row>
 				<Row mobile>
 				Repository Name:
 					<TextBox
