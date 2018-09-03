@@ -128,7 +128,7 @@ router.post('/add', async (req, res, next) => {
     .substr(2, 9);
   
   const access_token = req.session.access_token;
-  
+
   // create webhook for the added repository
   axios.post(
     `https://api.github.com/repos/${owner}/${repo}/hooks?access_token=${access_token}`, {
@@ -142,11 +142,14 @@ router.post('/add', async (req, res, next) => {
     events: ["issues"] 
   });
 
+  // TODO: Create issue
+
   // New entry
   var newProject = {
     id: id,
     name: repo,
     owner: owner,
+    // TODO: issueNumber: ''
     description: repoData.data.description,
     url: 'https://github.com/' + owner + '/' + repo,
     twitter: twitterHandle
@@ -166,7 +169,21 @@ router.post('/add', async (req, res, next) => {
  * payload url for github issues webhooks
  */
 router.post('/webhook', async (req, res, next) => {
-  console.log(req.body);
+  const issueAction = req.body.action;
+  const issueNumber = req.body.issue.number;
+  const repoUrl = req.body.repository.html_url;
+
+  // neat trick to do a SQL-like search query
+  const hookedProject = projectDB.orderByChild('url')
+    .startAt(repoUrl)
+    .endAt(repoUrl+"\uf8ff");
+
+  console.log(hookedProject);
+  if (issueAction === 'closed') {
+
+  } else if (issueAction === 'reopened') {
+
+  }
 })
 
 
