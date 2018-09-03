@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const axios = require('axios');
 
 const { paginate, finished } = require('../util/apiHelper');
 
@@ -7,7 +8,12 @@ const env = process.env.NODE_ENV || 'dev';
 const rootURL =
   env === 'dev' ?
 		'http://localhost:5000' :
-		'https://maintainerswanted.com';
+    'https://maintainerswanted.com';
+
+const webHookUrl =
+  env === 'dev' ?
+    process.env.NGROK :
+    'https://maintainerswanted.com';
 
 let octokit = null;
 let firebase = null;
@@ -118,13 +124,17 @@ router.post('/add', async (req, res, next) => {
   const id = Math.random()
     .toString(36)
     .substr(2, 9);
-
-  const result = await octokit.repos.createHook({
+  
+  const access_token = req.session.access_token;
+  
+  // create webhook for the added repository
+  axios.post(
+    `https://api.github.com/repos/${owner}/${repo}/hooks?access_token=${access_token}`, {
     owner,
     repo,
     name: 'web',
     config: {
-      url: `${rootURL}/api/project/webhook`,
+      url: `${webHookUrl}/api/project/webhook`,
       content_type: 'json'
     },
     events: ["issues"] 
@@ -150,6 +160,14 @@ router.post('/add', async (req, res, next) => {
 
   next();
 });
+
+/**
+ * POST /api/project/webhook
+ * payload url for github issues webhooks
+ */
+router.post('/webhook', async (req, res, next) => {
+  console.log(req.body);
+})
 
 
 module.exports = getRouter;
