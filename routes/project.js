@@ -7,9 +7,9 @@ let octokit = null;
 let firebase = null;
 
 const getRouter = (octokitRef, firebaseRef) => {
-	octokit = octokitRef;
-	firebase = firebaseRef;
-	return router;
+  octokit = octokitRef;
+  firebase = firebaseRef;
+  return router;
 }
 
 /**
@@ -17,30 +17,30 @@ const getRouter = (octokitRef, firebaseRef) => {
  * Gets all registered projects from Firebase
  */
 router.get('/getList', (req, res, next) => {
-	var database = firebase.database();
-	var projectRef = database.ref('projects');
+  var database = firebase.database();
+  var projectRef = database.ref('projects');
 
-	const projectsList = [];
+  const projectsList = [];
 
-	const gotAll = data => {
-		let tmp = data.val();
-		projectsList.push(tmp);
-	};
+  const gotAll = data => {
+    let tmp = data.val();
+    projectsList.push(tmp);
+  };
 
-	const errData = error => {
-		console.error('Something went wrong.');
-		console.error(error);
-	};
+  const errData = error => {
+    console.error('Something went wrong.');
+    console.error(error);
+  };
 
-	projectRef.on('value', gotAll, errData);
+  projectRef.on('value', gotAll, errData);
 
-	// Return project if availible
-	if (projectsList) res.json({ status: 200, data: projectsList });
-	else
-		res.json({
-			status: 500,
-			err: 'Error while getting registered Repository List'
-		});
+  // Return project if availible
+  if (projectsList) res.json({ status: 200, data: projectsList });
+  else
+    res.json({
+      status: 500,
+      err: 'Error while getting registered Repository List'
+    });
 
 });
 
@@ -49,28 +49,28 @@ router.get('/getList', (req, res, next) => {
  * Fetches Repo Data from Github API
  */
 router.get('/getStatistics', async (req, res, next) => {
-	const { owner, repo } = req.query;
+  const { owner, repo } = req.query;
 
-	const repoData = await octokit.repos.get({ owner, repo });
-	const contributors = await paginate(octokit, octokit.repos.getContributors, {
-		owner,
-		repo,
-		anon: true
-	}).then(data => {
-		return data.length;
+  const repoData = await octokit.repos.get({ owner, repo });
+  const contributors = await paginate(octokit, octokit.repos.getContributors, {
+    owner,
+    repo,
+    anon: true
+  }).then(data => {
+    return data.length;
   });
   
-	const data = {
-		stars: repoData.data.stargazers_count,
-		watchers: repoData.data.watchers_count,
-		contributors: contributors,
-		description: repoData.data.description,
-		url: 'https://www.github.com/' + owner + '/' + repo
-	};
+  const data = {
+    stars: repoData.data.stargazers_count,
+    watchers: repoData.data.watchers_count,
+    contributors: contributors,
+    description: repoData.data.description,
+    url: 'https://www.github.com/' + owner + '/' + repo
+  };
 
-	// Return project if available
-	if (data) res.json({ data: await data });
-	else res.json({ status: 500, err: 'Error while getting Repository Data' });
+  // Return project if available
+  if (data) res.json({ data: await data });
+  else res.json({ status: 500, err: 'Error while getting Repository Data' });
 });
 
 /**
@@ -79,28 +79,24 @@ router.get('/getStatistics', async (req, res, next) => {
  * TODO: Change to all Repos he collaborates on
  */
 router.get('/getRepos', async (req, res, next) => {
-	const username = req.query.user;
-	const repos = await octokit.repos.getForUser({ username });
+  const username = req.query.user;
+  const repos = await octokit.repos.getForUser({ username });
 
-	const repos_temp = repos.data;
-	console.log(repos_temp);
-	let data = [];
-	for (i = 0; i < repos_temp.length; i++) {
-		data.push({
-			name: repos_temp[i].name,
-			stars: repos_temp[i].stargazers_count,
-			watchers: repos_temp[i].watchers_count,
-			description: repos_temp[i].description,
-			url: 'https://www.github.com/' + username + '/' + repos_temp[i].name
-		});
-	}
+  const repos_temp = repos.data;
+  let data = [];
+  for (i = 0; i < repos_temp.length; i++) {
+    data.push({
+      name: repos_temp[i].name,
+      stars: repos_temp[i].stargazers_count,
+      watchers: repos_temp[i].watchers_count,
+      description: repos_temp[i].description,
+      url: 'https://www.github.com/' + username + '/' + repos_temp[i].name
+    });
+  }
 
-	// let data = repos.data;
-	// console.log(data);
-
-	// Return project if available
-	if (data) res.json({ data: await data });
-	else res.json({ status: 500, err: 'Error while getting Repository Data' });
+  // Return project if available
+  if (data) res.json({ data: await data });
+  else res.json({ status: 500, err: 'Error while getting Repository Data' });
 });
 
 /**
@@ -108,34 +104,40 @@ router.get('/getRepos', async (req, res, next) => {
  * Adds new project to Database
  */
 router.post('/add', async (req, res, next) => {
-	var database = firebase.database();
-	const owner = req.session.user;
-	const repo = req.body.repo;
-	const twitterHandle = req.body.twitter;
-	const repoData = await octokit.repos.get({ owner, repo });
-	const id = Math.random()
-		.toString(36)
-		.substr(2, 9);
+  var database = firebase.database();
+  const owner = req.session.user;
+  const repo = req.body.repo;
+  const twitterHandle = req.body.twitter;
+  const repoData = await octokit.repos.get({ owner, repo });
+  const id = Math.random()
+    .toString(36)
+    .substr(2, 9);
 
-	// New entry
-	var newProject = {
-		id: id,
-		name: repo,
-		owner: owner,
-		description: repoData.data.description,
-		url: 'https://www.github.com/' + owner + '/' + repo,
-		twitter: twitterHandle
-	};
+  const result = await octokit.repos.createHook({
+    owner, repo, name: 'web', config: {
 
-	let dbProjects = database.ref('projects');
+    }
+  });
 
-	let dbProject = dbProjects.push(newProject, finished);
-	console.log('Firebase generated key: ' + dbProject.key);
+  // New entry
+  var newProject = {
+    id: id,
+    name: repo,
+    owner: owner,
+    description: repoData.data.description,
+    url: 'https://www.github.com/' + owner + '/' + repo,
+    twitter: twitterHandle
+  };
 
-	if (dbProject) res.json({ status: 200, data: dbProject.key });
-	else res.json({ status: 500, err: 'Error while adding project' });
+  let dbProjects = database.ref('projects');
 
-	next();
+  let dbProject = dbProjects.push(newProject, finished);
+  console.log('Firebase generated key: ' + dbProject.key);
+
+  if (dbProject) res.json({ status: 200, data: dbProject.key });
+  else res.json({ status: 500, err: 'Error while adding project' });
+
+  next();
 });
 
 
