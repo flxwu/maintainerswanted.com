@@ -18,9 +18,14 @@ const webHookUrl =
 let octokit = null;
 let firebase = null;
 
+let database;
+let projectDB;
+
 const getRouter = (octokitRef, firebaseRef) => {
   octokit = octokitRef;
   firebase = firebaseRef;
+  database = firebase.database();
+  projectDB = database.ref('projects');
   return router;
 }
 
@@ -29,8 +34,6 @@ const getRouter = (octokitRef, firebaseRef) => {
  * Gets all registered projects from Firebase
  */
 router.get('/getList', (req, res, next) => {
-  var database = firebase.database();
-  var projectRef = database.ref('projects');
 
   const projectsList = [];
 
@@ -44,7 +47,7 @@ router.get('/getList', (req, res, next) => {
     console.error(error);
   };
 
-  projectRef.on('value', gotAll, errData);
+  projectDB.on('value', gotAll, errData);
 
   // Return project if availible
   if (projectsList) res.json({ status: 200, data: projectsList });
@@ -116,7 +119,6 @@ router.get('/getRepos', async (req, res, next) => {
  * Adds new project to Database
  */
 router.post('/add', async (req, res, next) => {
-  var database = firebase.database();
   const owner = req.session.user;
   const repo = req.body.repo;
   const twitterHandle = req.body.twitter;
@@ -150,12 +152,10 @@ router.post('/add', async (req, res, next) => {
     twitter: twitterHandle
   };
 
-  let dbProjects = database.ref('projects');
+  let projectDBEntry = projectDB.push(newProject, finished);
+  console.log('Firebase generated key: ' + projectDBEntry.key);
 
-  let dbProject = dbProjects.push(newProject, finished);
-  console.log('Firebase generated key: ' + dbProject.key);
-
-  if (dbProject) res.json({ status: 200, data: dbProject.key });
+  if (projectDBEntry) res.json({ status: 200, data: projectDBEntry.key });
   else res.json({ status: 500, err: 'Error while adding project' });
 
   next();
