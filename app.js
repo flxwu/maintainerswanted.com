@@ -12,10 +12,12 @@ const projectRouter = require('./routes/project');
 const authRouter = require('./routes/auth');
 const config = require('./util/config');
 const { passportSetup } = require('./util/apiHelper');
+const bodyParser = require('body-parser');
 
 
 // Initialize Express App
 const app = express();
+app.use(bodyParser.json());
 // Init passport
 app.use(passport.initialize());
 
