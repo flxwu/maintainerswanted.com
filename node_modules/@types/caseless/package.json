@@ -1,0 +1,27 @@
+{
+    "name": "@types/caseless",
+    "version": "0.12.1",
+    "description": "TypeScript definitions for caseless",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "downace",
+            "url": "https://github.com/downace",
+            "githubUsername": "downace"
+        },
+        {
+            "name": "Matt R. Wilson",
+            "url": "https://github.com/mastermatt",
+            "githubUsername": "mastermatt"
+        }
+    ],
+    "main": "",
+    "repository": {
+        "type": "git",
+        "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "9867f2283cf33abfd1a8875bf1d88add8d1133c5972167fba16c4699ceecc74e",
+    "typeScriptVersion": "2.2"
+}

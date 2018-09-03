@@ -1,0 +1,29 @@
+{
+  "name": "methmeth",
+  "version": "1.1.0",
+  "author": "Stephen Sawchuk <sawchuk@gmail.com> (http://stephenplusplus.com)",
+  "description": "Execute a method out from an object.",
+  "repository": "stephenplusplus/methmeth",
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "license"
+  ],
+  "keywords": [
+    "prop",
+    "property",
+    "pluck",
+    "method",
+    "meth",
+    "execute",
+    "array",
+    "iterator"
+  ],
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
+}

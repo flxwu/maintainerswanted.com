@@ -1,0 +1,26 @@
+{
+  "name": "split-array-stream",
+  "version": "1.0.3",
+  "description": "Safely push each item of an array to a stream",
+  "main": "index.js",
+  "repository": "stephenplusplus/split-array-stream",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "array",
+    "stream",
+    "split",
+    "push"
+  ],
+  "author": "Stephen Sawchuk <sawchuk@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.3.0",
+    "through2": "^2.0.0"
+  },
+  "dependencies": {
+    "async": "^2.4.0",
+    "is-stream-ended": "^0.1.0"
+  }
+}
