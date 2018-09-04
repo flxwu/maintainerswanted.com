@@ -59,7 +59,7 @@ router.get('/getStatistics', async (req, res, next) => {
 	}).then(data => {
 		return data.length;
   });
-  
+
 	const data = {
 		stars: repoData.data.stargazers_count,
 		watchers: repoData.data.watchers_count,
@@ -79,7 +79,7 @@ router.get('/getStatistics', async (req, res, next) => {
  * TODO: Change to all Repos he collaborates on
  */
 router.get('/getRepos', async (req, res, next) => {
-	const username = req.query.user;
+	const username = req.session.user;
 	const repos = await octokit.repos.getForUser({ username });
 
 	const repos_temp = repos.data;
