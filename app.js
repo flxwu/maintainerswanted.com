@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const passport = require('passport');
 const logger = require('morgan');
 const firebase = require('firebase');
 const octokit = require('@octokit/rest')();
@@ -11,20 +10,17 @@ const FirebaseStore = require('connect-session-firebase')(session);
 const projectRouter = require('./routes/project');
 const authRouter = require('./routes/auth');
 const config = require('./util/config');
-const { passportSetup } = require('./util/apiHelper');
 const bodyParser = require('body-parser');
 
 
 // Initialize Express App
 const app = express();
 app.use(bodyParser.json());
-// Init passport
-app.use(passport.initialize());
 
 const GH_KEY = process.env.GH_KEY;
 const GH_SECRET = process.env.GH_SECRET;
 
-// run Setup for Firebase, Octokit and Passport
+// run Setup for Firebase and Octokit
 const ref = firebase.initializeApp(config);
 octokit.authenticate({
 	type: 'oauth',
