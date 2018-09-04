@@ -1,5 +1,9 @@
-const GitHubStrategy = require('passport-github').Strategy;
-
+/**
+ * Paginate through octokit results
+ * @param {*} octokit 
+ * @param {*} method 
+ * @param {*} params 
+ */
 const paginate = async (octokit, method, params) => {
 	let response = await method({ per_page: 100, ...params });
 	let { data } = response;
@@ -10,30 +14,10 @@ const paginate = async (octokit, method, params) => {
 	return data;
 };
 
-const passportSetup = passportRef => {
-	// Passport user (de)-serialisation to avoid transmitting user info after login
-	passportRef.serializeUser((user, callback) => {
-		callback(null, user);
-	});
 
-	passportRef.deserializeUser((obj, callback) => {
-		callback(null, obj);
-	});
-
-	// Configure Github OAuth
-	passportRef.use(
-		new GitHubStrategy(
-			{
-				clientID: process.env.GH_KEY,
-				clientSecret: process.env.GH_SECRET,
-				callbackURL: '/api/auth/github/callback'
-			},
-			(accessToken, refreshToken, profile, callback) => {
-				return callback(null, profile);
-			}
-		)
-	);
-};
+const checkIfDuplicate = () => {
+  
+}
 
 // firebase callback after push finished
 const finished = err => {
@@ -44,4 +28,4 @@ const finished = err => {
 	}
 };
 
-module.exports = { paginate, finished, passportSetup };
+module.exports = { paginate, finished };
