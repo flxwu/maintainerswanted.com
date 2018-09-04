@@ -96,7 +96,8 @@ router.get('/getStatistics', async (req, res, next) => {
  */
 router.get('/getRepos', async (req, res, next) => {
 	const username = req.session.user;
-	const repos = await octokit.repos.getForUser({ username });
+	octokit.authenticate({ type: "token", token: req.session.access_token });
+	const repos = await octokit.repos.getAll();
 
 	const repos_temp = repos.data;
 	let data = [];
