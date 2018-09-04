@@ -6,14 +6,10 @@ const { paginate, finished } = require('../util/apiHelper');
 
 const env = process.env.NODE_ENV || 'dev';
 const rootURL =
-  env === 'dev' ?
-		'http://localhost:5000' :
-    'https://maintainerswanted.com';
+	env === 'dev' ? 'http://localhost:5000' : 'https://maintainerswanted.com';
 
 const webHookUrl =
-  env === 'dev' ?
-    process.env.NGROK :
-    'https://maintainerswanted.com';
+	env === 'dev' ? process.env.NGROK : 'https://maintainerswanted.com';
 
 let octokit = null;
 let firebase = null;
@@ -22,41 +18,41 @@ let database;
 let projectDB;
 
 const getRouter = (octokitRef, firebaseRef) => {
-  octokit = octokitRef;
-  firebase = firebaseRef;
-  database = firebase.database();
-  projectDB = database.ref('projects');
-  return router;
-}
+	octokit = octokitRef;
+	firebase = firebaseRef;
+	database = firebase.database();
+	projectDB = database.ref('projects');
+	return router;
+};
 
 /**
  * GET - /api/project/getList
  * Gets all registered projects from Firebase
  */
-router.get('/getList', (req, res, next) => {
+router.get('/getList', async (req, res, next) => {
+	const gotAll = async (data) => {
+		let tmp = await data.val();
+		let projectsList = tmp;
 
-  const projectsList = [];
+		// Return projects if availible
+		if (projectsList) res.json({ status: 200, data: projectsList });
+		else
+			res.json({
+				status: 500,
+				err: 'Error while getting registered Repository List'
+			});
+	};
 
-  const gotAll = data => {
-    let tmp = data.val();
-    projectsList.push(tmp);
-  };
+	const errData = error => {
+		console.error('Something went wrong.');
+		console.error(error);
+		res.json({
+			status: 500,
+			err: 'Error while getting registered Repository List'
+		});
+	};
 
-  const errData = error => {
-    console.error('Something went wrong.');
-    console.error(error);
-  };
-
-  projectDB.on('value', gotAll, errData);
-
-  // Return project if availible
-  if (projectsList) res.json({ status: 200, data: projectsList });
-  else
-    res.json({
-      status: 500,
-      err: 'Error while getting registered Repository List'
-    });
-
+	await projectDB.on('value', gotAll, errData);
 });
 
 /**
@@ -64,28 +60,28 @@ router.get('/getList', (req, res, next) => {
  * Fetches Repo Data from Github API
  */
 router.get('/getStatistics', async (req, res, next) => {
-  const { owner, repo } = req.query;
+	const { owner, repo } = req.query;
 
-  const repoData = await octokit.repos.get({ owner, repo });
-  const contributors = await paginate(octokit, octokit.repos.getContributors, {
-    owner,
-    repo,
-    anon: true
-  }).then(data => {
-    return data.length;
-  });
-  
-  const data = {
-    stars: repoData.data.stargazers_count,
-    watchers: repoData.data.watchers_count,
-    contributors: contributors,
-    description: repoData.data.description,
-    url: 'https://github.com/' + owner + '/' + repo
-  };
+	const repoData = await octokit.repos.get({ owner, repo });
+	const contributors = await paginate(octokit, octokit.repos.getContributors, {
+		owner,
+		repo,
+		anon: true
+	}).then(data => {
+		return data.length;
+	});
 
-  // Return project if available
-  if (data) res.json({ data: await data });
-  else res.json({ status: 500, err: 'Error while getting Repository Data' });
+	const data = {
+		stars: repoData.data.stargazers_count,
+		watchers: repoData.data.watchers_count,
+		contributors: contributors,
+		description: repoData.data.description,
+		url: 'https://github.com/' + owner + '/' + repo
+	};
+
+	// Return project if available
+	if (data) res.json({ data: await data });
+	else res.json({ status: 500, err: 'Error while getting Repository Data' });
 });
 
 /**
@@ -94,24 +90,24 @@ router.get('/getStatistics', async (req, res, next) => {
  * TODO: Change to all Repos he collaborates on
  */
 router.get('/getRepos', async (req, res, next) => {
-  const username = req.query.user;
-  const repos = await octokit.repos.getForUser({ username });
+	const username = req.query.user;
+	const repos = await octokit.repos.getForUser({ username });
 
-  const repos_temp = repos.data;
-  let data = [];
-  for (i = 0; i < repos_temp.length; i++) {
-    data.push({
-      name: repos_temp[i].name,
-      stars: repos_temp[i].stargazers_count,
-      watchers: repos_temp[i].watchers_count,
-      description: repos_temp[i].description,
-      url: 'https://github.com/' + username + '/' + repos_temp[i].name
-    });
-  }
+	const repos_temp = repos.data;
+	let data = [];
+	for (i = 0; i < repos_temp.length; i++) {
+		data.push({
+			name: repos_temp[i].name,
+			stars: repos_temp[i].stargazers_count,
+			watchers: repos_temp[i].watchers_count,
+			description: repos_temp[i].description,
+			url: 'https://github.com/' + username + '/' + repos_temp[i].name
+		});
+	}
 
-  // Return project if available
-  if (data) res.json({ data: await data });
-  else res.json({ status: 500, err: 'Error while getting Repository Data' });
+	// Return project if available
+	if (data) res.json({ data: await data });
+	else res.json({ status: 500, err: 'Error while getting Repository Data' });
 });
 
 /**
@@ -119,49 +115,61 @@ router.get('/getRepos', async (req, res, next) => {
  * Adds new project to Database
  */
 router.post('/add', async (req, res, next) => {
-  const owner = req.session.user;
-  const repo = req.body.repo;
-  const twitterHandle = req.body.twitter;
-  const repoData = await octokit.repos.get({ owner, repo });
-  const id = Math.random()
-    .toString(36)
-    .substr(2, 9);
-  
-  const access_token = req.session.access_token;
+	const owner = req.session.user;
+	const repo = req.body.repo;
+	const twitterHandle = req.body.twitter;
+	const repoData = await octokit.repos.get({ owner, repo });
+	const id = Math.random()
+		.toString(36)
+		.substr(2, 9);
 
+	const access_token = req.session.access_token;
+  octokit.authenticate({
+    type: 'token',
+    token: access_token
+  })
   // create webhook for the added repository
-  axios.post(
-    `https://api.github.com/repos/${owner}/${repo}/hooks?access_token=${access_token}`, {
-    owner,
-    repo,
-    name: 'web',
-    config: {
-      url: `${webHookUrl}/api/project/webhook`,
-      content_type: 'json'
-    },
-    events: ["issues"] 
+  const createHookUrl = `https://api.github.com/repos/${owner}/${repo}/hooks?access_token=${access_token}`;
+  // use axios instead of octokit as octokit throws an "404 Not Found" error
+  // await axios.post(
+  await octokit.repos.createHook({
+      owner,
+			repo,
+			name: 'web',
+			config: {
+        url: `${webHookUrl}/api/project/webhook`,
+				content_type: 'json'
+			},
+			events: ['issues']
   });
 
-  // TODO: Create issue
+	// TODO: Create issue
+	const result = await octokit.issues.create({
+		owner,
+		repo,
+		title: "# Test",
+		body: "# Test",
+		labels: ["Maintainers Wanted"]
+	});
 
-  // New entry
-  var newProject = {
-    id: id,
-    name: repo,
-    owner: owner,
-    // TODO: issueNumber: ''
-    description: repoData.data.description,
-    url: 'https://github.com/' + owner + '/' + repo,
-    twitter: twitterHandle
-  };
+	// New entry
+	var newProject = {
+		id: id,
+		name: repo,
+		owner: owner,
+		// TODO: issueNumber: ''
+		description: repoData.data.description,
+		url: 'https://github.com/' + owner + '/' + repo,
+		twitter: twitterHandle
+	};
 
-  let projectDBEntry = projectDB.push(newProject, finished);
-  console.log('Firebase generated key: ' + projectDBEntry.key);
+	let projectDBEntry = projectDB.push(newProject, finished);
+	console.log('Firebase generated key: ' + projectDBEntry.key);
 
-  if (projectDBEntry) res.json({ status: 200, data: projectDBEntry.key });
-  else res.json({ status: 500, err: 'Error while adding project' });
+	if (projectDBEntry) res.json({ status: 200, data: projectDBEntry.key });
+	else res.json({ status: 500, err: 'Error while adding project' });
 
-  next();
+	next();
 });
 
 /**
@@ -169,22 +177,27 @@ router.post('/add', async (req, res, next) => {
  * payload url for github issues webhooks
  */
 router.post('/webhook', async (req, res, next) => {
-  const issueAction = req.body.action;
-  const issueNumber = req.body.issue.number;
-  const repoUrl = req.body.repository.html_url;
+	const issueAction = req.body.action;
+	const issueNumber = req.body.issue.number;
+	const repoUrl = req.body.repository.html_url;
 
-  // neat trick to do a SQL-like search query
-  const hookedProject = projectDB.orderByChild('url')
-    .startAt(repoUrl)
-    .endAt(repoUrl+"\uf8ff");
+	let hookedProject = null;
+	// neat trick to do a SQL-like search query
+	const hookedProjectRef = await projectDB
+		.orderByChild('url')
+		.startAt(repoUrl)
+		.endAt(repoUrl + '\uf8ff')
+		.on('value', snapshot => {
+			let tmp = snapshot.val();
+			hookedProject = Object.values(tmp)[0];
 
-  console.log(hookedProject);
-  if (issueAction === 'closed') {
-
-  } else if (issueAction === 'reopened') {
-
-  }
-})
-
+			if (hookedProject.issueNumber === issueNumber) {
+				if (issueAction === 'closed') {
+				}
+				// } else if (issueAction === 'reopened') {
+				// }
+			}
+		});
+});
 
 module.exports = getRouter;
