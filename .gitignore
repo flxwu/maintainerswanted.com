@@ -3,3 +3,4 @@ node_modules/
 dbconfig.json
 routes/secrets.js
 yarn-error.log
+node_modules/
