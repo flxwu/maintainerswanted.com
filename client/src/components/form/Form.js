@@ -46,7 +46,7 @@ class Form extends Component {
 				filteredReposList: filteredRepos
 			});
 		}
- else {
+		else {
 			this.setState({
 				[e.target.name]: e.target.value
 			});
@@ -101,7 +101,7 @@ class Form extends Component {
 			<FormContainer
 				onSubmit={this._submitForm}
 				action="javascript:"
-				autocomplete="off"
+				autoComplete="off"
 				mobile
 			>
 				<Row mobile>
