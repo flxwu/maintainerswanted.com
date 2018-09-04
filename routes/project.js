@@ -129,16 +129,19 @@ router.post('/add', async (req, res, next) => {
   }
 
 	const twitterHandle = req.body.twitter;
+  const access_token = req.session.access_token;
+  // Authenticate octokit with new user token
+  // TODO: Can we move this directly to the github login callback?
+  octokit.authenticate({
+    type: 'token',
+    token: access_token
+  });
+
 	const repoData = await octokit.repos.get({ owner, repo });
 	const id = Math.random()
 		.toString(36)
 		.substr(2, 9);
 
-	const access_token = req.session.access_token;
-  octokit.authenticate({
-    type: 'token',
-    token: access_token
-  })
   // create webhook for the added repository
   const createHookUrl = `https://api.github.com/repos/${owner}/${repo}/hooks?access_token=${access_token}`;
   // use axios instead of octokit as octokit throws an "404 Not Found" error
