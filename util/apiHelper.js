@@ -1,8 +1,8 @@
 /**
  * Paginate through octokit results
- * @param {*} octokit 
- * @param {*} method 
- * @param {*} params 
+ * @param {*} octokit
+ * @param {*} method
+ * @param {*} params
  */
 const paginate = async (octokit, method, params) => {
 	let response = await method({ per_page: 100, ...params });
@@ -14,10 +14,19 @@ const paginate = async (octokit, method, params) => {
 	return data;
 };
 
+const checkIfDuplicate = async (projectDB, url) => {
+	let isDuplicate = false;
 
-const checkIfDuplicate = () => {
-  
-}
+	const gotAll = async data => {
+    let projectsList = await data.val();
+		isDuplicate = Object.values(projectsList).some(
+			project => project.url === url
+    );
+	};
+
+  await projectDB.on('value', gotAll);
+	return isDuplicate;
+};
 
 // firebase callback after push finished
 const finished = err => {
@@ -28,4 +37,4 @@ const finished = err => {
 	}
 };
 
-module.exports = { paginate, finished };
+module.exports = { paginate, finished, checkIfDuplicate };
