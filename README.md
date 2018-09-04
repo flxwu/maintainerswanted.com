@@ -20,7 +20,7 @@ Uploading a new project is quite simple: merely enter your username and reposito
 
 Users who browse the site will be presented with all projects currently up for grabs, completely with the amount of stars and contributors along with the name and description.  
 
-Go ahead and try it yourself: [maintainerswanted.com](https://www.maintainerswanted.com)   
+Go ahead and try it yourself: [maintainerswanted.com](https://maintainerswanted.com)   
 # Development #
 
 Setup:
