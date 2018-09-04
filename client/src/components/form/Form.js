@@ -10,7 +10,9 @@ class Form extends Component {
 			twitter: '',
 			fetching: false,
 			success: false,
-			possibleRepos: []
+			possibleRepos: [],
+			allRepos: [],
+			showSug: false
 		};
 	}
 
@@ -18,15 +20,25 @@ class Form extends Component {
 		this.setState({
 			[e.target.name]: e.target.value
 		});
-		this._getRepos(e.target.value);
+		this._filterRepos(e.target.value);
 	}
 
-	_getRepos = repoPre => {
+	_filterRepos = (repoSugs) => {
+		this.setState({ possibleRepos: this.allRepos.filter(project => project.name.includes(repoSugs)) });
+	}
+
+	_getRepos = () => {
 	  axios.get('/api/project/getRepos')
 			.then((response) => {
-				console.log(response.data.data.filter(project => project.name.includes(repoPre)));
-				this.setState({ possibleRepos: response.data.data.filter(project => project.name.includes(repoPre)) });
+				this.setState({ allRepos: response.data.data });
+			})
+			.catch((err) => {
+				console.log(err);
 			});
+	}
+
+	_addRepo(repoSug) {
+		this.setState({ repo: repoSug });
 	}
 
 	_submitForm = async () => {
@@ -48,7 +60,8 @@ class Form extends Component {
 			});
 	};
 
-	render({ mobile }, { owner, repo, twitter, fetching, success, possibleRepos }) {
+	render({ mobile }, { owner, repo, twitter, fetching, success, possibleRepos, showSug }) {
+		this._getRepos();
 		return (
 			<FormContainer onSubmit={this._submitForm} action="javascript:" mobile>
 				<Row mobile>
@@ -59,14 +72,16 @@ class Form extends Component {
 						name="repo"
 						placeholder="e.g. standard"
 						mobile
-						isSuggesting={possibleRepos.length !== 0}
+						isSuggesting={showSug}
+						onFocus={() => this.setState({ showSug: true})}
+						onBlur={() => this.setState({ showSug: false})}
 					/>
 					<Suggestions
-						isSuggesting={possibleRepos.length !== 0}
+						isSuggesting={showSug}
 					>
-						{possibleRepos.length !== 0 ? (
-							possibleRepos.slice(0, 5).map(repoSug => (
-								<Suggestion> {repoSug.name} </Suggestion>
+						{possibleRepos.length !== 0 && showSug ? (
+							possibleRepos.map(repoSug => (
+								<Suggestion onClick={this._addRepo(repoSug)}> {repoSug.name} </Suggestion>
 							))
 						) : ( <p /> )}
 					</Suggestions>
@@ -119,7 +134,7 @@ const Text = styled.h5`
 
 const TextBox = styled.input`
 	display: inline-flex;
-	${props => props.isSuggesting ? 'border-radius: 12px;' : 'border-radius: 12px 12px 0 0;'}
+	${props => props.isSuggesting ? 'border-radius: 12px 12px 0 0;' : 'border-radius: 12px;'}
 	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
 	height: 20px;
 	padding: 10px;
@@ -150,35 +165,30 @@ const Submit = styled.input`
 
 const Suggestions = styled.ul`
 	list-style-type: none;
-	border: 1px solid grey;
 	padding: 0;
-	${props => props.isSuggesting ? 'display: none;' : 'display: flex;'}
+	${props => props.isSuggesting ? 'display: flex;' : 'display: none;'}
 	flex-direction: column;
 	justify-content: center;
 	align-content: center;
 	margin: -10px 20px -30px 20px;
-	display: -webkit-box;
-	display: -webkit-flex;
-	display: -ms-flexbox;
-	display: flex;
 	-webkit-flex-basis: 100%;
 	-ms-flex-preferred-size: 100%;
 	flex-basis: 100%;
-	border-top: 1px solid #CCC;
 	background: white;
 	border-radius: 0 0 12px 12px;
 	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1),0 0 0 1px #f0f2f7;
+	z-index: 666;
 `
 ;
 
 const Suggestion = styled.li`
-	display: flex;
-	align-self: center;
-`
-;
-
-const NoRepo = styled.li`
-	color: red;
+	border-top: 1px solid rgba(0, 0, 0, 0.3);
+	text-align: center;
+	border-radius: 0 0 12px 12px;
+	&:hover {
+		background: #EEE;
+		cursor: pointer;
+	}
 `
 ;
 
