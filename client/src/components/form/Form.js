@@ -3,91 +3,133 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 class Form extends Component {
-	constructor (props) {
+	constructor(props) {
 		super(props);
 		this.state = {
 			repo: '',
 			twitter: '',
 			fetching: false,
 			success: false,
-			possibleRepos: [],
-			allRepos: [],
-			showSug: false
+			filteredReposList: [],
+			reposList: [],
+			showAutoComplete: false
 		};
+
+		this._toggleAutoComplete = this._toggleAutoComplete.bind(this);
 	}
 
-	_setFormValue = e => {
-		this.setState({
-			[e.target.name]: e.target.value
-		});
-		this._filterRepos(e.target.value);
-	}
-
-	_filterRepos = (repoSugs) => {
-		this.setState({ possibleRepos: this.allRepos.filter(project => project.name.includes(repoSugs)) });
-	}
-
-	_getRepos = () => {
-	  axios.get('/api/project/getRepos')
-			.then((response) => {
-				this.setState({ allRepos: response.data.data });
-			})
-			.catch((err) => {
-				console.log(err);
+	async componentDidMount() {
+		await axios.get('/api/project/getRepos').then(response => {
+			this.setState({
+				reposList: response.data.data,
+				filteredReposList: []
 			});
+		});
 	}
 
-	_addRepo(repoSug) {
-		this.setState({ repo: repoSug });
+	shouldComponentUpdate(nextProps, nextState) {
+		return JSON.stringify(this.state) !== JSON.stringify(nextState);
 	}
+
+	_setFormValue = async e => {
+		if (e.target.name === 'repo') {
+			let targetVal = e.target.value;
+			let filteredRepos = await this.state.reposList
+				.filter(repo => repo.repo.includes(targetVal));
+      
+			filteredRepos.sort((repo1, repo2) => repo1.repo.localeCompare(repo2.repo));
+			if (filteredRepos.length > 5) filteredRepos = filteredRepos.slice(4);
+      
+			this.setState({
+				[e.target.name]: targetVal,
+				filteredReposList: filteredRepos
+			});
+		}
+		else {
+			this.setState({
+				[e.target.name]: e.target.value
+			});
+		}
+	};
 
 	_submitForm = async () => {
 		const { repo, twitter } = this.state;
 		this.setState({ fetching: true });
 
-		await axios.post('/api/project/add', {
-			repo,
-			twitter
-		})
-			.then((response) => {
+		await axios
+			.post('/api/project/add', {
+				repo,
+				twitter
+			})
+			.then(response => {
 				if (response.status === 200) {
 					this.setState({ fetching: false, success: true });
 				}
 			})
-			.catch((error) => {
+			.catch(error => {
 				this.setState({ fetching: 'error' });
 				console.error(error);
 			});
 	};
 
-	render({ mobile }, { owner, repo, twitter, fetching, success, possibleRepos, showSug }) {
-		this._getRepos();
+	_toggleAutoComplete(toggle) {
+		this.setState({
+			showAutoComplete: toggle
+		});
+	}
+
+	_selectRepo(repo) {
+		this.setState({
+			repo: repo.repo
+		});
+	}
+
+	render(
+		{ mobile },
+		{
+			owner,
+			repo,
+			twitter,
+			fetching,
+			success,
+			filteredReposList,
+			showAutoComplete
+		}
+	) {
 		return (
-			<FormContainer onSubmit={this._submitForm} action="javascript:" mobile>
+			<FormContainer
+				onSubmit={this._submitForm}
+				action="javascript:"
+				autocomplete="off"
+				mobile
+			>
 				<Row mobile>
-				Repository Name:
+					Repository Name:
 					<TextBox
 						value={repo}
 						onInput={this._setFormValue}
 						name="repo"
 						placeholder="e.g. standard"
 						mobile
-						isSuggesting={showSug}
-						onFocus={() => this.setState({ showSug: true})}
-						onBlur={() => this.setState({ showSug: false})}
+						isSuggesting={showAutoComplete}
+						onFocus={() => this._toggleAutoComplete(true)}
+						onBlur={() => this._toggleAutoComplete(false)}
 					/>
-					<Suggestions
-						isSuggesting={showSug}
-					>
-						{possibleRepos.length !== 0 && showSug ? (
-							possibleRepos.map(repoSug => (
-								<Suggestion onClick={this._addRepo(repoSug)}> {repoSug.name} </Suggestion>
+					<Suggestions isSuggesting={showAutoComplete}>
+						{filteredReposList.length !== 0 && showAutoComplete ? (
+							filteredReposList.map(repo => (
+								<Suggestion onClick={() => this._selectRepo(repo)}>
+									{' '}
+									{repo.repo}{' '}
+								</Suggestion>
 							))
-						) : ( <p /> )}
+						) : (
+							<p />
+						)}
 					</Suggestions>
 				</Row>
 				<Row mobile>
-				Twitter Handle:
+					Twitter Handle:
 					<TextBox
 						value={twitter}
 						onInput={this._setFormValue}
@@ -100,11 +142,7 @@ class Form extends Component {
 				<Row submit mobile>
 					<Submit type="submit"> Submit </Submit>
 				</Row>
-				{ success &&
-					<Text>
-						Project successfully added!
-					</Text>
-				}
+				{success && <Text>Project successfully added!</Text>}
 			</FormContainer>
 		);
 	}
@@ -120,11 +158,11 @@ const FormContainer = styled.form`
 
 const Row = styled.div`
 	display: flex;
-	align-items: ${props => props.mobile ? 'stretch' : 'center'};
-	justify-content: ${props => props.submit ? 'center' : 'space-between'};
-	${props => props.submit && 'flex-basis: 15%' };
-	${props => props.submit && 'margin-top: 15px' };
-	flex-direction: ${props => props.mobile ? 'column' : 'row'};
+	align-items: ${props => (props.mobile ? 'stretch' : 'center')};
+	justify-content: ${props => (props.submit ? 'center' : 'space-between')};
+	${props => props.submit && 'flex-basis: 15%'};
+	${props => props.submit && 'margin-top: 15px'};
+	flex-direction: ${props => (props.mobile ? 'column' : 'row')};
 	white-space: nowrap;
 `;
 
@@ -134,24 +172,26 @@ const Text = styled.h5`
 
 const TextBox = styled.input`
 	display: inline-flex;
-	${props => props.isSuggesting ? 'border-radius: 12px 12px 0 0;' : 'border-radius: 12px;'}
-	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
+	${props =>
+		props.isSuggesting
+			? 'border-radius: 12px 12px 0 0;'
+			: 'border-radius: 12px;'} box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
 	height: 20px;
 	padding: 10px;
 	margin: 10px 20px;
 	border: none;
 	display: flex;
-	flex-basis: ${props => props.mobile ? '100%' : '60%'};
+	flex-basis: ${props => (props.mobile ? '100%' : '60%')};
 `;
 
 const Submit = styled.input`
 	display: flex;
-	background: #FAFAFA;
+	background: #fafafa;
 	border-radius: 50px;
 	line-height: 1.8;
 	overflow: hidden;
 	font-size: 20px;
-	color: #E27D60;
+	color: #e27d60;
 	align-self: center;
 	margin-bottom: 12.5px;
 	&:hover {
@@ -160,14 +200,16 @@ const Submit = styled.input`
 	}
 	&:active {
 		outline: 0;
-	}`
-;
+	}
+`;
 
 const Suggestions = styled.ul`
 	list-style-type: none;
 	padding: 0;
-	${props => props.isSuggesting ? 'display: flex;' : 'display: none;'}
-	flex-direction: column;
+	${props =>
+		props.isSuggesting
+			? 'display: flex;'
+			: 'display: none;'} flex-direction: column;
 	justify-content: center;
 	align-content: center;
 	margin: -10px 20px -30px 20px;
@@ -176,21 +218,18 @@ const Suggestions = styled.ul`
 	flex-basis: 100%;
 	background: white;
 	border-radius: 0 0 12px 12px;
-	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1),0 0 0 1px #f0f2f7;
+	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0, 32, 128, 0.1), 0 0 0 1px #f0f2f7;
 	z-index: 666;
-`
-;
+`;
 
 const Suggestion = styled.li`
 	border-top: 1px solid rgba(0, 0, 0, 0.3);
 	text-align: center;
 	border-radius: 0 0 12px 12px;
 	&:hover {
-		background: #EEE;
+		background: #eee;
 		cursor: pointer;
 	}
-`
-;
-
+`;
 
 export default Form;
