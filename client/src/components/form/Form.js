@@ -9,7 +9,8 @@ class Form extends Component {
 			repo: '',
 			twitter: '',
 			fetching: false,
-			success: false
+			success: false,
+			possibleRepos: []
 		};
 	}
 
@@ -17,8 +18,17 @@ class Form extends Component {
 		this.setState({
 			[e.target.name]: e.target.value
 		});
+		this._getRepos(e.target.value);
 	}
-	
+
+	_getRepos = repoPre => {
+	  axios.get('/api/project/getRepos')
+			.then((response) => {
+				console.log(response.data.data.filter(project => project.name.includes(repoPre)));
+				this.setState({ possibleRepos: response.data.data.filter(project => project.name.includes(repoPre)) });
+			});
+	}
+
 	_submitForm = async () => {
 		const { repo, twitter } = this.state;
 		this.setState({ fetching: true });
@@ -38,7 +48,7 @@ class Form extends Component {
 			});
 	};
 
-	render({ mobile }, { owner, repo, twitter, fetching, success }) {
+	render({ mobile }, { owner, repo, twitter, fetching, success, possibleRepos }) {
 		return (
 			<FormContainer onSubmit={this._submitForm} action="javascript:" mobile>
 				<Row mobile>
@@ -49,7 +59,17 @@ class Form extends Component {
 						name="repo"
 						placeholder="e.g. standard"
 						mobile
+						isSuggesting={possibleRepos.length !== 0}
 					/>
+					<Suggestions
+						isSuggesting={possibleRepos.length !== 0}
+					>
+						{possibleRepos.length !== 0 ? (
+							possibleRepos.slice(0, 5).map(repoSug => (
+								<Suggestion> {repoSug.name} </Suggestion>
+							))
+						) : ( <p /> )}
+					</Suggestions>
 				</Row>
 				<Row mobile>
 				Twitter Handle:
@@ -59,6 +79,7 @@ class Form extends Component {
 						name="twitter"
 						placeholder="e.g. feross"
 						mobile
+						isSuggesting={false}
 					/>
 				</Row>
 				<Row submit mobile>
@@ -98,7 +119,7 @@ const Text = styled.h5`
 
 const TextBox = styled.input`
 	display: inline-flex;
-	border-radius: 12px;
+	${props => props.isSuggesting ? 'border-radius: 12px;' : 'border-radius: 12px 12px 0 0;'}
 	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
 	height: 20px;
 	padding: 10px;
@@ -126,5 +147,40 @@ const Submit = styled.input`
 		outline: 0;
 	}`
 ;
+
+const Suggestions = styled.ul`
+	list-style-type: none;
+	border: 1px solid grey;
+	padding: 0;
+	${props => props.isSuggesting ? 'display: none;' : 'display: flex;'}
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	margin: -10px 20px -30px 20px;
+	display: -webkit-box;
+	display: -webkit-flex;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-flex-basis: 100%;
+	-ms-flex-preferred-size: 100%;
+	flex-basis: 100%;
+	border-top: 1px solid #CCC;
+	background: white;
+	border-radius: 0 0 12px 12px;
+	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1),0 0 0 1px #f0f2f7;
+`
+;
+
+const Suggestion = styled.li`
+	display: flex;
+	align-self: center;
+`
+;
+
+const NoRepo = styled.li`
+	color: red;
+`
+;
+
 
 export default Form;
