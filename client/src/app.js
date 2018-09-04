@@ -41,7 +41,9 @@ export default class App extends Component {
 		// get projects list
 		const response = await axios.get('/api/project/getList');
 		const dataObject = response.data.data;
-		const data = Object.keys(dataObject).map(dbKey => dataObject[dbKey]);
+		const data = dataObject.length !== 'None'
+			? Object.keys(dataObject).map(dbKey => dataObject[dbKey])
+			: 'None';
 
 		this.setState({
 			projects: data,
@@ -57,53 +59,57 @@ export default class App extends Component {
 				<MediaQuery minDeviceWidth={1224}>
 					<List>
 						<NewProject loggedIn={loggedIn} />
-						{projects.length !== 0 ? (
-							projects.map(project => (
-								<ProjectCardWrapper>
-									<ProjectCard project={project} />
-								</ProjectCardWrapper>
-							))
-						) : (
-							<Loading />
-						)}
+						{projects === 'None' ?
+							<div>No Projects in DB</div>
+							: projects.length !== 0 ? (
+								projects.map(project => (
+									<ProjectCardWrapper>
+										<ProjectCard project={project} />
+									</ProjectCardWrapper>
+								))
+							) : (
+								<Loading />
+							)}
 					</List>
 				</MediaQuery>
 				<MediaQuery maxDeviceWidth={1224}>
 					<List mobile>
 						<NewProject loggedIn={loggedIn} />
-						{projects.length !== 0 ? (
-							projects.map(project => (
-								<ProjectCardWrapper>
-									<ProjectCard project={project} />
-								</ProjectCardWrapper>
-							))
-						) : (
-							<Loading />
-						)}
+						{projects === 'None' ?
+							<div>No Projects in DB</div>
+							: projects.length !== 0 ? (
+								projects.map(project => (
+									<ProjectCardWrapper>
+										<ProjectCard project={project} />
+									</ProjectCardWrapper>
+								))
+							) : (
+								<Loading />
+							)}
 					</List>
 				</MediaQuery>
 				<FooterWrapper>
 					<Footer>
-						Made with love by
+            Made with love by
 						<Link href="https://twitter.com/flxwu"> @flxwu</Link> and
 						<Link href="https://twitter.com/QuentinOschatz"> @Qo2770</Link>
 						<br />
 						<Footer break>
 							<Link break href="https://github.com/flxwu/maintainerswanted.com">
-								Find us on Github!
+                Find us on Github!
 							</Link>
 						</Footer>
 						<br />
 						<Footer small break>
-							Built using
+              Built using
 							<Link small href="https://github.com/flxwu/maintainerswanted.com">
 								{' Preact'}
 							</Link>{' '}
-							+
+              +
 							<Link small href="https://github.com/flxwu/maintainerswanted.com">
 								{' Express'}
 							</Link>{' '}
-							+
+              +
 							<Link small href="https://github.com/flxwu/maintainerswanted.com">
 								{' Firebase'}
 							</Link>
@@ -116,47 +122,47 @@ export default class App extends Component {
 }
 
 const List = styled.ul`
-	display: block;
-	margin-block-start: 3em;
-	margin-block-end: 1em;
-	margin-inline-start: 0px;
-	margin-inline-end: 0px;
-	padding-inline-start: ${props => (props.mobile ? '10%' : '20%')};
-	-webkit-padding-start: ${props => (props.mobile ? '10%' : '20%')};
-	padding-inline-end: ${props => (props.mobile ? '10%' : '20%')};
-	-webkit-padding-end: ${props => (props.mobile ? '10%' : '20%')};
-	list-style-type: none;
-	background: #fafafa;
-	text-align: center;
+  display: block;
+  margin-block-start: 3em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: ${props => (props.mobile ? '10%' : '20%')};
+  -webkit-padding-start: ${props => (props.mobile ? '10%' : '20%')};
+  padding-inline-end: ${props => (props.mobile ? '10%' : '20%')};
+  -webkit-padding-end: ${props => (props.mobile ? '10%' : '20%')};
+  list-style-type: none;
+  background: #fafafa;
+  text-align: center;
 `;
 
 const FooterWrapper = styled.div`
-	display: flex;
-	justify-content: center;
-	background: #fafafa;
-	height: 20px;
-	margin: 50px 0;
+  display: flex;
+  justify-content: center;
+  background: #fafafa;
+  height: 20px;
+  margin: 50px 0;
 `;
 
 const Footer = styled.div`
-	position: relative;
-	text-align: center;
-	${props => props.small && 'font-size: 12px'};
-	${props => props.break && 'margin: 10px 0'};
+  position: relative;
+  text-align: center;
+  ${props => props.small && 'font-size: 12px'};
+  ${props => props.break && 'margin: 10px 0'};
 `;
 
 const ProjectCardWrapper = styled.li`
-	position: relative;
-	flex: 1;
+  position: relative;
+  flex: 1;
 `;
 
 const Link = styled.a`
-	text-decoration: none;
-	font-weight: bold;
-	text-align: center;
-	color: #e27d60;
-	&:hover {
-		color: grey;
-	}
-	${props => props.break && 'margin-top: 10px'};
+  text-decoration: none;
+  font-weight: bold;
+  text-align: center;
+  color: #e27d60;
+  &:hover {
+    color: grey;
+  }
+  ${props => props.break && 'margin-top: 10px'};
 `;
