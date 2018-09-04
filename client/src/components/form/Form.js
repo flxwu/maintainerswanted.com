@@ -188,13 +188,12 @@ const TextBox = styled.input`
 const Submit = styled.input`
 	display: flex;
 	background: #fafafa;
-	border-radius: 50px;
+	border: 0;
 	line-height: 1.8;
 	overflow: hidden;
 	font-size: 20px;
 	color: #e27d60;
 	align-self: center;
-	margin-bottom: 12.5px;
 	&:hover {
 		font-weight: bold;
 		cursor: pointer;
