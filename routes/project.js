@@ -163,15 +163,12 @@ router.post('/add', async (req, res, next) => {
 		labels: ['Maintainers Wanted']
   });
 
-  console.log(createdIssue);
-  
-
 	// New DB entry
 	var newProject = {
 		id,
 		name: repo,
 		owner,
-		// TODO: issueNumber: ''
+		issueNumber: createdIssue.data.number,
 		description: repoData.data.description,
 		url,
 		twitter: twitterHandle
