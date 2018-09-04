@@ -143,9 +143,6 @@ router.post('/add', async (req, res, next) => {
 		.substr(2, 9);
 
   // create webhook for the added repository
-  const createHookUrl = `https://api.github.com/repos/${owner}/${repo}/hooks?access_token=${access_token}`;
-  // use axios instead of octokit as octokit throws an "404 Not Found" error
-  // await axios.post(
   await octokit.repos.createHook({
       owner,
 			repo,
