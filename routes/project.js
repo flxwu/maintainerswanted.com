@@ -96,21 +96,53 @@ router.get('/getStatistics', async (req, res, next) => {
  */
 router.get('/getRepos', async (req, res, next) => {
 	const username = req.session.user;
-	octokit.authenticate({ type: "token", token: req.session.access_token });
-	const repos = await octokit.repos.getAll();
+	const access_token = req.session.access_token;
 
-	const repos_temp = repos.data;
+	octokit.authenticate({
+		type: 'token',
+		token: access_token
+	});
+
+	const getAllGithubAPIUrl = page =>
+		'https://api.github.com/user/repos' +
+		'?visibility=public&affiliation=owner,collaborator' +
+		`&per_page=100&page=${page}` +
+		`&access_token=${access_token}`;
+
+	const repos_temp = [];
+	let page = 1;
+	let con = true;
+	while (con) {
+		await axios.get(getAllGithubAPIUrl(page)).then(res => {
+			if (res.data.length === 0) {
+				con = false;
+			}
+			repos_temp.push(...res.data);
+		});
+		page += 1;
+	}
+
+	console.log(repos_temp.map(x => !x.full_name.includes('flxwu')));
 	let data = [];
-	for (i = 0; i < repos_temp.length; i++) {
+	for (let i = 0; i < repos_temp.length; i++) {
+		let repoName =
+			repos_temp[i].full_name.split('/')[0] === username
+				? repos_temp[i].name
+				: repos_temp[i].full_name;
+
 		data.push({
-			repo: repos_temp[i].name,
+			repo: repoName,
 			stars: repos_temp[i].stargazers_count,
 			watchers: repos_temp[i].watchers_count,
 			description: repos_temp[i].description,
-			url: 'https://github.com/' + username + '/' + repos_temp[i].name
+			url:
+				'https://github.com/' +
+				repos_temp[i].owner.login +
+				'/' +
+				repos_temp[i].name
 		});
 	}
-
+	console.log(data);
 	// Return project if available
 	if (data) res.json({ data: await data });
 	else res.json({ status: 500, err: 'Error while getting Repository Data' });
@@ -160,7 +192,7 @@ router.post('/add', async (req, res, next) => {
 			content_type: 'json'
 		},
 		events: ['issues']
-  });
+	});
 
 	// Create issue on repository
 	const createdIssue = await octokit.issues.create({
@@ -177,8 +209,8 @@ router.post('/add', async (req, res, next) => {
 		name: repo,
 		owner,
 		issueNumber: createdIssue.data.number,
-    description: repoData.data.description,
-    hookID: createdHook.data.id,
+		description: repoData.data.description,
+		hookID: createdHook.data.id,
 		url,
 		twitter: twitterHandle
 	};
@@ -195,7 +227,7 @@ router.post('/add', async (req, res, next) => {
  * payload url for github issues webhooks
  */
 router.post('/webhook', async (req, res, next) => {
-  const issueAction = req.body.action;
+	const issueAction = req.body.action;
 
 	// TODO: Do we also react on issue being reopened?
 	// s. Issue #26
@@ -217,10 +249,10 @@ router.post('/webhook', async (req, res, next) => {
 			let tmp = snapshot.val();
 			hookedProject = Object.values(tmp)[0];
 			if (hookedProject.issueNumber === issueNumber) {
-        deleteProjectFromDB(projectDB, repoUrl);
-        // TODO: delete hook
+				deleteProjectFromDB(projectDB, repoUrl);
+				// TODO: delete hook
 			}
-    });
+		});
 });
 
 module.exports = getRouter;
