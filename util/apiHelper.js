@@ -1,47 +1,55 @@
-const GitHubStrategy = require('passport-github').Strategy;
-
+/**
+ * Paginate through octokit results
+ * @param {*} octokit
+ * @param {*} method
+ * @param {*} params
+ */
 const paginate = async (octokit, method, params) => {
-	let response = await method({ per_page: 100, ...params });
-	let { data } = response;
-	while (octokit.hasNextPage(response)) {
-		response = await octokit.getNextPage(response);
-		data = data.concat(response.data);
-	}
-	return data;
+  let response = await method({ per_page: 100, ...params });
+  let { data } = response;
+  while (octokit.hasNextPage(response)) {
+    response = await octokit.getNextPage(response);
+    data = data.concat(response.data);
+  }
+  return data;
 };
 
-const passportSetup = passportRef => {
-	// Passport user (de)-serialisation to avoid transmitting user info after login
-	passportRef.serializeUser((user, callback) => {
-		callback(null, user);
-	});
+const checkIfDuplicate = async (projectDB, url) => {
+  let isDuplicate = false;
 
-	passportRef.deserializeUser((obj, callback) => {
-		callback(null, obj);
-	});
+  const gotAll = async data => {
+    let projectsList = await data.val();
+    if (projectsList) {
+      isDuplicate = Object.values(projectsList).some(
+        project => project.url === url
+      );
+    }
+  };
 
-	// Configure Github OAuth
-	passportRef.use(
-		new GitHubStrategy(
-			{
-				clientID: process.env.GH_KEY,
-				clientSecret: process.env.GH_SECRET,
-				callbackURL: '/api/auth/github/callback'
-			},
-			(accessToken, refreshToken, profile, callback) => {
-				return callback(null, profile);
-			}
-		)
-	);
+  await projectDB.on('value', gotAll);
+  return isDuplicate;
+};
+
+const deleteProjectFromDB = async (projectDB, url) => {
+  console.log('aosidnapwidmapsmcyspcomapsodmapwod');
+  await projectDB
+    .orderByChild('url')
+    .equalTo(url)
+    .remove();
 };
 
 // firebase callback after push finished
 const finished = err => {
-	if (err) {
-		console.error(err);
-	} else {
-		console.log('SUCCESS');
-	}
+  if (err) {
+    console.error(err);
+  } else {
+    console.log('SUCCESS');
+  }
 };
 
-module.exports = { paginate, finished, passportSetup };
+module.exports = {
+  paginate,
+  finished,
+  checkIfDuplicate,
+  deleteProjectFromDB
+};
