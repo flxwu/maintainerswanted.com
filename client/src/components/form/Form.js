@@ -12,7 +12,8 @@ class Form extends Component {
 			success: false,
 			filteredReposList: [],
 			reposList: [],
-			showAutoComplete: false
+			showAutoComplete: false,
+			selectedIndexFromDropdown: 0
 		};
 
 		this._toggleAutoComplete = this._toggleAutoComplete.bind(this);
@@ -85,6 +86,23 @@ class Form extends Component {
 		});
 	}
 
+	_handleKeyOnRepoSelect(event) {
+		if (event.key === 'ArrowDown') {
+			if (this.state.selectedIndexFromDropdown < this.state.filteredReposList.length) {
+				this.setState({
+					selectedIndexFromDropdown: this.state.selectedIndexFromDropdown + 1
+				});
+			}
+		}
+		else if (event.key === 'ArrowUp') {
+			if (this.state.selectedIndexFromDropdown >= 0) {
+				this.setState({
+					selectedIndexFromDropdown: this.state.selectedIndexFromDropdown - 1
+				});
+			}
+		}
+	}
+
 	render(
 		{ mobile },
 		{
@@ -111,10 +129,11 @@ class Form extends Component {
 						onInput={this._setFormValue}
 						name="repo"
 						placeholder="e.g. standard"
-						mobile
 						isSuggesting={showAutoComplete}
 						onFocus={() => this._toggleAutoComplete(true)}
 						onBlur={() => this._toggleAutoComplete(false)}
+						onKeyUp={this._handleKeyOnRepoSelect}
+						mobile
 					/>
 					<Suggestions isSuggesting={showAutoComplete}>
 						{filteredReposList.length !== 0 && showAutoComplete ? (
