@@ -40,7 +40,7 @@ export default class App extends Component {
 
 		// get projects list
 		const response = await axios.get('/api/project/getList');
-		const dataObject = response.data.data[0];
+		const dataObject = response.data.data;
 		const data = Object.keys(dataObject).map(dbKey => dataObject[dbKey]);
 
 		this.setState({

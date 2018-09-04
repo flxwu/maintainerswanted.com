@@ -1,5 +1,5 @@
 {
-  "name": "lookingformaintainers.com",
+  "name": "maintainerswanted.com",
   "version": "2.0.3",
   "private": true,
   "scripts": {
@@ -7,7 +7,8 @@
     "dev": "concurrently \"yarn start\" \"cd client && yarn start\"",
     "heroku-postbuild": "cd client && yarn install --network-timeout 1000000 && yarn run build",
     "heroku-prebuild": "yarn config delete proxy && npm config rm https-proxy && npm config rm proxy && yarn install --network-timeout 1000000",
-    "bump": "yarn version --patch"
+    "bump": "yarn version --patch",
+    "expose-web": "ngrok http 5000"
   },
   "homepage": "https://maintainerswanted.com",
   "repository": {
@@ -22,21 +23,18 @@
     "@octokit/rest": "^15.10.0",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
+    "chalk": "^2.4.1",
     "connect-session-firebase": "^5.13.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "express-session": "^1.15.6",
     "firebase": "^5.4.1",
-    "firebase-admin": "^6.0.0",
-    "http-errors": "~1.6.2",
-    "jade": "~1.11.0",
-    "morgan": "~1.9.0",
-    "nodemon": "^1.18.4",
-    "passport": "^0.4.0",
-    "passport-github": "^1.1.0"
+    "morgan": "~1.9.0"
   },
   "devDependencies": {
-    "concurrently": "^4.0.1"
+    "concurrently": "^4.0.1",
+    "ngrok": "^3.0.1",
+    "nodemon": "^1.18.4"
   }
 }
