@@ -90,7 +90,7 @@ router.get('/getStatistics', async (req, res, next) => {
 });
 
 /**
- * GET - /api/project/getRepos?user
+ * GET - /api/project/getRepos
  * All Repos of User from Github API
  * TODO: Change to all Repos he collaborates on
  */
@@ -102,7 +102,7 @@ router.get('/getRepos', async (req, res, next) => {
 	let data = [];
 	for (i = 0; i < repos_temp.length; i++) {
 		data.push({
-			name: repos_temp[i].name,
+			repo: repos_temp[i].name,
 			stars: repos_temp[i].stargazers_count,
 			watchers: repos_temp[i].watchers_count,
 			description: repos_temp[i].description,
