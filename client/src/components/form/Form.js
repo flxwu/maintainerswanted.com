@@ -34,18 +34,19 @@ class Form extends Component {
 	_setFormValue = async e => {
 		if (e.target.name === 'repo') {
 			let targetVal = e.target.value;
-			let filteredRepos = await this.state.reposList
-				.filter(repo => repo.repo.includes(targetVal));
-      
-			filteredRepos.sort((repo1, repo2) => repo1.repo.localeCompare(repo2.repo));
-			if (filteredRepos.length > 5) filteredRepos = filteredRepos.slice(4);
-      
+			let filteredRepos = await this.state.reposList.filter(repo =>
+				repo.repo.toLowerCase().includes(targetVal.toLowerCase())
+			);
+
+			filteredRepos.sort((repo1, repo2) => repo2.stars - repo1.stars);
+			if (filteredRepos.length > 5) filteredRepos = filteredRepos.slice(0, 4);
+
 			this.setState({
 				[e.target.name]: targetVal,
 				filteredReposList: filteredRepos
 			});
 		}
-		else {
+ else {
 			this.setState({
 				[e.target.name]: e.target.value
 			});
