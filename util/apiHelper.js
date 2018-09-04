@@ -19,9 +19,11 @@ const checkIfDuplicate = async (projectDB, url) => {
 
   const gotAll = async data => {
     let projectsList = await data.val();
-    isDuplicate = Object.values(projectsList).some(
-      project => project.url === url
-    );
+    if (projectsList) {
+      isDuplicate = Object.values(projectsList).some(
+        project => project.url === url
+      );
+    }
   };
 
   await projectDB.on('value', gotAll);
@@ -29,11 +31,11 @@ const checkIfDuplicate = async (projectDB, url) => {
 };
 
 const deleteProjectFromDB = async (projectDB, url) => {
+  console.log('aosidnapwidmapsmcyspcomapsodmapwod');
   await projectDB
     .orderByChild('url')
-    .startAt(url)
-    .endAt(url + '\uf8ff')
-    .delete();
+    .equalTo(url)
+    .remove();
 };
 
 // firebase callback after push finished
