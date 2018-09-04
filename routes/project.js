@@ -189,6 +189,14 @@ router.post('/add', async (req, res, next) => {
  */
 router.post('/webhook', async (req, res, next) => {
 	const issueAction = req.body.action;
+  
+  // TODO: Do we also react on issue being reopened?
+  // s. Issue #26
+	if (issueAction !== 'closed') {
+		return;
+	}
+
+	// Maintainers-Wanted issue got closed
 	const issueNumber = req.body.issue.number;
 	const repoUrl = req.body.repository.html_url;
 
