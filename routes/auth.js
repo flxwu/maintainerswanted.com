@@ -34,7 +34,7 @@ router.get('/status', (req, res, next) => {
 router.get('/github', (req, res, next) => {
 	res.send(
 		'https://github.com/login/oauth/authorize?' +
-			`client_id=${key}&scope=user,repo` +
+			`client_id=${key}&scope=user,repo,admin:repo_hook` +
 			`&redirect_uri=${callbackUrl}`
   );
 });
