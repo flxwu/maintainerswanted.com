@@ -16,11 +16,11 @@ After reading the tweet, [@flxwu](https://twitter.com/flxwu) searched for a "Loo
 
 # Usage #  
 
-Uploading a new project is quite simple: merely enter your username and repository _(Github Authentication coming soon)_ and the site will fill in the remaining information automatically!  
+Uploading a new project is quite simple: Log in with your Github Account and then select one of the repositories you collaborate on.
 
 Users who browse the site will be presented with all projects currently up for grabs, completely with the amount of stars and contributors along with the name and description.  
 
-Go ahead and try it yourself: [maintainerswanted.com](https://www.maintainerswanted.com)   
+Go ahead and try it yourself: [maintainerswanted.com](https://maintainerswanted.com)   
 # Development #
 
 Setup:
