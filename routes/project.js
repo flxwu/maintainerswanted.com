@@ -117,6 +117,17 @@ router.get('/getRepos', async (req, res, next) => {
 router.post('/add', async (req, res, next) => {
 	const owner = req.session.user;
 	const repo = req.body.repo;
+  const url = 'https://github.com/' + owner + '/' + repo;
+  
+  // Check if project got added already
+  const duplicate = await checkIfDuplicate(projectDB, url);
+  if (duplicate) {
+    return res.json(res.json({
+      status: 400,
+      err: 'Project got already added!'
+    }));
+  }
+
 	const twitterHandle = req.body.twitter;
 	const repoData = await octokit.repos.get({ owner, repo });
 	const id = Math.random()
