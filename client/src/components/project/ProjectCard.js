@@ -34,8 +34,15 @@ class ProjectCard extends Component {
 
 	render () {
 		const { stars, contributors } = this.state;
-		const { name, description, url, twitter } = this.state.project;
-
+		const {
+			name,
+			description,
+			url,
+			twitter,
+			issueNumber
+		} = this.state.project;
+		
+		const issueURL = `${url}/issues/${issueNumber}`;
 		const twitterURL = (handle) => `https://twitter.com/${handle}`;
 
 		return (
@@ -45,13 +52,16 @@ class ProjectCard extends Component {
 						<Meta>
 							<TitleWrapper>
 								<Title>
-									<Link href={url}>
+									<Link href={issueURL}>
 										{name}
 									</Link>
 								</Title>
 								<div style={styles.iconContainer}>
 									<a href={twitterURL(twitter)} target="_blank" rel="noopener noreferrer">
 										<Icon type={'twitter'} width={30} height={30} style={styles.twitter} />
+									</a>
+									<a style="margin-left: 7px" href={url} target="_blank" rel="noopener noreferrer">
+										<Icon type={'github'} width={30} height={30} style={styles.twitter} />
 									</a>
 								</div>
 							</TitleWrapper>
@@ -64,13 +74,21 @@ class ProjectCard extends Component {
 					<Card mobile>
 						<Meta mobile>
 							<Title mobile>
-								<Link href={url}>
+								<Link href={issueURL}>
 									{name}
 								</Link>
 							</Title>
 							<Description text={description} />
 						</Meta>
 						<Info stars={stars} contributors={contributors} />
+						<div style={styles.iconContainerMobile}>
+							<a href={twitterURL(twitter)} target="_blank" rel="noopener noreferrer">
+								<Icon type={'twitter'} width={20} height={20} style={styles.twitter} />
+							</a>
+							<a style="margin-left: 7px" href={url} target="_blank" rel="noopener noreferrer">
+								<Icon type={'github'} width={20} height={20} style={styles.twitter} />
+							</a>
+						</div>
 					</Card>
 				</MediaQuery>
 			</div>
@@ -85,6 +103,12 @@ const styles = {
 		flexBasis: '100%',
 		alignSelf: 'center',
 		marginLeft: '15px'
+	},
+	iconContainerMobile: {
+		display: 'flex',
+		alignItems: 'center',
+		flexBasis: '0',
+		margin: '8px 0 10px 0'
 	},
 	twitter: {
 		cursor: 'pointer',
