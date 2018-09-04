@@ -21,7 +21,7 @@ class ProjectCard extends Component {
 	componentDidMount = async () => {
 		const { project } = this.state;
 
-		const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.name}`;
+		const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.repo}`;
 		// Get stars and contributors for single project
 		const response = await axios.get(url);
 		const data = response.data.data;
@@ -34,7 +34,7 @@ class ProjectCard extends Component {
 
 	render () {
 		const { stars, contributors } = this.state;
-		const { name, description, url, twitter } = this.state.project;
+		const { repo, description, url, twitter } = this.state.project;
 
 		const twitterURL = (handle) => `https://twitter.com/${handle}`;
 
@@ -46,7 +46,7 @@ class ProjectCard extends Component {
 							<TitleWrapper>
 								<Title>
 									<Link href={url}>
-										{name}
+										{repo}
 									</Link>
 								</Title>
 								<div style={styles.iconContainer}>
@@ -65,7 +65,7 @@ class ProjectCard extends Component {
 						<Meta mobile>
 							<Title mobile>
 								<Link href={url}>
-									{name}
+									{repo}
 								</Link>
 							</Title>
 							<Description text={description} />
