@@ -2,7 +2,12 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-const { paginate, finished, checkIfDuplicate } = require('../util/apiHelper');
+const {
+	paginate,
+	finished,
+	checkIfDuplicate,
+	deleteProjectFromDB
+} = require('../util/apiHelper');
 const issueTemplate = require('../util/issueTemplate');
 
 const env = process.env.NODE_ENV || 'dev';
@@ -115,33 +120,35 @@ router.get('/getRepos', async (req, res, next) => {
  * Adds new project to Database
  */
 router.post('/add', async (req, res, next) => {
-  const owner = req.session.user;
-  const repo = req.body.repo;
-  const url = 'https://github.com/' + owner + '/' + repo;
-  
-  // Check if project got added already
-  const duplicate = await checkIfDuplicate(projectDB, url);
-  if (duplicate) {
-    return res.json(res.json({
-      status: 400,
-      err: 'Project got already added!'
-    }));
-  }
+	const owner = req.session.user;
+	const repo = req.body.repo;
+	const url = 'https://github.com/' + owner + '/' + repo;
 
-  const twitterHandle = req.body.twitter;
-  const access_token = req.session.access_token;
-  // Authenticate octokit with new user token
-  // TODO: Can we move this directly to the github login callback?
-  octokit.authenticate({
-    type: 'token',
-    token: access_token
-  });
+	// Check if project got added already
+	const duplicate = await checkIfDuplicate(projectDB, url);
+	if (duplicate) {
+		return res.json(
+			res.json({
+				status: 400,
+				err: 'Project got already added!'
+			})
+		);
+	}
+
+	const twitterHandle = req.body.twitter;
+	const access_token = req.session.access_token;
+	// Authenticate octokit with new user token
+	// TODO: Can we move this directly to the github login callback?
+	octokit.authenticate({
+		type: 'token',
+		token: access_token
+	});
 
 	const repoData = await octokit.repos.get({ owner, repo });
 	const id = Math.random()
 		.toString(36)
-    .substr(2, 9);
-    
+		.substr(2, 9);
+
 	// create webhook for the added repository
 	await octokit.repos.createHook({
 		owner,
@@ -154,14 +161,14 @@ router.post('/add', async (req, res, next) => {
 		events: ['issues']
 	});
 
-  // Create issue on repository
+	// Create issue on repository
 	const createdIssue = await octokit.issues.create({
 		owner,
 		repo,
 		title: issueTemplate.title,
 		body: issueTemplate.body,
 		labels: ['Maintainers Wanted']
-  });
+	});
 
 	// New DB entry
 	var newProject = {
@@ -173,15 +180,12 @@ router.post('/add', async (req, res, next) => {
 		url,
 		twitter: twitterHandle
 	};
-  // push to Firebase
+	// push to Firebase
 	let projectDBEntry = projectDB.push(newProject, finished);
 	console.log('Firebase generated key: ' + projectDBEntry.key);
 
-
-	if (projectDBEntry) res.json({ status: 200, data: createdIssue.number });
+	if (projectDBEntry) res.json({ status: 200, data: projectDBEntry });
 	else res.json({ status: 500, err: 'Error while adding project' });
-
-	next();
 });
 
 /**
@@ -189,10 +193,10 @@ router.post('/add', async (req, res, next) => {
  * payload url for github issues webhooks
  */
 router.post('/webhook', async (req, res, next) => {
-  const issueAction = req.body.action;
-  
-  // TODO: Do we also react on issue being reopened?
-  // s. Issue #26
+	const issueAction = req.body.action;
+
+	// TODO: Do we also react on issue being reopened?
+	// s. Issue #26
 	if (issueAction !== 'closed') {
 		return;
 	}
@@ -210,11 +214,10 @@ router.post('/webhook', async (req, res, next) => {
 		.on('value', snapshot => {
 			let tmp = snapshot.val();
 			hookedProject = Object.values(tmp)[0];
-
 			if (hookedProject.issueNumber === issueNumber) {
+				deleteProjectFromDB(projectDB, repoUrl);
 			}
-    });
-    
+		});
 });
 
 module.exports = getRouter;
