@@ -150,7 +150,7 @@ router.post('/add', async (req, res, next) => {
 		.substr(2, 9);
 
 	// create webhook for the added repository
-	await octokit.repos.createHook({
+	const createdHook = await octokit.repos.createHook({
 		owner,
 		repo,
 		name: 'web',
@@ -159,8 +159,8 @@ router.post('/add', async (req, res, next) => {
 			content_type: 'json'
 		},
 		events: ['issues']
-	});
-
+  });
+  
 	// Create issue on repository
 	const createdIssue = await octokit.issues.create({
 		owner,
@@ -176,7 +176,8 @@ router.post('/add', async (req, res, next) => {
 		name: repo,
 		owner,
 		issueNumber: createdIssue.data.number,
-		description: repoData.data.description,
+    description: repoData.data.description,
+    hookID: createdHook.data.id,
 		url,
 		twitter: twitterHandle
 	};
@@ -193,8 +194,8 @@ router.post('/add', async (req, res, next) => {
  * payload url for github issues webhooks
  */
 router.post('/webhook', async (req, res, next) => {
-	const issueAction = req.body.action;
-
+  const issueAction = req.body.action;
+  
 	// TODO: Do we also react on issue being reopened?
 	// s. Issue #26
 	if (issueAction !== 'closed') {
@@ -215,9 +216,10 @@ router.post('/webhook', async (req, res, next) => {
 			let tmp = snapshot.val();
 			hookedProject = Object.values(tmp)[0];
 			if (hookedProject.issueNumber === issueNumber) {
-				deleteProjectFromDB(projectDB, repoUrl);
+        deleteProjectFromDB(projectDB, repoUrl);
+        // TODO: delete hook
 			}
-		});
+    });
 });
 
 module.exports = getRouter;
