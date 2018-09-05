@@ -105,8 +105,9 @@ router.get('/getStatistics', async (req, res, next) => {
  * TODO: Change to all Repos he collaborates on
  */
 router.get('/getRepos', async (req, res, next) => {
-	const username = req.query.user;
-	const repos = await octokit.repos.getForUser({ username });
+	const username = req.session.user;
+	octokit.authenticate({ type: "token", token: req.session.access_token });
+	const repos = await octokit.repos.getAll();
 
 	const repos_temp = repos.data;
 	let data = [];
@@ -170,7 +171,7 @@ router.post('/add', async (req, res, next) => {
 		},
 		events: ['issues']
   });
-  
+
 	// Create issue on repository
 	const createdIssue = await octokit.issues.create({
 		owner,
@@ -207,7 +208,7 @@ router.post('/add', async (req, res, next) => {
  */
 router.post('/webhook', async (req, res, next) => {
   const issueAction = req.body.action;
-  
+
 	// TODO: Do we also react on issue being reopened?
 	// s. Issue #26
 	if (issueAction !== 'closed') {
