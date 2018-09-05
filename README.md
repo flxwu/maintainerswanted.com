@@ -8,9 +8,9 @@ Maintainers Wanted
 <div style="margin: auto">
 <img src="tweet.png" width=650 height=350 /> </div>
 
-This project is inspired by [Sara Vieira](https://twitter.com/NikkitaFTW)'s reply to a tweet by [Nitin Tulswani](https://twitter.com/NTulswani), who was unable to further maintain his popular [React Performance Devtool](https://github.com/nitin42/react-perf-devtool). 
+This project is inspired by [Sara Vieira](https://twitter.com/NikkitaFTW)'s reply to a tweet by [Nitin Tulswani](https://twitter.com/NTulswani), who was unable to further maintain his popular [React Performance Devtool](https://github.com/nitin42/react-perf-devtool).
 
-After reading the tweet, [@flxwu](https://twitter.com/flxwu) searched for a "Looking for Maintainers" platform but surprisingly didn't find any popular one. So he decided to take matter in own hands and create a platform on which Open Source Maintainers who are no longer able to maintain their projects can find other developers to hand their projects over. 
+After reading the tweet, [@flxwu](https://twitter.com/flxwu) searched for a "Looking for Maintainers" platform but surprisingly didn't find any popular one. So he decided to take matter in own hands and create a platform on which Open Source Maintainers who are no longer able to maintain their projects can find other developers to hand their projects over.
 
 "Maintainers Wanted" is a simple service to connect overworked project owners with eager devs who will continue to maintain larger projects. Instead of letting your project rot away, find someone who cares as much about it as you do, and who is willing to invest the time needed to keep it going.
 
