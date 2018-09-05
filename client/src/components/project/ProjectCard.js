@@ -21,7 +21,7 @@ class ProjectCard extends Component {
 	componentDidMount = async () => {
 		const { project } = this.state;
 
-		const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.name}`;
+		const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.repo}`;
 		// Get stars and contributors for single project
 		const response = await axios.get(url);
 		const data = response.data.data;
@@ -35,7 +35,7 @@ class ProjectCard extends Component {
 	render () {
 		const { stars, contributors } = this.state;
 		const {
-			name,
+			repo,
 			description,
 			url,
 			twitter,
@@ -53,7 +53,7 @@ class ProjectCard extends Component {
 							<TitleWrapper>
 								<Title>
 									<Link href={issueURL}>
-										{name}
+										{repo}
 									</Link>
 								</Title>
 								<div style={styles.iconContainer}>
@@ -75,7 +75,7 @@ class ProjectCard extends Component {
 						<Meta mobile>
 							<Title mobile>
 								<Link href={issueURL}>
-									{name}
+									{repo}
 								</Link>
 							</Title>
 							<Description text={description} />
@@ -158,14 +158,6 @@ const Title = styled.h2`
 
 const Description = styled(Emoji)`
 	display: flex;
-`;
-
-const SubTitle = styled.h4`
-	display: flex;
-	text-decoration: none !important;
-	flex: 1;
-	font-family: Comic Sans MS;
-	text-align: left;
 `;
 
 const Link = styled.a`
