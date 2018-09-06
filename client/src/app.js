@@ -35,6 +35,7 @@ export default class App extends Component {
   }
 
   async componentDidMount () {
+    console.log(window.location);
     // get if logged in
     const authStatus = await axios.get('/api/auth/status');
 
