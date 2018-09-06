@@ -2,15 +2,15 @@ import { h, Component } from 'preact';
 import styled, { keyframes } from 'styled-components';
 
 class Loading extends Component {
-	render () {
-		return (
-			<DotWrapper>
-				<Dot delay="0s" />
-				<Dot delay=".1s" />
-				<Dot delay=".2s" />
-			</DotWrapper>
-		);
-	}
+  render () {
+    return (
+      <DotWrapper>
+        <Dot delay='0s' />
+        <Dot delay='.1s' />
+        <Dot delay='.2s' />
+      </DotWrapper>
+    );
+  }
 }
 
 const DotWrapper = styled.div`
@@ -18,6 +18,12 @@ const DotWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 5rem;
+`;
+
+const BounceAnimation = keyframes`
+  0% { margin-bottom: 0; }
+  50% { margin-bottom: 15px }
+  100% { margin-bottom: 0 }
 `;
 
 const Dot = styled.div`
@@ -29,12 +35,6 @@ const Dot = styled.div`
   /* Animation */
   animation: ${BounceAnimation} 0.5s linear infinite;
   animation-delay: ${props => props.delay};
-`;
-
-const BounceAnimation = keyframes`
-  0% { margin-bottom: 0; }
-  50% { margin-bottom: 15px }
-  100% { margin-bottom: 0 }
 `;
 
 export default Loading;
