@@ -12,7 +12,6 @@ const authRouter = require('./routes/auth');
 const config = require('./util/config');
 const bodyParser = require('body-parser');
 
-
 // Initialize Express App
 const app = express();
 app.use(bodyParser.json());
@@ -23,25 +22,24 @@ const GH_SECRET = process.env.GH_SECRET;
 // run Setup for Firebase and Octokit
 const ref = firebase.initializeApp(config);
 octokit.authenticate({
-	type: 'oauth',
-	key: GH_KEY,
-	secret: GH_SECRET
+  type: 'oauth',
+  key: GH_KEY,
+  secret: GH_SECRET
 });
 
 // Session Storage
 app.use(session({
-	store: new FirebaseStore({
-		database: ref.database()
-	}),
-	secret: 'keyboard cat',
-	resave: true,
-	saveUninitialized: true
+  store: new FirebaseStore({
+    database: ref.database()
+  }),
+  secret: 'keyboard cat',
+  resave: true,
+  saveUninitialized: true
 }));
 
 // Routes
 app.use('/api/project', projectRouter(octokit, firebase));
 app.use('/api/auth', authRouter(GH_KEY, GH_SECRET));
-
 
 // Middleware
 app.use(logger('dev'));
@@ -51,14 +49,13 @@ app.use(cookieParser());
 // Serve FrontEnd build
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-
 // redirect all wildcard matches to landing page
 app.get('*', (req, res) => {
   res.redirect('/');
 });
 // catch 404
 app.use((req, res) => {
-	res.redirect('/');
+  res.redirect('/');
 });
 
 module.exports = app;
