@@ -8,165 +8,165 @@ import Icon from '../Icon';
 import Info from './Info';
 
 class ProjectCard extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			project: props.project,
-			stars: 0,
-			watchers: 0,
-			contributors: 0
-		};
-	}
+  constructor (props) {
+    super(props);
+    this.state = {
+      project: props.project,
+      stars: 0,
+      watchers: 0,
+      contributors: 0
+    };
+  }
 
-	componentDidMount = async () => {
-		const { project } = this.state;
+  componentDidMount = async () => {
+    const { project } = this.state;
 
-		const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.repo}`;
-		// Get stars and contributors for single project
-		const response = await axios.get(url);
-		const data = response.data.data;
-		this.setState({
-			stars: data.stars,
-			watchers: data.watchers,
-			contributors: data.contributors
-		});
-	}
+    const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.repo}`;
+    // Get stars and contributors for single project
+    const response = await axios.get(url);
+    const data = response.data.data;
+    this.setState({
+      stars: data.stars,
+      watchers: data.watchers,
+      contributors: data.contributors
+    });
+  }
 
-	render () {
-		const { stars, contributors } = this.state;
-		const {
-			repo,
-			description,
-			url,
-			twitter,
-			issueNumber
-		} = this.state.project;
-		
-		const issueURL = `${url}/issues/${issueNumber}`;
-		const twitterURL = (handle) => `https://twitter.com/${handle}`;
+  render () {
+    const { stars, contributors } = this.state;
+    const {
+      repo,
+      description,
+      url,
+      twitter,
+      issueNumber
+    } = this.state.project;
 
-		return (
-			<div>
-				<MediaQuery minDeviceWidth={1224}>
-					<Card>
-						<Meta>
-							<TitleWrapper>
-								<Title>
-									<Link href={issueURL}>
-										{repo}
-									</Link>
-								</Title>
-								<div style={styles.iconContainer}>
-									<a href={twitterURL(twitter)} target="_blank" rel="noopener noreferrer">
-										<Icon type={'twitter'} width={30} height={30} style={styles.twitter} />
-									</a>
-									<a style="margin-left: 7px" href={url} target="_blank" rel="noopener noreferrer">
-										<Icon type={'github'} width={30} height={30} style={styles.twitter} />
-									</a>
-								</div>
-							</TitleWrapper>
-							<Emoji text={description} />
-						</Meta>
-						<Info stars={stars} contributors={contributors} />
-					</Card>
-				</MediaQuery>
-				<MediaQuery maxDeviceWidth={1224}>
-					<Card mobile>
-						<Meta mobile>
-							<Title mobile>
-								<Link href={issueURL}>
-									{repo}
-								</Link>
-							</Title>
-							<Description text={description} />
-						</Meta>
-						<Info stars={stars} contributors={contributors} />
-						<div style={styles.iconContainerMobile}>
-							<a href={twitterURL(twitter)} target="_blank" rel="noopener noreferrer">
-								<Icon type={'twitter'} width={20} height={20} style={styles.twitter} />
-							</a>
-							<a style="margin-left: 7px" href={url} target="_blank" rel="noopener noreferrer">
-								<Icon type={'github'} width={20} height={20} style={styles.twitter} />
-							</a>
-						</div>
-					</Card>
-				</MediaQuery>
-			</div>
-		);
-	}
+    const issueURL = `${url}/issues/${issueNumber}`;
+    const twitterURL = (handle) => `https://twitter.com/${handle}`;
+
+    return (
+      <div>
+        <MediaQuery minDeviceWidth={1224}>
+          <Card>
+            <Meta>
+              <TitleWrapper>
+                <Title>
+                  <Link href={issueURL}>
+                    {repo}
+                  </Link>
+                </Title>
+                <div style={styles.iconContainer}>
+                  <a href={twitterURL(twitter)} target='_blank' rel='noopener noreferrer'>
+                    <Icon type={'twitter'} width={30} height={30} style={styles.twitter} />
+                  </a>
+                  <a style='margin-left: 7px' href={url} target='_blank' rel='noopener noreferrer'>
+                    <Icon type={'github'} width={30} height={30} style={styles.twitter} />
+                  </a>
+                </div>
+              </TitleWrapper>
+              <Emoji text={description} />
+            </Meta>
+            <Info stars={stars} contributors={contributors} />
+          </Card>
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={1224}>
+          <Card mobile>
+            <Meta mobile>
+              <Title mobile>
+                <Link href={issueURL}>
+                  {repo}
+                </Link>
+              </Title>
+              <Description text={description} />
+            </Meta>
+            <Info stars={stars} contributors={contributors} />
+            <div style={styles.iconContainerMobile}>
+              <a href={twitterURL(twitter)} target='_blank' rel='noopener noreferrer'>
+                <Icon type={'twitter'} width={20} height={20} style={styles.twitter} />
+              </a>
+              <a style='margin-left: 7px' href={url} target='_blank' rel='noopener noreferrer'>
+                <Icon type={'github'} width={20} height={20} style={styles.twitter} />
+              </a>
+            </div>
+          </Card>
+        </MediaQuery>
+      </div>
+    );
+  }
 }
 
 const styles = {
-	iconContainer: {
-		display: 'flex',
-		alignItems: 'center',
-		flexBasis: '100%',
-		alignSelf: 'center',
-		marginLeft: '15px'
-	},
-	iconContainerMobile: {
-		display: 'flex',
-		alignItems: 'center',
-		flexBasis: '0',
-		margin: '8px 0 10px 0'
-	},
-	twitter: {
-		cursor: 'pointer',
-		display: 'flex'
-	}
+  iconContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexBasis: '100%',
+    alignSelf: 'center',
+    marginLeft: '15px'
+  },
+  iconContainerMobile: {
+    display: 'flex',
+    alignItems: 'center',
+    flexBasis: '0',
+    margin: '8px 0 10px 0'
+  },
+  twitter: {
+    cursor: 'pointer',
+    display: 'flex'
+  }
 };
 
 const Card = styled.div`
-	position: relative;
-	background: #fff;
-	padding: 4% 8%;
-	border-radius: 12px;
-	box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
-	line-height: 1.8;
-	margin-bottom: 20px;
-	height: 10rem;
-	overflow: hidden;
-	display: flex;
-	align-items: center;
-	justify-content: space-around
-	font-size: ${props => props.mobile ? '12px' : '18px'};
-	flex-direction: ${props => props.mobile ? 'column' : 'row'};
-	`
+  position: relative;
+  background: #fff;
+  padding: 4% 8%;
+  border-radius: 12px;
+  box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  height: 10rem;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-around
+  font-size: ${props => props.mobile ? '12px' : '18px'};
+  flex-direction: ${props => props.mobile ? 'column' : 'row'};
+  `
 ;
 
 const Meta = styled.div`
-	display: flex;
-	flex: 1;
-	flex-direction: column;
-	flex-basis: 70%;
-	${props => props.mobile && 'align-self: flex-start'}; 
-	text-align: left;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  flex-basis: 70%;
+  ${props => props.mobile && 'align-self: flex-start'}; 
+  text-align: left;
 `;
 
 const TitleWrapper = styled.div`
-	display: flex;
+  display: flex;
 `;
 
 const Title = styled.h2`
-	display: flex;
-	flex: 1;
-	text-decoration: underline;
-	font-family: Courier New;
-	${props => props.mobile && 'max-height: fit-content'};
-	${props => props.mobile && 'flex-basis: 0'};
+  display: flex;
+  flex: 1;
+  text-decoration: underline;
+  font-family: Courier New;
+  ${props => props.mobile && 'max-height: fit-content'};
+  ${props => props.mobile && 'flex-basis: 0'};
 `;
 
 const Description = styled(Emoji)`
-	display: flex;
+  display: flex;
 `;
 
 const Link = styled.a`
-	display: flex;
-	color: #E27D60;
-	flex: 1;
-	&:hover {
-		color: grey;
-	}
+  display: flex;
+  color: #E27D60;
+  flex: 1;
+  &:hover {
+    color: grey;
+  }
 `;
 
 export default ProjectCard;
