@@ -6,7 +6,7 @@
     "start": "nodemon ./bin/www",
     "dev": "concurrently \"yarn start\" \"cd client && yarn start\"",
     "heroku-postbuild": "cd client && yarn install --network-timeout 1000000 && yarn run build",
-    "heroku-prebuild": "yarn config delete proxy && npm config rm https-proxy && npm config rm proxy && yarn install --network-timeout 1000000",
+    "heroku-prebuild": "yarn config delete proxy && npm config rm https-proxy && npm config rm proxy && yarn install --production=false --network-timeout 1000000",
     "bump": "yarn version --patch",
     "expose-web": "ngrok http 5000",
     "lint": "eslint --fix ."

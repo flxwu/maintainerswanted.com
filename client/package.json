@@ -62,11 +62,11 @@
 		"eslint-plugin-promise": "^4.0.0",
 		"eslint-plugin-react": "^7.11.1",
 		"identity-obj-proxy": "^3.0.0",
-		"if-env": "^1.0.0",
 		"jest": "^21.2.1",
 		"preact-render-spy": "^1.2.1"
 	},
 	"dependencies": {
+		"if-env": "^1.0.0",
 		"babel-plugin-module-resolver": "^3.1.1",
 		"preact": "^8.2.6",
 		"preact-cli": "^2.1.0",

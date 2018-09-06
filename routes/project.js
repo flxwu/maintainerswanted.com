@@ -43,7 +43,7 @@ router.get('/getList', async (req, res, next) => {
         return project;
       })
       : 'None';
-      
+
     // Return projects if availible
     if (projectsList) res.json({ status: 200, data: projectsList });
     else {
