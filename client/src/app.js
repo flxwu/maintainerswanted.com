@@ -9,116 +9,116 @@ import Header from './components/Header';
 import Loading from './components/Loading';
 
 export default class App extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			projects: [],
-			loggedIn: false,
-			user: null
-		};
+  constructor (props) {
+    super(props);
+    this.state = {
+      projects: [],
+      loggedIn: false,
+      user: null
+    };
 
-		// accessibility: add outline if tab is used
-		if (typeof window !== 'undefined') {
-			const handleFirstTab = e => {
-				if (e.keyCode === 9) {
-					document.body.classList.add('user-is-tabbing');
-					window.removeEventListener('keydown', handleFirstTab);
-				}
-			};
+    // accessibility: add outline if tab is used
+    if (typeof window !== 'undefined') {
+      const handleFirstTab = e => {
+        if (e.keyCode === 9) {
+          document.body.classList.add('user-is-tabbing');
+          window.removeEventListener('keydown', handleFirstTab);
+        }
+      };
 
-			window.addEventListener('keydown', handleFirstTab);
-		}
+      window.addEventListener('keydown', handleFirstTab);
+    }
 
-		if (typeof document !== 'undefined') {
-			document.title = 'Maintainers Wanted';
-		}
-	}
+    if (typeof document !== 'undefined') {
+      document.title = 'Maintainers Wanted';
+    }
+  }
 
-	async componentDidMount() {
-		// get if logged in
-		const authStatus = await axios.get('/api/auth/status');
+  async componentDidMount () {
+    // get if logged in
+    const authStatus = await axios.get('/api/auth/status');
 
-		// get projects list
-		const response = await axios.get('/api/project/getList');
-		const dataObject = response.data.data;
-		const data = dataObject.length !== 'None'
-			? Object.keys(dataObject).map(dbKey => dataObject[dbKey])
-			: 'None';
+    // get projects list
+    const response = await axios.get('/api/project/getList');
+    const dataObject = response.data.data;
+    const data = dataObject.length !== 'None'
+      ? Object.keys(dataObject).map(dbKey => dataObject[dbKey])
+      : 'None';
 
-		this.setState({
-			projects: data,
-			loggedIn: authStatus.data.loggedIn,
-			user: authStatus.data.user
-		});
-	}
+    this.setState({
+      projects: data,
+      loggedIn: authStatus.data.loggedIn,
+      user: authStatus.data.user
+    });
+  }
 
-	render({}, { projects, loggedIn, user }) {
-		return (
-			<div>
-				<Header loggedIn={loggedIn} user={user} />
-				<MediaQuery minDeviceWidth={1224}>
-					<List>
-						<NewProject loggedIn={loggedIn} />
-						{projects === 'None' ?
-							<div>No Projects in DB</div>
-							: projects.length !== 0 ? (
-								projects.map(project => (
-									<ProjectCardWrapper>
-										<ProjectCard project={project} />
-									</ProjectCardWrapper>
-								))
-							) : (
-								<Loading />
-							)}
-					</List>
-				</MediaQuery>
-				<MediaQuery maxDeviceWidth={1224}>
-					<List mobile>
-						<NewProject loggedIn={loggedIn} />
-						{projects === 'None' ?
-							<div>No Projects in DB</div>
-							: projects.length !== 0 ? (
-								projects.map(project => (
-									<ProjectCardWrapper>
-										<ProjectCard project={project} />
-									</ProjectCardWrapper>
-								))
-							) : (
-								<Loading />
-							)}
-					</List>
-				</MediaQuery>
-				<FooterWrapper>
-					<Footer>
+  render ({}, { projects, loggedIn, user }) { // eslint-disable-line no-empty-pattern
+    return (
+      <div>
+        <Header loggedIn={loggedIn} user={user} />
+        <MediaQuery minDeviceWidth={1224}>
+          <List>
+            <NewProject loggedIn={loggedIn} />
+            {projects === 'None'
+              ? <div>No Projects in DB</div>
+              : projects.length !== 0 ? (
+                projects.map(project => (
+                  <ProjectCardWrapper>
+                    <ProjectCard project={project} />
+                  </ProjectCardWrapper>
+                ))
+              ) : (
+                <Loading />
+              )}
+          </List>
+        </MediaQuery>
+        <MediaQuery maxDeviceWidth={1224}>
+          <List mobile>
+            <NewProject loggedIn={loggedIn} />
+            {projects === 'None'
+              ? <div>No Projects in DB</div>
+              : projects.length !== 0 ? (
+                projects.map(project => (
+                  <ProjectCardWrapper>
+                    <ProjectCard project={project} />
+                  </ProjectCardWrapper>
+                ))
+              ) : (
+                <Loading />
+              )}
+          </List>
+        </MediaQuery>
+        <FooterWrapper>
+          <Footer>
             Made with love by
-						<Link href="https://twitter.com/flxwu"> @flxwu</Link> and
-						<Link href="https://twitter.com/QuentinOschatz"> @Qo2770</Link>
-						<br />
-						<Footer break>
-							<Link break href="https://github.com/flxwu/maintainerswanted.com">
+            <Link href='https://twitter.com/flxwu'> @flxwu</Link> and
+            <Link href='https://twitter.com/QuentinOschatz'> @Qo2770</Link>
+            <br />
+            <Footer break>
+              <Link break href='https://github.com/flxwu/maintainerswanted.com'>
                 Find us on Github!
-							</Link>
-						</Footer>
-						<br />
-						<Footer small break>
+              </Link>
+            </Footer>
+            <br />
+            <Footer small break>
               Built using
-							<Link small href="https://github.com/flxwu/maintainerswanted.com">
-								{' Preact'}
-							</Link>{' '}
+              <Link small href='https://github.com/flxwu/maintainerswanted.com'>
+                {' Preact'}
+              </Link>{' '}
               +
-							<Link small href="https://github.com/flxwu/maintainerswanted.com">
-								{' Express'}
-							</Link>{' '}
+              <Link small href='https://github.com/flxwu/maintainerswanted.com'>
+                {' Express'}
+              </Link>{' '}
               +
-							<Link small href="https://github.com/flxwu/maintainerswanted.com">
-								{' Firebase'}
-							</Link>
-						</Footer>
-					</Footer>
-				</FooterWrapper>
-			</div>
-		);
-	}
+              <Link small href='https://github.com/flxwu/maintainerswanted.com'>
+                {' Firebase'}
+              </Link>
+            </Footer>
+          </Footer>
+        </FooterWrapper>
+      </div>
+    );
+  }
 }
 
 const List = styled.ul`
