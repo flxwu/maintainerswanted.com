@@ -8,22 +8,26 @@ class Form extends Component {
 		this.state = {
 			repo: '',
 			twitter: '',
-			fetching: false,
+			fetching: true,
 			success: false,
-			filteredReposList: [],
+			filteredReposList: [{
+				repo: 'Loading...'
+			}],
 			reposList: [],
 			showAutoComplete: false,
-			selectedIndexFromDropdown: 0
+			selectedIndexFromDropdown: -1
 		};
 
 		this._toggleAutoComplete = this._toggleAutoComplete.bind(this);
+		this._handleKeyOnRepoSelect = this._handleKeyOnRepoSelect.bind(this);
 	}
 
 	async componentDidMount() {
 		await axios.get('/api/project/getRepos').then(response => {
 			this.setState({
 				reposList: response.data.data,
-				filteredReposList: []
+				filteredReposList: [],
+				fetching: false
 			});
 		});
 	}
@@ -44,7 +48,8 @@ class Form extends Component {
 
 			this.setState({
 				[e.target.name]: targetVal,
-				filteredReposList: filteredRepos
+				filteredReposList: filteredRepos,
+				selectedIndexFromDropdown: -1
 			});
 		}
 		else {
@@ -80,25 +85,34 @@ class Form extends Component {
 		});
 	}
 
-	_selectRepo(repo) {
-		this.setState({
-			repo: repo.repo
-		});
-	}
-
 	_handleKeyOnRepoSelect(event) {
-		if (event.key === 'ArrowDown') {
-			if (this.state.selectedIndexFromDropdown < this.state.filteredReposList.length) {
-				this.setState({
-					selectedIndexFromDropdown: this.state.selectedIndexFromDropdown + 1
-				});
+		switch (event.key) {
+			case 'ArrowDown': {
+				if (!this.state.fetching) {
+					if (
+						this.state.selectedIndexFromDropdown <
+						this.state.filteredReposList.length
+					) {
+						this.setState({
+							selectedIndexFromDropdown: this.state.selectedIndexFromDropdown + 1,
+							repo: this.state.filteredReposList[
+								this.state.selectedIndexFromDropdown + 1
+							].repo
+						});
+					}
+				}
+				break;
 			}
-		}
-		else if (event.key === 'ArrowUp') {
-			if (this.state.selectedIndexFromDropdown >= 0) {
-				this.setState({
-					selectedIndexFromDropdown: this.state.selectedIndexFromDropdown - 1
-				});
+			case 'ArrowUp': {
+				if (this.state.selectedIndexFromDropdown >= 0) {
+					this.setState({
+						selectedIndexFromDropdown: this.state.selectedIndexFromDropdown - 1,
+						repo: this.state.filteredReposList[
+							this.state.selectedIndexFromDropdown - 1
+						].repo
+					});
+				}
+				break;
 			}
 		}
 	}
@@ -112,7 +126,8 @@ class Form extends Component {
 			fetching,
 			success,
 			filteredReposList,
-			showAutoComplete
+			showAutoComplete,
+			selectedIndexFromDropdown
 		}
 	) {
 		return (
@@ -129,16 +144,19 @@ class Form extends Component {
 						onInput={this._setFormValue}
 						name="repo"
 						placeholder="e.g. standard"
-						isSuggesting={showAutoComplete}
+						shown={showAutoComplete}
 						onFocus={() => this._toggleAutoComplete(true)}
 						onBlur={() => this._toggleAutoComplete(false)}
 						onKeyUp={this._handleKeyOnRepoSelect}
-						mobile
+						mobile={mobile}
 					/>
-					<Suggestions isSuggesting={showAutoComplete}>
+					<Suggestions shown={showAutoComplete}>
 						{filteredReposList.length !== 0 && showAutoComplete ? (
-							filteredReposList.map(repo => (
-								<Suggestion onClick={() => this._selectRepo(repo)}>
+							filteredReposList.map((repo, index) => (
+								<Suggestion
+									onClick={() => this._selectRepo()}
+									focused={selectedIndexFromDropdown === index}
+								>
 									{' '}
 									{repo.repo}{' '}
 								</Suggestion>
@@ -155,8 +173,8 @@ class Form extends Component {
 						onInput={this._setFormValue}
 						name="twitter"
 						placeholder="e.g. feross"
-						mobile
 						isSuggesting={false}
+						mobile
 					/>
 				</Row>
 				<Row submit mobile>
@@ -193,7 +211,7 @@ const Text = styled.h5`
 const TextBox = styled.input`
 	display: inline-flex;
 	${props =>
-		props.isSuggesting
+		props.shown
 			? 'border-radius: 12px 12px 0 0;'
 			: 'border-radius: 12px;'} box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,.1), 0 0 0 1px #f0f2f7;
 	height: 20px;
@@ -226,9 +244,7 @@ const Suggestions = styled.ul`
 	list-style-type: none;
 	padding: 0;
 	${props =>
-		props.isSuggesting
-			? 'display: flex;'
-			: 'display: none;'} flex-direction: column;
+		props.shown ? 'display: flex;' : 'display: none;'} flex-direction: column;
 	justify-content: center;
 	align-content: center;
 	margin: -10px 20px -30px 20px;
@@ -244,7 +260,7 @@ const Suggestions = styled.ul`
 const Suggestion = styled.li`
 	border-top: 1px solid rgba(0, 0, 0, 0.3);
 	text-align: center;
-	border-radius: 0 0 12px 12px;
+	${props => props.focused && 'background: #eee'};
 	&:hover {
 		background: #eee;
 		cursor: pointer;
