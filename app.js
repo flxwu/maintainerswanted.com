@@ -50,7 +50,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 // redirect all wildcard matches to landing page
-app.get('*', (req, res) => {
+app.use('*', (req, res) => {
   res.redirect('/');
 });
 // catch 404

@@ -20,7 +20,7 @@ const getRouter = (keyRef, secretRef) => {
 /**
  * GET Auth Status
  */
-router.get('/status', (req, res, next) => {
+router.use('/status', (req, res, next) => {
   res.json({
     loggedIn: req.session.loggedIn,
     user: req.session.user
@@ -30,7 +30,7 @@ router.get('/status', (req, res, next) => {
 /**
  * GET Github Auth
  */
-router.get('/github', (req, res, next) => {
+router.use('/github', (req, res, next) => {
   logger('[AUTH] Redirecting to Github OAuth Authorization');
   res.send(
     'https://github.com/login/oauth/authorize?' +
@@ -42,7 +42,7 @@ router.get('/github', (req, res, next) => {
 /**
  * GET Github Auth Callback
  */
-router.get('/github/callback', async (req, res, next) => {
+router.use('/github/callback', async (req, res, next) => {
   const code = req.query.code;
 
   let accessToken = null;
