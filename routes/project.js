@@ -153,8 +153,12 @@ router.get('/getRepos', async (req, res, next) => {
  * Adds new project to Database
  */
 router.post('/add', async (req, res, next) => {
-	const owner = req.session.user;
-	const repo = req.body.repo;
+	const repo = req.body.repo.includes('/')
+		? req.body.repo.split('/').pop()
+		: req.body.repo;
+	const owner = req.body.repo.includes('/')
+		? req.body.repo.split('/')[0]
+		: req.session.user;
 	const url = 'https://github.com/' + owner + '/' + repo;
 
 	// Check if project got added already
