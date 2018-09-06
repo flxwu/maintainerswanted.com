@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const logger = require('../util/logger');
 
 const {
 	paginate,
@@ -16,6 +17,9 @@ const rootURL =
 
 const webHookUrl =
 	env === 'dev' ? process.env.NGROK : 'https://maintainerswanted.com';
+
+const GH_KEY = process.env.GH_SECRET;
+const GH_SECRET = process.env.GH_SECRET;
 
 let octokit = null;
 let firebase = null;
@@ -37,8 +41,14 @@ const getRouter = (octokitRef, firebaseRef) => {
  */
 router.get('/getList', async (req, res, next) => {
 	const gotAll = async data => {
-		let projectsList = await data.val();
-
+    let projectsList = await data.val();
+    projectsList = projectsList ?
+      Object.values(projectsList)
+        .map(project => {
+          delete project.accessToken;
+          return project;
+        }) :
+      'None';
 		// Return projects if availible
 		if (projectsList) res.json({ status: 200, data: projectsList });
 		else
@@ -73,7 +83,7 @@ router.get('/getStatistics', async (req, res, next) => {
 		repo,
 		anon: true
 	}).then(data => {
-		return data.length;
+		return data ? data.length : 0;
 	});
 
 	const data = {
@@ -210,17 +220,19 @@ router.post('/add', async (req, res, next) => {
 	// New DB entry
 	var newProject = {
 		id,
-		name: repo,
+		repo,
 		owner,
 		issueNumber: createdIssue.data.number,
-		description: repoData.data.description,
-		hookID: createdHook.data.id,
+    description: repoData.data.description,
+    hookId: createdHook.data.id,
+    accessToken: access_token,
 		url,
 		twitter: twitterHandle
-	};
+  };
+
 	// push to Firebase
 	let projectDBEntry = projectDB.push(newProject, finished);
-	console.log('Firebase generated key: ' + projectDBEntry.key);
+	logger('Firebase generated key: ' + projectDBEntry.key);
 
 	if (projectDBEntry) res.json({ status: 200, data: projectDBEntry });
 	else res.json({ status: 500, err: 'Error while adding project' });
@@ -237,10 +249,10 @@ router.post('/webhook', async (req, res, next) => {
 	// s. Issue #26
 	if (issueAction !== 'closed') {
 		return;
-	}
-
+  }
+  
 	// Maintainers-Wanted issue got closed
-	const issueNumber = req.body.issue.number;
+	const hookedIssueNumber = req.body.issue.number;
 	const repoUrl = req.body.repository.html_url;
 
 	let hookedProject = null;
@@ -249,14 +261,35 @@ router.post('/webhook', async (req, res, next) => {
 		.orderByChild('url')
 		.startAt(repoUrl)
 		.endAt(repoUrl + '\uf8ff')
-		.on('value', snapshot => {
-			let tmp = snapshot.val();
-			hookedProject = Object.values(tmp)[0];
-			if (hookedProject.issueNumber === issueNumber) {
-				deleteProjectFromDB(projectDB, repoUrl);
-				// TODO: delete hook
-			}
-		});
+		.on('value', async snapshot => {
+      let tmp = snapshot.val();
+      if(tmp) {
+        let key = Object.keys(tmp)[0];
+        hookedProject = Object.values(tmp)[0];
+
+        const {
+          owner,
+          repo,
+          issueNumber,
+					hookId,
+					accessToken
+				} = hookedProject;
+				
+				octokit.authenticate({
+					type: 'token',
+					token: accessToken
+				});
+
+        if (issueNumber === hookedIssueNumber) {
+          await octokit.repos.deleteHook({
+            owner,
+            repo,
+            hook_id: hookId
+          });
+          deleteProjectFromDB(database, key);
+        }
+      }
+    });
 });
 
 module.exports = getRouter;
