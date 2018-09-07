@@ -14,8 +14,6 @@ const issueTemplate = require('../util/issueTemplate');
 const env = process.env.NODE_ENV || 'dev';
 const webHookUrl =
   env === 'dev' ? process.env.NGROK : 'https://maintainerswanted.com';
-const GH_KEY = process.env.GH_KEY;
-const GH_SECRET = process.env.GH_SECRET;
 
 let octokit = null;
 let firebase = null;
@@ -40,9 +38,9 @@ router.get('/getList', async (req, res, next) => {
     let projectsList = await data.val();
     projectsList = projectsList
       ? Object.values(projectsList).map(project => {
-          delete project.accessToken;
-          return project;
-        })
+        delete project.accessToken;
+        return project;
+      })
       : 'None';
 
     // Return projects if availible
@@ -211,7 +209,7 @@ router.post('/add', async (req, res, next) => {
     },
     events: ['issues']
   });
-  
+
   // New DB entry
   var newProject = {
     id,
