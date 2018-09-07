@@ -9,7 +9,7 @@
     "heroku-prebuild": "yarn config delete proxy && npm config rm https-proxy && npm config rm proxy && yarn install --production=false --network-timeout 1000000",
     "bump": "yarn version --patch",
     "expose-web": "ngrok http 5000",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix . && cd client/ && yarn lint"
   },
   "homepage": "https://maintainerswanted.com",
   "repository": {

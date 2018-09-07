@@ -98,7 +98,7 @@ class Form extends Component {
             this.setState({
               selectedIndexFromDropdown:
                 this.state.selectedIndexFromDropdown + 1,
-              repo: 
+              repo:
                 this.state.filteredReposList[this.state.selectedIndexFromDropdown + 1].repo
             });
           }
