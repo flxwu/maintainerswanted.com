@@ -35,7 +35,7 @@ const checkIfDuplicate = async (projectDB, url) => {
 const deleteProjectFromDB = async (database, key) => {
   await database.ref(`projects/${key}`)
     .remove()
-    .then(() => logger('[FIREBASE] DB Delete Success: ' + key))
+    .then((res) => logger('[FIREBASE] DB Delete Success: ' + key))
     .then((err) => logger(`[FIREBASE] Error while deleting entry ${key}: ${err}`));
 };
 
