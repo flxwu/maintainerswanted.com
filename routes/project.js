@@ -40,9 +40,9 @@ router.get('/getList', async (req, res, next) => {
     let projectsList = await data.val();
     projectsList = projectsList
       ? Object.values(projectsList).map(project => {
-        delete project.accessToken;
-        return project;
-      })
+          delete project.accessToken;
+          return project;
+        })
       : 'None';
 
     // Return projects if availible
@@ -191,6 +191,15 @@ router.post('/add', async (req, res, next) => {
     .toString(36)
     .substr(2, 9);
 
+  // Create issue on repository
+  const createdIssue = await octokit.issues.create({
+    owner,
+    repo,
+    title: issueTemplate(repo, twitterHandle).title,
+    body: issueTemplate(repo, twitterHandle).body,
+    labels: ['Maintainers Wanted']
+  });
+
   // create webhook for the added repository
   const createdHook = await octokit.repos.createHook({
     owner,
@@ -202,22 +211,7 @@ router.post('/add', async (req, res, next) => {
     },
     events: ['issues']
   });
-
-  octokit.authenticate({
-    type: 'oauth',
-    key: GH_KEY,
-    secret: GH_SECRET
-  });
-
-  // Create issue on repository
-  const createdIssue = await octokit.issues.create({
-    owner,
-    repo,
-    title: issueTemplate(repo, twitterHandle).title,
-    body: issueTemplate(repo, twitterHandle).body,
-    labels: ['Maintainers Wanted']
-  });
-
+  
   // New DB entry
   var newProject = {
     id,
