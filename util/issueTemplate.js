@@ -4,12 +4,16 @@ const issueTemplate = (repo, twitter) => ({
     '*This issue was created by [Maintainers Wanted](https://maintainerswanted.com)* :nerd-face: \n' +
     '*Support us by leaving a star on [Github!](https://github.com/flxwu/maintainerswanted.com)* :star2: \n' +
     `\n\n ## ${repo} is searching for new Maintainers! :coder: :mailbox-with-mail:\n` +
-    `Do you use ${repo} personally or at work and would like this project to be further developed and improved?\n` +
-    'Or are you already a contributor and ready to take the next step to becoming a maintainer?\n\n' +
+    ` Do you use ${repo} personally or at work and would like this project to be further developed and improved?\n` +
+    ' Or are you already a contributor and ready to take the next step to becoming a maintainer?\n\n' +
     twitter
       ? `If you are interested, comment here below on this issue :point-down or
-        drop me a message on [Twitter](https://twitter.com/${twitter})! :raised-hands:`
-      : 'If you are interested, comment here below on this issue! :point-down::raised-hands:'
+        ${' '}drop me a message on [Twitter](https://twitter.com/${twitter})! :raised-hands:`
+      : 'If you are interested, comment here below on this issue! :point-down::raised-hands:',
+  comment:
+    'This issue got closed by the project\'s maintainers. ' +
+    'Please don\'t reopen this issue but instead readd the project on [Maintainers Wanted](https://maintainerswanted.com)' +
+    ' in case you still search for maintainers.'
 });
 
 module.exports = issueTemplate;
