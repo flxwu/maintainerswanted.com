@@ -70,7 +70,7 @@ class NewProject extends Component {
               this._iconWrapper()
             ) : (
               <FormWrapper>
-                <Form handleCollapse={this._handleCollapse}/>
+                <Form handleCollapse={this._handleCollapse} />
               </FormWrapper>
             )}
           </Card>
@@ -81,7 +81,7 @@ class NewProject extends Component {
               this._iconWrapper()
             ) : (
               <FormWrapper mobile>
-                <Form mobile handleCollapse={this._handleCollapse}/>
+                <Form mobile handleCollapse={this._handleCollapse} />
               </FormWrapper>
             )}
           </Card>
