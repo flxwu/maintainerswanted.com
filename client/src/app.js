@@ -14,7 +14,7 @@ const rootURL =
     : 'https://maintainerswanted.com';
 
 export default class App extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       projects: [],
@@ -39,7 +39,7 @@ export default class App extends Component {
     }
   }
 
-  async componentDidMount() {
+  async componentDidMount () {
     const path = window.location.pathname;
     const query = window.location.search;
 
@@ -66,7 +66,7 @@ export default class App extends Component {
     });
   }
 
-  render({}, { projects, loggedIn, user }) { // eslint-disable-line no-empty-pattern
+  render ({}, { projects, loggedIn, user }) { // eslint-disable-line no-empty-pattern
     // eslint-disable-line no-empty-pattern
     return (
       <div>
@@ -106,26 +106,26 @@ export default class App extends Component {
         <FooterWrapper>
           <Footer>
             Made with love by
-            <Link href="https://twitter.com/flxwu" target="_blank"> @flxwu</Link> and
-            <Link href="https://twitter.com/QuentinOschatz" target="_blank"> @Qo2770</Link>
+            <Link href='https://twitter.com/flxwu' target='_blank'> @flxwu</Link> and
+            <Link href='https://twitter.com/QuentinOschatz' target='_blank'> @Qo2770</Link>
             <br />
             <Footer break>
-              <Link break href="https://github.com/flxwu/maintainerswanted.com" target="_blank">
+              <Link break href='https://github.com/flxwu/maintainerswanted.com' target='_blank'>
                 Find us on Github!
               </Link>
             </Footer>
             <br />
             <Footer small break>
               Built using
-              <Link small href="https://preactjs.com" target="_blank">
+              <Link small href='https://preactjs.com' target='_blank'>
                 {' Preact'}
               </Link>{' '}
               +
-              <Link small href="https://expressjs.com" target="_blank">
+              <Link small href='https://expressjs.com' target='_blank'>
                 {' Express'}
               </Link>{' '}
               +
-              <Link small href="https://firebase.google.com/" target="_blank">
+              <Link small href='https://firebase.google.com/' target='_blank'>
                 {' Firebase'}
               </Link>
             </Footer>
