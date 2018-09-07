@@ -59,7 +59,7 @@ router.get('/github/callback', async (req, res, next) => {
       req.session.access_token = accessToken;
     });
 
-  logger('[AUTH] Got user\'s access token');
+  logger('[AUTH] Got user\'s access token: ' + accessToken);
 
   await axios
     .get(`https://api.github.com/user?access_token=${accessToken}`)

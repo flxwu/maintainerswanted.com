@@ -44,7 +44,7 @@ export default class App extends Component {
     const query = window.location.search;
 
     if (path === '/api/auth/github/callback') {
-      await axios.get(`/api/auth/github/callback?${query}`).then(res => {
+      await axios.get(`/api/auth/github/callback${query}`).then(res => {
         window.location = rootURL;
       });
     }
