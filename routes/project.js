@@ -181,6 +181,8 @@ router.post('/add', async (req, res, next) => {
   const accessToken = req.session.accessToken;
   // Authenticate octokit with new user token
   // TODO: Can we move this directly to the github login callback?
+  logger(req.session);
+  logger(accessToken);
   octokit.authenticate({
     type: 'token',
     token: accessToken
