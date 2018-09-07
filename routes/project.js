@@ -275,7 +275,7 @@ router.post('/webhook', async (req, res, next) => {
             repo,
             hook_id: hookId
           });
-          deleteProjectFromDB(database, key);
+          await deleteProjectFromDB(database, key);
         }
       }
     });
