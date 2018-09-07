@@ -40,9 +40,9 @@ router.get('/getList', async (req, res, next) => {
     let projectsList = await data.val();
     projectsList = projectsList
       ? Object.values(projectsList).map(project => {
-          delete project.accessToken;
-          return project;
-        })
+        delete project.accessToken;
+        return project;
+      })
       : 'None';
 
     // Return projects if availible
@@ -213,8 +213,8 @@ router.post('/add', async (req, res, next) => {
   const createdIssue = await octokit.issues.create({
     owner,
     repo,
-    title: issueTemplate.title,
-    body: issueTemplate.body,
+    title: issueTemplate(repo, twitterHandle).title,
+    body: issueTemplate(repo, twitterHandle).body,
     labels: ['Maintainers Wanted']
   });
 
