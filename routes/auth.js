@@ -35,7 +35,7 @@ router.get('/github', (req, res, next) => {
   // FIXME: Reduce to only access public repos
   res.send(
     'https://github.com/login/oauth/authorize?' +
-      `client_id=${key}&scope=user,repo,admin:repo_hook` +
+      `client_id=${key}&scope=user,public_repo,admin:repo_hook` +
       `&redirect_uri=${callbackUrl}`
   );
 });
