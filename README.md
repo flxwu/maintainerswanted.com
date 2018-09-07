@@ -1,4 +1,4 @@
-Maintainers Wanted  
+Maintainers Wanted [![Build Status](https://travis-ci.org/flxwu/maintainerswanted.com.svg?branch=master)](https://travis-ci.org/flxwu/maintainerswanted.com)
 ==================  
 
 ![Maintainers Wanted](MaintainersWanted.png "")  
