@@ -70,10 +70,7 @@ class NewProject extends Component {
               this._iconWrapper()
             ) : (
               <FormWrapper>
-                <Form />
-                <IconWrapperCollapse onClick={this._handleCollapse}>
-                  <Icon type={'arrow-up'} />
-                </IconWrapperCollapse>
+                <Form handleCollapse={this._handleCollapse}/>
               </FormWrapper>
             )}
           </Card>
@@ -84,10 +81,7 @@ class NewProject extends Component {
               this._iconWrapper()
             ) : (
               <FormWrapper mobile>
-                <Form mobile />
-                <IconWrapperCollapse onClick={this._handleCollapse}>
-                  <Icon type={'x'} />
-                </IconWrapperCollapse>
+                <Form mobile handleCollapse={this._handleCollapse}/>
               </FormWrapper>
             )}
           </Card>
@@ -120,24 +114,6 @@ const Card = styled.div`
 const IconWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
-
-const IconWrapperCollapse = styled.div`
-  display: flex;
-  background: #fafafa;
-  border-radius: 50px;
-  line-height: 1.8;
-  overflow: hidden;
-  font-size: 16px;
-  color: #e27d60;
-  align-self: center;
-  &:hover {
-    box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0, 32, 128, 0.1), 0 0 0 1px #f0f2f7;
-    cursor: pointer;
-  }
-  &:active {
-    outline: none;
-  }
 `;
 
 const Text = styled.p`

@@ -1,9 +1,10 @@
 import { h, Component } from 'preact';
 import styled from 'styled-components';
+import Icon from '../Icon';
 import axios from 'axios';
 
 class Form extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       repo: '',
@@ -24,7 +25,7 @@ class Form extends Component {
     this._handleKeyOnRepoSelect = this._handleKeyOnRepoSelect.bind(this);
   }
 
-  async componentDidMount () {
+  async componentDidMount() {
     await axios.get('/api/project/getRepos').then(response => {
       this.setState({
         reposList: response.data.data,
@@ -34,7 +35,7 @@ class Form extends Component {
     });
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return JSON.stringify(this.state) !== JSON.stringify(nextState);
   }
 
@@ -80,13 +81,13 @@ class Form extends Component {
       });
   };
 
-  _toggleAutoComplete (toggle) {
+  _toggleAutoComplete(toggle) {
     this.setState({
       showAutoComplete: toggle
     });
   }
 
-  _handleKeyOnRepoSelect (event) {
+  _handleKeyOnRepoSelect(event) {
     switch (event.key) {
       case 'ArrowDown': {
         if (!this.state.fetching) {
@@ -97,8 +98,9 @@ class Form extends Component {
             this.setState({
               selectedIndexFromDropdown:
                 this.state.selectedIndexFromDropdown + 1,
-              repo:
-                this.state.filteredReposList[this.state.selectedIndexFromDropdown + 1].repo
+              repo: this.state.filteredReposList[
+                this.state.selectedIndexFromDropdown + 1
+              ].repo
             });
           }
         }
@@ -108,8 +110,9 @@ class Form extends Component {
         if (this.state.selectedIndexFromDropdown >= 0) {
           this.setState({
             selectedIndexFromDropdown: this.state.selectedIndexFromDropdown - 1,
-            repo:
-              this.state.filteredReposList[this.state.selectedIndexFromDropdown - 1].repo
+            repo: this.state.filteredReposList[
+              this.state.selectedIndexFromDropdown - 1
+            ].repo
           });
         }
         break;
@@ -117,7 +120,7 @@ class Form extends Component {
     }
   }
 
-  render (
+  render(
     { mobile },
     {
       owner,
@@ -133,16 +136,16 @@ class Form extends Component {
     return (
       <FormContainer
         onSubmit={this._submitForm}
-        action='javascript:'
-        autoComplete='off'
+        action="javascript:"
+        autoComplete="off"
         mobile>
         <Row mobile>
           Repository Name:
           <TextBox
             value={repo}
             onInput={this._setFormValue}
-            name='repo'
-            placeholder='e.g. standard'
+            name="repo"
+            placeholder="e.g. standard"
             shown={showAutoComplete}
             onFocus={() => this._toggleAutoComplete(true)}
             onBlur={() => this._toggleAutoComplete(false)}
@@ -169,14 +172,17 @@ class Form extends Component {
           <TextBox
             value={twitter}
             onInput={this._setFormValue}
-            name='twitter'
-            placeholder='e.g. feross'
+            name="twitter"
+            placeholder="e.g. feross"
             isSuggesting={false}
             mobile
           />
         </Row>
         <Row submit mobile>
-          <Submit type='submit'> Submit </Submit>
+          <Submit type="submit"> Submit </Submit>
+          <IconWrapperCollapse onClick={this.props.handleCollapse}>
+            <Icon type={mobile ? 'x' : 'arrow-up'} width={30} height={30}/>
+          </IconWrapperCollapse>
         </Row>
         {success && <Text>Project successfully added!</Text>}
       </FormContainer>
@@ -192,14 +198,40 @@ const FormContainer = styled.form`
   ${props => props.mobile && 'padding: 10px 0'};
 `;
 
+const IconWrapperCollapse = styled.div`
+  display: flex;
+  position: absolute;
+  align-self: flex-start;
+  right: 0;
+  background: #fafafa;
+  border-radius: 50px;
+  line-height: 1.8;
+  overflow: hidden;
+  font-size: 16px;
+  color: #e27d60;
+  align-self: center;
+  &:hover {
+    box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0, 32, 128, 0.1), 0 0 0 1px #f0f2f7;
+    cursor: pointer;
+  }
+  &:active {
+    outline: none;
+  }
+`;
+
 const Row = styled.div`
   display: flex;
   align-items: ${props => (props.mobile ? 'stretch' : 'center')};
   justify-content: ${props => (props.submit ? 'center' : 'space-between')};
-  ${props => props.submit && 'flex-basis: 15%'};
-  ${props => props.submit && 'margin-top: 15px'};
   flex-direction: ${props => (props.mobile ? 'column' : 'row')};
-  white-space: nowrap;
+  ${props =>
+    props.submit &&
+    `display: flex;
+    flex-direction: row !important;
+    position: relative;
+    flex-basis: 15%;
+    margin-top: 15px`};
+    white-space: nowrap;
 `;
 
 const Text = styled.h5`
