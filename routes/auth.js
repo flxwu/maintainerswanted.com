@@ -32,7 +32,6 @@ router.use('/status', (req, res, next) => {
  */
 router.get('/github', (req, res, next) => {
   logger('[AUTH] Redirecting to Github OAuth Authorization');
-  // FIXME: Reduce to only access public repos
   res.send(
     'https://github.com/login/oauth/authorize?' +
       `client_id=${key}&scope=user,public_repo,admin:repo_hook` +

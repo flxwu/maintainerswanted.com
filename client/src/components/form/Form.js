@@ -76,7 +76,7 @@ class Form extends Component {
         }
       })
       .catch(error => {
-        this.setState({ fetching: 'error' });
+        this.setState({ fetching: 'error', success: false });
         console.error(error);
       });
   };
