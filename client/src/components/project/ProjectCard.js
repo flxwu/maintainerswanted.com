@@ -52,7 +52,7 @@ class ProjectCard extends Component {
             <Meta>
               <TitleWrapper>
                 <Title>
-                  <Link href={issueURL}>
+                  <Link href={issueURL} target='_blank' rel='noopener noreferrer'>
                     {repo}
                   </Link>
                 </Title>
