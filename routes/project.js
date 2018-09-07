@@ -240,8 +240,6 @@ router.post('/add', async (req, res, next) => {
 router.post('/webhook', async (req, res, next) => {
   const issueAction = req.body.action;
 
-  // TODO: Do we also react on issue being reopened?
-  // s. Issue #26
   if (issueAction !== 'closed') {
     return;
   }
@@ -275,6 +273,7 @@ router.post('/webhook', async (req, res, next) => {
             repo,
             hook_id: hookId
           });
+          // TODO: Comment on thread
           await deleteProjectFromDB(database, key);
         }
       }
