@@ -98,7 +98,6 @@ router.get('/getStatistics', async (req, res, next) => {
 /**
  * GET - /api/project/getRepos
  * All Repos of User from Github API
- * TODO: Change to all Repos he collaborates on
  */
 router.get('/getRepos', async (req, res, next) => {
   const username = req.session.user;
