@@ -106,26 +106,26 @@ export default class App extends Component {
         <FooterWrapper>
           <Footer>
             Made with love by
-            <Link href="https://twitter.com/flxwu"> @flxwu</Link> and
-            <Link href="https://twitter.com/QuentinOschatz"> @Qo2770</Link>
+            <Link href="https://twitter.com/flxwu" target="_blank"> @flxwu</Link> and
+            <Link href="https://twitter.com/QuentinOschatz" target="_blank"> @Qo2770</Link>
             <br />
             <Footer break>
-              <Link break href="https://github.com/flxwu/maintainerswanted.com">
+              <Link break href="https://github.com/flxwu/maintainerswanted.com" target="_blank">
                 Find us on Github!
               </Link>
             </Footer>
             <br />
             <Footer small break>
               Built using
-              <Link small href="https://github.com/flxwu/maintainerswanted.com">
+              <Link small href="https://preactjs.com" target="_blank">
                 {' Preact'}
               </Link>{' '}
               +
-              <Link small href="https://github.com/flxwu/maintainerswanted.com">
+              <Link small href="https://expressjs.com" target="_blank">
                 {' Express'}
               </Link>{' '}
               +
-              <Link small href="https://github.com/flxwu/maintainerswanted.com">
+              <Link small href="https://firebase.google.com/" target="_blank">
                 {' Firebase'}
               </Link>
             </Footer>
