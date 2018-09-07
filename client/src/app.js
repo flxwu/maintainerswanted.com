@@ -8,8 +8,13 @@ import NewProject from './components/form/NewProject';
 import Header from './components/Header';
 import Loading from './components/Loading';
 
+const rootURL =
+  process.env.NODE_ENV === 'development'
+    ? 'http://localhost:5000'
+    : 'https://maintainerswanted.com';
+
 export default class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       projects: [],
@@ -34,17 +39,25 @@ export default class App extends Component {
     }
   }
 
-  async componentDidMount () {
-    console.log(window.location);
+  async componentDidMount() {
+    const path = window.location.pathname;
+    const query = window.location.search;
+
+    if (path === '/api/auth/github/callback') {
+      await axios.get(`/api/auth/github/callback?${query}`).then(res => {
+        window.location = rootURL;
+      });
+    }
     // get if logged in
     const authStatus = await axios.get('/api/auth/status');
 
     // get projects list
     const response = await axios.get('/api/project/getList');
     const dataObject = response.data.data;
-    const data = dataObject !== 'None'
-      ? Object.keys(dataObject).map(dbKey => dataObject[dbKey])
-      : 'None';
+    const data =
+      dataObject !== 'None'
+        ? Object.keys(dataObject).map(dbKey => dataObject[dbKey])
+        : 'None';
 
     this.setState({
       projects: data,
@@ -53,65 +66,66 @@ export default class App extends Component {
     });
   }
 
-  render ({}, { projects, loggedIn, user }) { // eslint-disable-line no-empty-pattern
+  render({}, { projects, loggedIn, user }) { // eslint-disable-line no-empty-pattern
+    // eslint-disable-line no-empty-pattern
     return (
       <div>
         <Header loggedIn={loggedIn} user={user} />
         <MediaQuery minDeviceWidth={1224}>
           <List>
             <NewProject loggedIn={loggedIn} />
-            {projects === 'None'
-              ? <div>No Projects in DB</div>
-              : projects.length !== 0 ? (
-                projects.map(project => (
-                  <ProjectCardWrapper>
-                    <ProjectCard project={project} />
-                  </ProjectCardWrapper>
-                ))
-              ) : (
-                <Loading />
-              )}
+            {projects === 'None' ? (
+              <div>No Projects in DB</div>
+            ) : projects.length !== 0 ? (
+              projects.map(project => (
+                <ProjectCardWrapper>
+                  <ProjectCard project={project} />
+                </ProjectCardWrapper>
+              ))
+            ) : (
+              <Loading />
+            )}
           </List>
         </MediaQuery>
         <MediaQuery maxDeviceWidth={1224}>
           <List mobile>
             <NewProject loggedIn={loggedIn} />
-            {projects === 'None'
-              ? <div>No Projects in DB</div>
-              : projects.length !== 0 ? (
-                projects.map(project => (
-                  <ProjectCardWrapper>
-                    <ProjectCard project={project} />
-                  </ProjectCardWrapper>
-                ))
-              ) : (
-                <Loading />
-              )}
+            {projects === 'None' ? (
+              <div>No Projects in DB</div>
+            ) : projects.length !== 0 ? (
+              projects.map(project => (
+                <ProjectCardWrapper>
+                  <ProjectCard project={project} />
+                </ProjectCardWrapper>
+              ))
+            ) : (
+              <Loading />
+            )}
           </List>
         </MediaQuery>
         <FooterWrapper>
           <Footer>
             Made with love by
-            <Link href='https://twitter.com/flxwu'> @flxwu</Link> and
-            <Link href='https://twitter.com/QuentinOschatz'> @Qo2770</Link>
+            <Link href="https://twitter.com/flxwu"> @flxwu</Link> and
+            <Link href="https://twitter.com/QuentinOschatz"> @Qo2770</Link>
             <br />
             <Footer break>
-              <Link break href='https://github.com/flxwu/maintainerswanted.com'>
+              <Link break href="https://github.com/flxwu/maintainerswanted.com">
                 Find us on Github!
               </Link>
             </Footer>
             <br />
             <Footer small break>
               Built using
-              <Link small href='https://github.com/flxwu/maintainerswanted.com'>
+              <Link small href="https://github.com/flxwu/maintainerswanted.com">
                 {' Preact'}
               </Link>{' '}
               +
-              <Link small href='https://github.com/flxwu/maintainerswanted.com'>
+              <Link small href="https://github.com/flxwu/maintainerswanted.com">
                 {' Express'}
               </Link>{' '}
               +
-              <Link small href='https://github.com/flxwu/maintainerswanted.com'>
+              <Link small href="https://github.com/flxwu/maintainerswanted.com">
                 {' Firebase'}
               </Link>
             </Footer>

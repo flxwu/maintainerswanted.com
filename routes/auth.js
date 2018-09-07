@@ -30,7 +30,7 @@ router.use('/status', (req, res, next) => {
 /**
  * GET Github Auth
  */
-router.use('/github', (req, res, next) => {
+router.get('/github', (req, res, next) => {
   logger('[AUTH] Redirecting to Github OAuth Authorization');
   res.send(
     'https://github.com/login/oauth/authorize?' +
@@ -42,7 +42,7 @@ router.use('/github', (req, res, next) => {
 /**
  * GET Github Auth Callback
  */
-router.use('/github/callback', async (req, res, next) => {
+router.get('/github/callback', async (req, res, next) => {
   const code = req.query.code;
 
   let accessToken = null;
