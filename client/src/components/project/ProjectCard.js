@@ -36,18 +36,18 @@ class ProjectCard extends Component {
   };
 
   render ({ project }, { stars, contributors, labels }) {
-    const {
-      repo,
-      description,
-      url,
-      twitter,
-      issueNumber,
-      topics
-    } = project;
+    const { repo, description, url, twitter, issueNumber, topics } = project;
 
     const issueURL = `${url}/issues/${issueNumber}`;
     const twitterURL = handle => `https://twitter.com/${handle}`;
 
+    // s. POST /add , gets added in DB as stringified array
+    const topicsArray = topics
+      .replace('[', '')
+      .replace(']', '')
+      .replace(/"/g, '')
+      .split(',');
+    console.log(topicsArray);
     return (
       <div>
         <MediaQuery minDeviceWidth={1224}>
@@ -90,10 +90,12 @@ class ProjectCard extends Component {
               </TitleWrapper>
               <Emoji text={description} />
               <Topics>
-                {topics === [] ? (
+                {topicsArray === [] ? (
                   <div />
-                ) : topics.length !== 0 ? (
-                  topics.slice(0, 5).map((topic, i) => <Topic>{topic}</Topic>)
+                ) : topicsArray.length !== 0 ? (
+                  topicsArray
+                    .slice(0, 5)
+                    .map((topic, i) => <Topic>{topic}</Topic>)
                 ) : (
                   <div />
                 )}

@@ -196,8 +196,7 @@ router.post('/add', async (req, res, next) => {
     repo,
     title: issueTemplate(repo, twitterHandle).title,
     body: issueTemplate(repo, twitterHandle).body,
-    labels: ['Maintainers Wanted'],
-    topics: topics.data.names
+    labels: ['Maintainers Wanted']
   });
 
   // create webhook for the added repository
@@ -222,7 +221,8 @@ router.post('/add', async (req, res, next) => {
     hookId: createdHook.data.id,
     accessToken: accessToken,
     url,
-    twitter: twitterHandle
+    twitter: twitterHandle,
+    topics: JSON.stringify(topics.data.names)
   };
 
   // push to Firebase
