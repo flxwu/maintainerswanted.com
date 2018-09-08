@@ -73,6 +73,7 @@ router.get('/getStatistics', async (req, res, next) => {
   const { owner, repo } = req.query;
 
   const repoData = await octokit.repos.get({ owner, repo });
+  const topics = await octokit.repos.getTopics({ owner, repo });
   const contributors = await paginate(octokit, octokit.repos.getContributors, {
     owner,
     repo,
@@ -86,7 +87,8 @@ router.get('/getStatistics', async (req, res, next) => {
     watchers: repoData.data.watchers_count,
     contributors: contributors,
     description: repoData.data.description,
-    url: 'https://github.com/' + owner + '/' + repo
+    url: 'https://github.com/' + owner + '/' + repo,
+    topics: topics.data
   };
 
   // Return project if available
