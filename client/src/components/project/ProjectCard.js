@@ -22,30 +22,31 @@ class ProjectCard extends Component {
   componentDidMount = async () => {
     const { project } = this.state;
 
-    const url = `/api/project/getStatistics?owner=${project.owner}&repo=${project.repo}`;
+    const url = `/api/project/getStatistics?owner=${project.owner}&repo=${
+      project.repo
+    }`;
     // Get stars and contributors for single project
     const response = await axios.get(url);
     const data = response.data.data;
     this.setState({
       stars: data.stars,
       watchers: data.watchers,
-      contributors: data.contributors,
-      labels: data.topics.names
+      contributors: data.contributors
     });
-  }
+  };
 
-  render () {
-    const { stars, contributors, labels } = this.state;
+  render ({ project }, { stars, contributors, labels }) {
     const {
       repo,
       description,
       url,
       twitter,
-      issueNumber
-    } = this.state.project;
+      issueNumber,
+      topics
+    } = project;
 
     const issueURL = `${url}/issues/${issueNumber}`;
-    const twitterURL = (handle) => `https://twitter.com/${handle}`;
+    const twitterURL = handle => `https://twitter.com/${handle}`;
 
     return (
       <div>
@@ -54,26 +55,46 @@ class ProjectCard extends Component {
             <Meta>
               <TitleWrapper>
                 <Title>
-                  <Link href={issueURL} target='_blank' rel='noopener noreferrer'>
+                  <Link
+                    href={issueURL}
+                    target='_blank'
+                    rel='noopener noreferrer'>
                     {repo}
                   </Link>
                 </Title>
                 <div style={styles.iconContainer}>
-                  <a href={twitterURL(twitter)} target='_blank' rel='noopener noreferrer'>
-                    <Icon type={'twitter'} width={30} height={30} style={styles.twitter} />
+                  <a
+                    href={twitterURL(twitter)}
+                    target='_blank'
+                    rel='noopener noreferrer'>
+                    <Icon
+                      type={'twitter'}
+                      width={30}
+                      height={30}
+                      style={styles.twitter}
+                    />
                   </a>
-                  <a style='margin-left: 7px' href={url} target='_blank' rel='noopener noreferrer'>
-                    <Icon type={'github'} width={30} height={30} style={styles.twitter} />
+                  <a
+                    style='margin-left: 7px'
+                    href={url}
+                    target='_blank'
+                    rel='noopener noreferrer'>
+                    <Icon
+                      type={'github'}
+                      width={30}
+                      height={30}
+                      style={styles.twitter}
+                    />
                   </a>
                 </div>
               </TitleWrapper>
               <Emoji text={description} />
               <Topics>
-                {labels === [] ? (
+                {topics === [] ? (
                   <div />
-                ) : labels.length !== 0 ? labels.slice(0, 5).map((label, i) => (
-                  <Topic>{label}</Topic>
-                )) : (
+                ) : topics.length !== 0 ? (
+                  topics.slice(0, 5).map((topic, i) => <Topic>{topic}</Topic>)
+                ) : (
                   <div />
                 )}
               </Topics>
@@ -85,28 +106,43 @@ class ProjectCard extends Component {
           <Card mobile>
             <Meta mobile>
               <Title mobile>
-                <Link href={issueURL}>
-                  {repo}
-                </Link>
+                <Link href={issueURL}>{repo}</Link>
               </Title>
               <Description text={description} />
               <Topics>
                 {labels === [] ? (
                   <div />
-                ) : labels.length !== 0 ? labels.slice(0, 5).map((label, i) => (
-                  <Topic>{label}</Topic>
-                )) : (
+                ) : labels.length !== 0 ? (
+                  labels.slice(0, 5).map((label, i) => <Topic>{label}</Topic>)
+                ) : (
                   <div />
                 )}
               </Topics>
             </Meta>
             <Info stars={stars} contributors={contributors} />
             <div style={styles.iconContainerMobile}>
-              <a href={twitterURL(twitter)} target='_blank' rel='noopener noreferrer'>
-                <Icon type={'twitter'} width={20} height={20} style={styles.twitter} />
+              <a
+                href={twitterURL(twitter)}
+                target='_blank'
+                rel='noopener noreferrer'>
+                <Icon
+                  type={'twitter'}
+                  width={20}
+                  height={20}
+                  style={styles.twitter}
+                />
               </a>
-              <a style='margin-left: 7px' href={url} target='_blank' rel='noopener noreferrer'>
-                <Icon type={'github'} width={20} height={20} style={styles.twitter} />
+              <a
+                style='margin-left: 7px'
+                href={url}
+                target='_blank'
+                rel='noopener noreferrer'>
+                <Icon
+                  type={'github'}
+                  width={20}
+                  height={20}
+                  style={styles.twitter}
+                />
               </a>
             </div>
           </Card>
@@ -149,10 +185,9 @@ const Card = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around
-  font-size: ${props => props.mobile ? '12px' : '18px'};
-  flex-direction: ${props => props.mobile ? 'column' : 'row'};
-  `
-;
+  font-size: ${props => (props.mobile ? '12px' : '18px')};
+  flex-direction: ${props => (props.mobile ? 'column' : 'row')};
+  `;
 
 const Meta = styled.div`
   display: flex;
@@ -182,7 +217,7 @@ const Description = styled(Emoji)`
 
 const Link = styled.a`
   display: flex;
-  color: #E27D60;
+  color: #e27d60;
   flex: 1;
   &:hover {
     color: grey;
@@ -191,22 +226,21 @@ const Link = styled.a`
 
 const Topics = styled.div`
   display: flex;
-  color: #E27D60;
+  color: #e27d60;
   text-align: center;
   width: 100%;
 `;
 
 const Topic = styled.p`
-  box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,0.1),0 0 0 1px #f0f2f7;
-  background: #fbfbfb;
+  box-shadow: 0 0.2rem 0.5rem -0.5rem rgba(0, 32, 128, 0.1), 0 0 0 1px #f0f2f7;
   padding: 5px;
+  font-size: 1rem;
   margin: 4px;
   padding-top: 0px;
   padding-bottom: 0px;
   margin-top: 10px;
   margin-bottom: 0;
   border-radius: 5px;
-  color: #444;
   height: fit-content;
 `;
 
