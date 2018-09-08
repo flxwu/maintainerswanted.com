@@ -73,7 +73,6 @@ router.get('/getStatistics', async (req, res, next) => {
   const { owner, repo } = req.query;
 
   const repoData = await octokit.repos.get({ owner, repo });
-  const topics = await octokit.repos.getTopics({ owner, repo });
   const contributors = await paginate(octokit, octokit.repos.getContributors, {
     owner,
     repo,
@@ -87,8 +86,7 @@ router.get('/getStatistics', async (req, res, next) => {
     watchers: repoData.data.watchers_count,
     contributors: contributors,
     description: repoData.data.description,
-    url: 'https://github.com/' + owner + '/' + repo,
-    topics: topics.data
+    url: 'https://github.com/' + owner + '/' + repo
   };
 
   // Return project if available
@@ -187,6 +185,7 @@ router.post('/add', async (req, res, next) => {
   });
 
   const repoData = await octokit.repos.get({ owner, repo });
+  const topics = await octokit.repos.getTopics({ owner, repo });
   const id = Math.random()
     .toString(36)
     .substr(2, 9);
@@ -197,7 +196,8 @@ router.post('/add', async (req, res, next) => {
     repo,
     title: issueTemplate(repo, twitterHandle).title,
     body: issueTemplate(repo, twitterHandle).body,
-    labels: ['Maintainers Wanted']
+    labels: ['Maintainers Wanted'],
+    topics: topics.data.names
   });
 
   // create webhook for the added repository
