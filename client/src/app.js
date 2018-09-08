@@ -67,7 +67,6 @@ export default class App extends Component {
   }
 
   render ({}, { projects, loggedIn, user }) { // eslint-disable-line no-empty-pattern
-    // eslint-disable-line no-empty-pattern
     return (
       <div>
         <Header loggedIn={loggedIn} user={user} />
