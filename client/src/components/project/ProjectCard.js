@@ -92,11 +92,11 @@ class ProjectCard extends Component {
               <Description text={description} />
               <Topics>
                 {labels === [] ? (
-                  <p>Hi</p>
-                ) : labels.length !== 0 ? labels.slice(0, 5).forEach(topic_curr => (
-                  <p>Hi</p>
+                  <div />
+                ) : labels.length !== 0 ? labels.slice(0, 5).map((label, i) => (
+                  <Topic>{label}</Topic>
                 )) : (
-                  <p>Hi</p>
+                  <div />
                 )}
               </Topics>
             </Meta>
