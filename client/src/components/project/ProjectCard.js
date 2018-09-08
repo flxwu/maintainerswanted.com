@@ -14,7 +14,8 @@ class ProjectCard extends Component {
       project: props.project,
       stars: 0,
       watchers: 0,
-      contributors: 0
+      contributors: 0,
+      labels: []
     };
   }
 
@@ -28,12 +29,13 @@ class ProjectCard extends Component {
     this.setState({
       stars: data.stars,
       watchers: data.watchers,
-      contributors: data.contributors
+      contributors: data.contributors,
+      labels: data.topics.names
     });
   }
 
   render () {
-    const { stars, contributors } = this.state;
+    const { stars, contributors, labels } = this.state;
     const {
       repo,
       description,
@@ -66,6 +68,15 @@ class ProjectCard extends Component {
                 </div>
               </TitleWrapper>
               <Emoji text={description} />
+              <Topics>
+                {labels === [] ? (
+                  <div />
+                ) : labels.length !== 0 ? labels.slice(0, 5).map((label, i) => (
+                  <Topic>{label}</Topic>
+                )) : (
+                  <div />
+                )}
+              </Topics>
             </Meta>
             <Info stars={stars} contributors={contributors} />
           </Card>
@@ -79,6 +90,15 @@ class ProjectCard extends Component {
                 </Link>
               </Title>
               <Description text={description} />
+              <Topics>
+                {labels === [] ? (
+                  <p>Hi</p>
+                ) : labels.length !== 0 ? labels.slice(0, 5).forEach(topic_curr => (
+                  <p>Hi</p>
+                )) : (
+                  <p>Hi</p>
+                )}
+              </Topics>
             </Meta>
             <Info stars={stars} contributors={contributors} />
             <div style={styles.iconContainerMobile}>
@@ -139,7 +159,7 @@ const Meta = styled.div`
   flex: 1;
   flex-direction: column;
   flex-basis: 70%;
-  ${props => props.mobile && 'align-self: flex-start'}; 
+  ${props => props.mobile && 'align-self: flex-start'};
   text-align: left;
 `;
 
@@ -167,6 +187,27 @@ const Link = styled.a`
   &:hover {
     color: grey;
   }
+`;
+
+const Topics = styled.div`
+  display: flex;
+  color: #E27D60;
+  text-align: center;
+  width: 100%;
+`;
+
+const Topic = styled.p`
+  box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0,32,128,0.1),0 0 0 1px #f0f2f7;
+  background: #fbfbfb;
+  padding: 5px;
+  margin: 4px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-top: 10px;
+  margin-bottom: 0;
+  border-radius: 5px;
+  color: #444;
+  height: fit-content;
 `;
 
 export default ProjectCard;
