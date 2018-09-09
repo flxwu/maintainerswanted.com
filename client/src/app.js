@@ -70,23 +70,21 @@ export default class App extends Component {
   }
 
   _search = async e => {
-    if (e.target.name === 'search') {
-      let targetVal = e.target.value;
-      let filteredRepos = await this.state.projects.filter(repo =>
-        repo.repo.toLowerCase().includes(targetVal.toLowerCase())
-      );
+    let targetVal = e.target.value;
+    let filteredRepos = await this.state.projects.filter(repo =>
+      repo.repo.toLowerCase().includes(targetVal.toLowerCase())
+    );
 
-      filteredRepos.sort((repo1, repo2) => repo2.stars - repo1.stars);
+    filteredRepos.sort((repo1, repo2) => repo2.stars - repo1.stars);
 
-      this.setState({
-        [e.target.name]: targetVal,
-        filteredProjects: filteredRepos
-      });
-    } else {
-      this.setState({
-        [e.target.name]: e.target.value
-      });
+    if (filteredRepos.length === 0) {
+      filteredRepos.push('None');
     }
+
+    this.setState({
+      [e.target.name]: targetVal,
+      filteredProjects: filteredRepos
+    });
   };
 
   render ({}, { projects, loggedIn, user, search, filteredProjects }) { // eslint-disable-line no-empty-pattern
@@ -105,11 +103,13 @@ export default class App extends Component {
             {projects === 'None' ? (
               <div>No Projects in DB</div>
             ) : filteredProjects.length !== 0 ? (
-              filteredProjects.map(project => (
-                <ProjectCardWrapper>
-                  <ProjectCard project={project} />
-                </ProjectCardWrapper>
-              ))
+              filteredProjects[0] === 'None'
+                ? <div>No Projects matching this query found</div>
+                : filteredProjects.map(project => (
+                  <ProjectCardWrapper>
+                    <ProjectCard project={project} />
+                  </ProjectCardWrapper>
+                ))
             ) : (
               <Loading />
             )}
@@ -118,14 +118,23 @@ export default class App extends Component {
         <MediaQuery maxDeviceWidth={1224}>
           <List mobile>
             <NewProject loggedIn={loggedIn} />
+            <TextBox
+              value={search}
+              onInput={this._search}
+              name='search'
+              placeholder='Search projects by title...'
+              mobile
+            />
             {projects === 'None' ? (
               <div>No Projects in DB</div>
             ) : filteredProjects.length !== 0 ? (
-              filteredProjects.map(project => (
-                <ProjectCardWrapper>
-                  <ProjectCard project={project} />
-                </ProjectCardWrapper>
-              ))
+              filteredProjects[0] === 'None'
+                ? <div>No Projects matching this query found</div>
+                : filteredProjects.map(project => (
+                  <ProjectCardWrapper>
+                    <ProjectCard project={project} />
+                  </ProjectCardWrapper>
+                ))
             ) : (
               <Loading />
             )}
@@ -134,11 +143,21 @@ export default class App extends Component {
         <FooterWrapper>
           <Footer>
             Made with love by
-            <Link href='https://twitter.com/flxwu' target='_blank'> @flxwu</Link> and
-            <Link href='https://twitter.com/QuentinOschatz' target='_blank'> @Qo2770</Link>
+            <Link href='https://twitter.com/flxwu' target='_blank'>
+              {' '}
+              @flxwu
+            </Link>{' '}
+            and
+            <Link href='https://twitter.com/QuentinOschatz' target='_blank'>
+              {' '}
+              @Qo2770
+            </Link>
             <br />
             <Footer break>
-              <Link break href='https://github.com/flxwu/maintainerswanted.com' target='_blank'>
+              <Link
+                break
+                href='https://github.com/flxwu/maintainerswanted.com'
+                target='_blank'>
                 Find us on Github!
               </Link>
             </Footer>
@@ -217,8 +236,8 @@ const TextBox = styled.input`
   border: none;
   display: flex;
   flex-basis: ${props => (props.mobile ? '100%' : '60%')};
+  width: ${props => props.mobile ? '-webkit-fill-available' : '98%'};
   display: inline-flex;
-  width: 98%;
   border-radius: 10px;
   margin-bottom: 30px;
 `;
