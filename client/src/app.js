@@ -19,7 +19,9 @@ export default class App extends Component {
     this.state = {
       projects: [],
       loggedIn: false,
-      user: null
+      user: null,
+      search: null,
+      filteredProjects: []
     };
 
     // accessibility: add outline if tab is used
@@ -62,21 +64,48 @@ export default class App extends Component {
     this.setState({
       projects: data,
       loggedIn: authStatus.data.loggedIn,
-      user: authStatus.data.user
+      user: authStatus.data.user,
+      filteredProjects: data
     });
   }
 
-  render ({}, { projects, loggedIn, user }) { // eslint-disable-line no-empty-pattern
+  _search = async e => {
+    if (e.target.name === 'search') {
+      let targetVal = e.target.value;
+      let filteredRepos = await this.state.projects.filter(repo =>
+        repo.repo.toLowerCase().includes(targetVal.toLowerCase())
+      );
+
+      filteredRepos.sort((repo1, repo2) => repo2.stars - repo1.stars);
+
+      this.setState({
+        [e.target.name]: targetVal,
+        filteredProjects: filteredRepos
+      });
+    } else {
+      this.setState({
+        [e.target.name]: e.target.value
+      });
+    }
+  };
+
+  render ({}, { projects, loggedIn, user, search, filteredProjects }) { // eslint-disable-line no-empty-pattern
     return (
       <div>
         <Header loggedIn={loggedIn} user={user} />
         <MediaQuery minDeviceWidth={1224}>
           <List>
+            <TextBox
+              value={search}
+              onInput={this._search}
+              name='search'
+              placeholder='Start entering project title...'
+            />
             <NewProject loggedIn={loggedIn} />
             {projects === 'None' ? (
               <div>No Projects in DB</div>
-            ) : projects.length !== 0 ? (
-              projects.map(project => (
+            ) : filteredProjects.length !== 0 ? (
+              filteredProjects.map(project => (
                 <ProjectCardWrapper>
                   <ProjectCard project={project} />
                 </ProjectCardWrapper>
@@ -91,8 +120,8 @@ export default class App extends Component {
             <NewProject loggedIn={loggedIn} />
             {projects === 'None' ? (
               <div>No Projects in DB</div>
-            ) : projects.length !== 0 ? (
-              projects.map(project => (
+            ) : filteredProjects.length !== 0 ? (
+              filteredProjects.map(project => (
                 <ProjectCardWrapper>
                   <ProjectCard project={project} />
                 </ProjectCardWrapper>
@@ -179,4 +208,14 @@ const Link = styled.a`
     color: grey;
   }
   ${props => props.break && 'margin-top: 10px'};
+`;
+
+const TextBox = styled.input`
+  display: inline-flex;
+  height: 20px;
+  padding: 10px;
+  margin: 10px 20px;
+  border: none;
+  display: flex;
+  flex-basis: ${props => (props.mobile ? '100%' : '60%')};
 `;
