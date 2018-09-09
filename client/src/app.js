@@ -95,13 +95,13 @@ export default class App extends Component {
         <Header loggedIn={loggedIn} user={user} />
         <MediaQuery minDeviceWidth={1224}>
           <List>
+            <NewProject loggedIn={loggedIn} />
             <TextBox
               value={search}
               onInput={this._search}
               name='search'
-              placeholder='Start entering project title...'
+              placeholder='Search projects by title...'
             />
-            <NewProject loggedIn={loggedIn} />
             {projects === 'None' ? (
               <div>No Projects in DB</div>
             ) : filteredProjects.length !== 0 ? (
@@ -214,8 +214,11 @@ const TextBox = styled.input`
   display: inline-flex;
   height: 20px;
   padding: 10px;
-  margin: 10px 20px;
   border: none;
   display: flex;
   flex-basis: ${props => (props.mobile ? '100%' : '60%')};
+  display: inline-flex;
+  width: 98%;
+  border-radius: 10px;
+  margin-bottom: 30px;
 `;
