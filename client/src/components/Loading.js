@@ -18,6 +18,7 @@ const DotWrapper = styled.div`
   align-items: center;
   justify-content: center;
   margin-top: 5rem;
+  height: 10px;
 `;
 
 const BounceAnimation = keyframes`
