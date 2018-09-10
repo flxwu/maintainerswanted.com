@@ -172,7 +172,7 @@ class Form extends Component {
             )}
           </Suggestions>
         </Row>
-        <Row mobile>
+        <Row mobile info>
           <InfoText>
             To add organization repositories, grant Maintainers Wanted{' '}
             <Link href='https://github.com/settings/connections/applications/dbc407eab78d60478da9' target='_blank'>
@@ -244,7 +244,7 @@ const Row = styled.div`
     position: relative;
     flex-basis: 15%;
     margin-top: 15px`};
-  white-space: nowrap;
+  ${props => !props.info && 'white-space: nowrap'};
 `;
 
 const InfoText = styled.p`
