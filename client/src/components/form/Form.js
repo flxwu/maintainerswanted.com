@@ -168,7 +168,7 @@ class Form extends Component {
         <Row mobile>
           <InfoText>
             To add organization repositories, grant Maintainers Wanted{' '}
-            <Link href='https://github.com/settings/connections/applications/dbc407eab78d60478da9' target="_blank">
+            <Link href='https://github.com/settings/connections/applications/dbc407eab78d60478da9' target='_blank'>
               organization access here.
             </Link>
           </InfoText>
