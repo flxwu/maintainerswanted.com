@@ -190,47 +190,50 @@ router.post('/add', async (req, res, next) => {
     .toString(36)
     .substr(2, 9);
 
-  // Create issue on repository
-  const createdIssue = await octokit.issues.create({
-    owner,
-    repo,
-    title: issueTemplate(repo, twitterHandle).title,
-    body: issueTemplate(repo, twitterHandle).body,
-    labels: ['Maintainers Wanted']
-  });
+  try {
+    // create webhook for the added repository
+    const createdHook = await octokit.repos.createHook({
+      owner,
+      repo,
+      name: 'web',
+      config: {
+        url: `${webHookUrl}/api/project/webhook`,
+        content_type: 'json'
+      },
+      events: ['issues']
+    });
 
-  // create webhook for the added repository
-  const createdHook = await octokit.repos.createHook({
-    owner,
-    repo,
-    name: 'web',
-    config: {
-      url: `${webHookUrl}/api/project/webhook`,
-      content_type: 'json'
-    },
-    events: ['issues']
-  });
+    // Create issue on repository
+    const createdIssue = await octokit.issues.create({
+      owner,
+      repo,
+      title: issueTemplate(repo, twitterHandle).title,
+      body: issueTemplate(repo, twitterHandle).body,
+      labels: ['Maintainers Wanted']
+    });
+    // New DB entry
+    let newProject = {
+      id,
+      repo,
+      owner,
+      issueNumber: createdIssue.data.number,
+      description: repoData.data.description,
+      hookId: createdHook.data.id,
+      accessToken: accessToken,
+      url,
+      twitter: twitterHandle,
+      topics: JSON.stringify(topics.data.names)
+    };
 
-  // New DB entry
-  var newProject = {
-    id,
-    repo,
-    owner,
-    issueNumber: createdIssue.data.number,
-    description: repoData.data.description,
-    hookId: createdHook.data.id,
-    accessToken: accessToken,
-    url,
-    twitter: twitterHandle,
-    topics: JSON.stringify(topics.data.names)
-  };
+    // push to Firebase
+    let projectDBEntry = projectDB.push(newProject, finished);
+    logger('Firebase generated key: ' + projectDBEntry.key);
 
-  // push to Firebase
-  let projectDBEntry = projectDB.push(newProject, finished);
-  logger('Firebase generated key: ' + projectDBEntry.key);
-
-  if (projectDBEntry) res.json({ status: 200, data: projectDBEntry });
-  else res.json({ status: 500, err: 'Error while adding project' });
+    if (projectDBEntry) res.json({ status: 200, data: projectDBEntry });
+    else res.json({ status: 500, err: 'Error while adding project' });
+  } catch (err) {
+    res.json({ status: 500, err: 'Error while creating webhook' });
+  }
 });
 
 /**

@@ -72,8 +72,18 @@ class Form extends Component {
         twitter
       })
       .then(response => {
-        if (response.status === 200) {
+        if (response.data.status === 200) {
           this.setState({ fetching: false, success: true });
+        }
+        if (response.data.status === 500) {
+          if (response.data.err === 'Error while creating webhook') {
+            alert( // eslint-disable-line
+              `Error while creating webhook for ${repo}.` +
+              ' Make sure you only add your own repositories or those of organizations you granted Maintainers Wanted access to.'
+            );
+          } else {
+            alert('Unknown error'); // eslint-disable-line
+          }
         }
       })
       .catch(error => {
@@ -175,7 +185,9 @@ class Form extends Component {
         <Row mobile info>
           <InfoText>
             To add organization repositories, grant Maintainers Wanted{' '}
-            <Link href='https://github.com/settings/connections/applications/dbc407eab78d60478da9' target='_blank'>
+            <Link
+              href='https://github.com/settings/connections/applications/dbc407eab78d60478da9'
+              target='_blank'>
               organization access here.
             </Link>
           </InfoText>
