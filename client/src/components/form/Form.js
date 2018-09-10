@@ -109,7 +109,8 @@ class Form extends Component {
         if (this.state.selectedIndexFromDropdown >= 0) {
           this.setState({
             selectedIndexFromDropdown: this.state.selectedIndexFromDropdown - 1,
-            repo: this.state.filteredReposList[this.state.selectedIndexFromDropdown - 1].repo
+            repo:
+              this.state.filteredReposList[this.state.selectedIndexFromDropdown - 1].repo
           });
         }
         break;
@@ -163,6 +164,12 @@ class Form extends Component {
               <p />
             )}
           </Suggestions>
+        </Row>
+        <Row mobile>
+          To add organization repositories,{' '}
+          <a href='https://github.com/settings/connections/applications/dbc407eab78d60478da9'>
+            grant Maintainers Wanted organization access here
+          </a>
         </Row>
         <Row mobile>
           Twitter Handle:
@@ -228,7 +235,7 @@ const Row = styled.div`
     position: relative;
     flex-basis: 15%;
     margin-top: 15px`};
-    white-space: nowrap;
+  white-space: nowrap;
 `;
 
 const Text = styled.h5`
