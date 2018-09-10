@@ -119,10 +119,10 @@ class Form extends Component {
     }
   }
 
-  _selectRepo(index) {
+  _selectRepo (index) {
     this.setState({
       repo: this.state.filteredReposList[index].repo
-    })
+    });
   }
 
   render (
