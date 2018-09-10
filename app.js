@@ -48,6 +48,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 // Serve FrontEnd build
 app.use(express.static(path.join(__dirname, 'client/build')));
+// Serve Sitemap
+app.use(express.static('sitemap'));
 
 // redirect all wildcard matches to landing page
 app.use('*', (req, res) => {
