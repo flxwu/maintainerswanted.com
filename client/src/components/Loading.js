@@ -6,8 +6,8 @@ class Loading extends Component {
     return (
       <DotWrapper>
         <Dot delay='0s' />
-        <Dot delay='.1s' />
-        <Dot delay='.2s' />
+        <Dot delay='0.1s' />
+        <Dot delay='0.25s' />
       </DotWrapper>
     );
   }
