@@ -47,7 +47,7 @@ class ProjectCard extends Component {
       .replace(']', '')
       .replace(/"/g, '')
       .split(',');
-    console.log(topicsArray);
+      
     return (
       <div>
         <MediaQuery minDeviceWidth={1224}>
