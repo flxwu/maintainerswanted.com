@@ -23,6 +23,7 @@ class Form extends Component {
 
     this._toggleAutoComplete = this._toggleAutoComplete.bind(this);
     this._handleKeyOnRepoSelect = this._handleKeyOnRepoSelect.bind(this);
+    this._selectRepo = this._selectRepo.bind(this);
   }
 
   async componentDidMount () {
@@ -118,6 +119,12 @@ class Form extends Component {
     }
   }
 
+  _selectRepo(index) {
+    this.setState({
+      repo: this.state.filteredReposList[index].repo
+    })
+  }
+
   render (
     { mobile },
     {
@@ -154,7 +161,7 @@ class Form extends Component {
             {filteredReposList.length !== 0 && showAutoComplete ? (
               filteredReposList.map((repo, index) => (
                 <Suggestion
-                  onClick={() => this._selectRepo()}
+                  onMouseDown={() => this._selectRepo(index)}
                   focused={selectedIndexFromDropdown === index}>
                   {' '}
                   {repo.repo}{' '}
