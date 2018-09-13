@@ -36,9 +36,9 @@ const Header = props => (
       Find projects that are searching for Maintainers or <br />
       Find maintainers to overtake your project!
     </Text>
-      <Link big href='https://www.producthunt.com/posts/maintainers-wanted' target='_blank'>
+    <Link big href='https://www.producthunt.com/posts/maintainers-wanted' target='_blank'>
       Upvote us on ProductHunt!
-      </Link>
+    </Link>
   </Container>
 );
 
