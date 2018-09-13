@@ -220,6 +220,7 @@ const Description = styled(Emoji)`
 const Link = styled.a`
   display: flex;
   color: #e27d60;
+  white-space: nowrap;
   flex: 1;
   &:hover {
     color: grey;
