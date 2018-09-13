@@ -36,6 +36,9 @@ const Header = props => (
       Find projects that are searching for Maintainers or <br />
       Find maintainers to overtake your project!
     </Text>
+      <Link big href='https://www.producthunt.com/posts/maintainers-wanted' target='_blank'>
+      Upvote us on ProductHunt!
+      </Link>
   </Container>
 );
 
@@ -69,6 +72,7 @@ const Link = styled.a`
   text-decoration: none;
   font-weight: bold;
   color: #e27d60;
+  ${props => props.big && 'font-size: 1.2rem; text-decoration: underline;'}
   &:hover {
     color: grey;
   }
