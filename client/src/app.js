@@ -58,9 +58,9 @@ export default class App extends Component {
     const dataObject = response.data.data;
     const data =
       dataObject !== 'None'
-        ? Object.keys(dataObject).map(dbKey => dataObject[dbKey])
+        ? Object.keys(dataObject).map(dbKey => dataObject[dbKey]).sort((v1, v2) => v2.stars - v1.stars)
         : 'None';
-
+        
     this.setState({
       projects: data,
       loggedIn: authStatus.data.loggedIn,

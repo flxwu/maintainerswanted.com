@@ -211,6 +211,7 @@ router.post('/add', async (req, res, next) => {
       body: issueTemplate(repo, twitterHandle).body,
       labels: ['Maintainers Wanted']
     });
+
     // New DB entry
     let newProject = {
       id,
@@ -220,6 +221,7 @@ router.post('/add', async (req, res, next) => {
       description: repoData.data.description,
       hookId: createdHook.data.id,
       accessToken: accessToken,
+      stars: repoData.data.stargazers_count,
       url,
       twitter: twitterHandle,
       topics: JSON.stringify(topics.data.names)
