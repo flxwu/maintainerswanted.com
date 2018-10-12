@@ -81,14 +81,14 @@ class Form extends Component {
               `Error while creating webhook for ${repo}.` +
               ' Make sure you only add your own repositories or those of organizations you granted Maintainers Wanted access to.'
             );
-          } else if (response.data.err === 'Project already got added!') {
-            alert( // eslint-disable-line
-              `Error while adding ${repo}.` +
-              ' Project already exists in database. Check if it was already added.'
-            );
           } else {
             alert('Unknown error'); // eslint-disable-line
           }
+        } else if (response.data.status === 400 && response.data.err === 'Project already got added!') {
+          alert( // eslint-disable-line
+            `Error while adding ${repo}.` +
+            ' Project already exists in database. Check if it was already added.'
+          );
         }
       })
       .catch(error => {
