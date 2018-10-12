@@ -170,7 +170,7 @@ router.post('/add', async (req, res, next) => {
     return res.json(
       res.json({
         status: 400,
-        err: 'Project got already added!'
+        err: 'Project already got added!'
       })
     );
   }
