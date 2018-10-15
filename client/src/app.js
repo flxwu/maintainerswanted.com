@@ -163,6 +163,11 @@ export default class App extends Component {
             </Footer>
             <br />
             <Footer small break>
+              Accelerated by <Link small href='https://www.keycdn.com/' target='_blank'>
+                {' KeyCDN'}
+              </Link>
+            </Footer>
+            <Footer small break>
               Built using
               <Link small href='https://preactjs.com' target='_blank'>
                 {' Preact'}
